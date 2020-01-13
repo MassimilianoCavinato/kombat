@@ -16,13 +16,13 @@ var qsOptions = _queryString.default.parse(location.search); // default options,
 
 var defaults = {
   traceLevel: _lanceGg.Lib.Trace.TRACE_NONE,
-  delayInputCount: 5,
+  delayInputCount: 15,
   scheduler: 'render-schedule',
   syncOptions: {
     sync: 'interpolate',
-    localObjBending: 1,
-    remoteObjBending: 1,
-    bendingIncrements: 6
+    localObjBending: .75,
+    remoteObjBending: .75,
+    bendingIncrements: 2
   }
 };
 var options = Object.assign(defaults, qsOptions); // create a client engine and a game engine

@@ -20,7 +20,7 @@ export default class KombatGameEngine extends GameEngine {
             // console.log('poststep', e);
         });
         this.on('collisionStart', (e) => this.handleCollision(e));
-           
+
         // game variables
         Object.assign(this, {
             foodRadius: 0.1, 

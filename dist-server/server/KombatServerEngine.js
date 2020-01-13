@@ -87,12 +87,12 @@ function (_ServerEngine) {
         height: sideA
       });
       this.gameEngine.addObjectToWorld(wallWest);
-      var walls = [[14, 21], [23, 18], [20, 37], [42, 24], [37, 41], [19, 9], [8, 16], [36, 23], [37, 9], [40, 9], [43, 9], [43, 12], [10, 40]];
+      var walls = [[8, 8, 3, 9], [32, 18, 8, 3], [25, 25, 2, 2], [42, 36, 3, 9], [12, 32, 8, 3]];
       walls.forEach(function (w) {
         var wall = new _Wall.default(_this2.gameEngine, null, {
           position: new _lanceGg.TwoVector(w[0], w[1]),
-          width: 3,
-          height: 3
+          width: w[2],
+          height: w[3]
         });
 
         _this2.gameEngine.addObjectToWorld(wall);

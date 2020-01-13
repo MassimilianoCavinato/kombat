@@ -1,12 +1,12 @@
 import { Renderer, TwoVector } from 'lance-gg';
 import Kombat from '../common/Kombat';
 import Bullet from '../common/Bullet';
-import Box from '../common/Box';
+import Wall from '../common/Wall';
+import Blood from '../common/Blood';
 
 let ctx = null;
 let canvas = null;
 let game = null;
-let c = 0;
 const C_WIDTH = 800;
 const C_HEIGHT = 600;
 
@@ -16,72 +16,116 @@ export default class KombatRenderer extends Renderer {
         super(gameEngine, clientEngine);
         game = gameEngine;
         canvas = document.createElement('canvas');
-        
         canvas.width = C_WIDTH;
         canvas.height = C_HEIGHT;
-        document.body.insertBefore(canvas, document.getElementById('logo'));
+        document.body.appendChild(canvas);
         game.w = canvas.width;
         game.h = canvas.height;
-        clientEngine.zoom = 15;
-        
-        // if (game.w / game.spaceWidth < clientEngine.zoom) clientEngine.zoom = game.w / game.spaceWidth;
+        clientEngine.zoom = 10;
         ctx = canvas.getContext('2d');
         ctx.lineWidth = 2 / clientEngine.zoom;
-        ctx.strokeStyle = 'white';
-        ctx.fildlStyle= "red";
-        this.viewPort = new TwoVector(0, 0);
+        this.offsetX = 0;
+        this.offsetY = 0;
     }
 
     draw(t, dt) {
         super.draw(t, dt);
-        ctx.clearRect(0, 0, game.w, game.h);
-        ctx.save();
-        ctx.fillRect(0, 0, 800, 600 );
-        ctx.translate(0, 0);
-        ctx.scale(this.clientEngine.zoom, this.clientEngine.zoom);  // Zoom in and flip y axis
-        this.drawBounds();
+        this.resetRender();
         let playerKombat = this.gameEngine.world.queryObject({ playerId: this.gameEngine.playerId,  instanceType: Kombat });
         if(playerKombat){
             this.offsetX = (C_WIDTH/2)/this.clientEngine.zoom - playerKombat.position.x - (playerKombat.width / 2);
             this.offsetY = (C_HEIGHT/2)/this.clientEngine.zoom - playerKombat.position.y - (playerKombat.height / 2);
+            //draw blood stains first // layer 0
+            game.world.queryObjects({instanceType: Blood}).forEach(obj => {
+                this.drawBlood(obj);
+            });
+            game.world.forEachObject((id, obj) => {
+                if (obj instanceof Kombat) this.drawKombat(obj);
+                else if (obj instanceof Bullet) this.drawBullet(obj);
+                else if (obj instanceof Wall) this.drawWall(obj);
+            });
+            this.drawUI(playerKombat);
         }
-        game.world.forEachObject((id, obj) => {
-            if (obj instanceof Kombat) this.drawKombat(obj);
-            else if (obj instanceof Bullet) this.drawBullet(obj);
-            else if (obj instanceof Box) this.drawBox(obj.position.x, obj.position.y, obj.width, obj.height);
-        });
-        // ctx.translate(game.w/2 - 2, game.h/2 - 2);
-        
         ctx.restore();
     }
 
+    resetRender(){
+        ctx.clearRect(0, 0, game.w, game.h);
+        ctx.save();
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, 800, 600 );
+        ctx.translate(0, 0);
+        ctx.scale(this.clientEngine.zoom, this.clientEngine.zoom);  // Zoom in and flip y axis
+    }
+
+    drawUI(obj){
+        ctx.fillStyle = "red";
+        ctx.fillRect(10/ this.clientEngine.zoom, 580/ this.clientEngine.zoom, obj.health * ( 780 / obj.max_health)/ this.clientEngine.zoom, 10/ this.clientEngine.zoom);
+    }
+
+    getCenter(obj){
+        return new TwoVector(
+            obj.position.x + this.offsetX + obj.width/2,
+            obj.position.y + this.offsetY + obj.height/2
+        )
+    }
+
+    getCircumscribedRadiusLength(edge){
+        return (edge * Math.SQRT2) / 2;
+    }
+
     drawKombat(obj) {
-        this.drawCircumscribedCircle(obj.position.x + this.offsetX, obj.position.y + this.offsetY, obj.width);
-        this.drawBox(obj.position.x + this.offsetX, obj.position.y + this.offsetY, obj.width, obj.height);
+        ctx.fillStyle = "transparent";
+        ctx.strokeStyle = obj.playerId === this.gameEngine.playerId ? "dodgerblue" : "crimson";
+        let center = this.getCenter(obj);
+        let radius = this.getCircumscribedRadiusLength(obj.width);
+        this.drawCircle(center.x, center.y, radius);
+        ctx.beginPath(); 
+        ctx.moveTo(center.x,center.y);
+        ctx.lineTo(center.x + radius * Math.cos(obj.direction), center.y + radius * Math.sin(obj.direction));
+        ctx.stroke();
     }
+
     drawBullet(obj){
-        this.drawCircumscribedCircle(obj.position.x + this.offsetX, obj.position.y + this.offsetY, obj.width);
-        this.drawBox(obj.position.x + this.offsetX, obj.position.y + this.offsetY, obj.width, obj.height);
+        ctx.fillStyle = "transparent";
+        ctx.strokeStyle = "yellow";
+        let center = this.getCenter(obj);
+        let radius = this.getCircumscribedRadiusLength(obj.width);
+        this.drawCircle(center.x, center.y, radius);
+        this.drawBox(center.x, center.y, obj.width, obj.height);
     }
-    drawCircle(x, y, r) {
+
+    drawWall(obj){
+        ctx.strokeStyle =  "white";
+        let center = this.getCenter(obj);
+        this.drawBox(center.x, center.y, obj.width, obj.height);
+    }
+
+    drawBlood(obj){
+        ctx.fillStyle = 'rgba(255,0,0,.6)';
+        let center = this.getCenter(obj);
+        obj.splatter.forEach(sp => {
+            ctx.beginPath();
+            ctx.arc(center.x+sp[0], center.y+sp[1], sp[2], 0, 2*Math.PI);
+            ctx.fill();
+            ctx.closePath();
+        });
+    }
+
+    drawCircle(x, y, r, ) {
         ctx.beginPath();
-        ctx.arc(x+r, y+r, r, 0, 2*Math.PI);
+        ctx.arc(x, y, r, 0, 2*Math.PI);
+        ctx.fill();
+      
         ctx.stroke();
+
         ctx.closePath();
     }
-    drawCircumscribedCircle(x, y, l){
-        ctx.beginPath();
-        ctx.arc(x+(l/2), y+(l/2), (l * Math.SQRT2) /2, 0, 2*Math.PI);
-        ctx.stroke();
-        ctx.closePath();
-    }
+
     drawBox(x, y, w, h){
         ctx.beginPath();
-        ctx.rect(x, y, w, h);
+        ctx.rect(x - (w/2), y - (h/2), w, h);
         ctx.stroke();
         ctx.closePath();
-    }
-    drawBounds() {
-        ctx.strokeRect(0 + this.offsetX, 0 + this.offsetY,30,12);
     }
 }

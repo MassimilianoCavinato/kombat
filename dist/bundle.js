@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 24);
+/******/ 	return __webpack_require__(__webpack_require__.s = 25);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -8045,8 +8045,8 @@ if (typeof Object.create === 'function') {
 
 
 
-var base64 = __webpack_require__(28)
-var ieee754 = __webpack_require__(29)
+var base64 = __webpack_require__(29)
+var ieee754 = __webpack_require__(30)
 var isArray = __webpack_require__(9)
 
 exports.Buffer = Buffer
@@ -10213,11 +10213,11 @@ module.exports = Array.isArray || function (arr) {
 /* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {var ClientRequest = __webpack_require__(30)
+/* WEBPACK VAR INJECTION */(function(global) {var ClientRequest = __webpack_require__(31)
 var response = __webpack_require__(12)
-var extend = __webpack_require__(39)
-var statusCodes = __webpack_require__(40)
-var url = __webpack_require__(41)
+var extend = __webpack_require__(40)
+var statusCodes = __webpack_require__(41)
+var url = __webpack_require__(42)
 
 var http = exports
 
@@ -10621,7 +10621,7 @@ exports.Readable = exports;
 exports.Writable = __webpack_require__(18);
 exports.Duplex = __webpack_require__(5);
 exports.Transform = __webpack_require__(20);
-exports.PassThrough = __webpack_require__(37);
+exports.PassThrough = __webpack_require__(38);
 
 
 /***/ }),
@@ -10700,7 +10700,7 @@ util.inherits = __webpack_require__(3);
 /*</replacement>*/
 
 /*<replacement>*/
-var debugUtil = __webpack_require__(31);
+var debugUtil = __webpack_require__(32);
 var debug = void 0;
 if (debugUtil && debugUtil.debuglog) {
   debug = debugUtil.debuglog('stream');
@@ -10709,7 +10709,7 @@ if (debugUtil && debugUtil.debuglog) {
 }
 /*</replacement>*/
 
-var BufferList = __webpack_require__(32);
+var BufferList = __webpack_require__(33);
 var destroyImpl = __webpack_require__(17);
 var StringDecoder;
 
@@ -12269,7 +12269,7 @@ util.inherits = __webpack_require__(3);
 
 /*<replacement>*/
 var internalUtil = {
-  deprecate: __webpack_require__(36)
+  deprecate: __webpack_require__(37)
 };
 /*</replacement>*/
 
@@ -12884,7 +12884,7 @@ Writable.prototype._destroy = function (err, cb) {
   this.end();
   cb(err);
 };
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(34).setImmediate, __webpack_require__(0)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(35).setImmediate, __webpack_require__(0)))
 
 /***/ }),
 /* 19 */
@@ -13451,6 +13451,12 @@ function (_DynamicObject) {
       return Object.assign({
         direction: {
           type: __WEBPACK_IMPORTED_MODULE_0_lance_gg__["BaseTypes"].TYPES.FLOAT32
+        },
+        max_health: {
+          type: __WEBPACK_IMPORTED_MODULE_0_lance_gg__["BaseTypes"].TYPES.UINT8
+        },
+        health: {
+          type: __WEBPACK_IMPORTED_MODULE_0_lance_gg__["BaseTypes"].TYPES.UINT8
         }
       }, _get(_getPrototypeOf(Kombat), "netScheme", this));
     }
@@ -13478,6 +13484,8 @@ function (_DynamicObject) {
     key: "collidesWith",
     value: function collidesWith(other) {
       if (this.playerId === other.playerId) {
+        return false;
+      } else if (other.type === "Blood") {
         return false;
       } else {
         return true;
@@ -13596,7 +13604,7 @@ function (_DynamicObject) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Box; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Wall; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lance_gg__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lance_gg___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lance_gg__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -13623,37 +13631,37 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
-var Box =
+var Wall =
 /*#__PURE__*/
 function (_DynamicObject) {
-  _inherits(Box, _DynamicObject);
+  _inherits(Wall, _DynamicObject);
 
-  _createClass(Box, null, [{
+  _createClass(Wall, null, [{
     key: "netScheme",
     get: function get() {
       return Object.assign({// add serializable properties here
-      }, _get(_getPrototypeOf(Box), "netScheme", this));
+      }, _get(_getPrototypeOf(Wall), "netScheme", this));
     }
   }]);
 
-  function Box(gameEngine, options, props) {
+  function Wall(gameEngine, options, props) {
     var _this;
 
-    _classCallCheck(this, Box);
+    _classCallCheck(this, Wall);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Box).call(this, gameEngine, options, props));
-    _this.class = Box;
-    _this.type = "Box";
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Wall).call(this, gameEngine, options, props));
+    _this.class = Wall;
+    _this.type = "Wall";
     _this.width = 3;
     _this.height = 3;
     _this.isStatic = 1;
     return _this;
   }
 
-  _createClass(Box, [{
+  _createClass(Wall, [{
     key: "syncTo",
     value: function syncTo(other) {
-      _get(_getPrototypeOf(Box.prototype), "syncTo", this).call(this, other);
+      _get(_getPrototypeOf(Wall.prototype), "syncTo", this).call(this, other);
     }
   }, {
     key: "collidesWith",
@@ -13662,7 +13670,7 @@ function (_DynamicObject) {
     }
   }]);
 
-  return Box;
+  return Wall;
 }(__WEBPACK_IMPORTED_MODULE_0_lance_gg__["DynamicObject"]);
 
 
@@ -13672,13 +13680,89 @@ function (_DynamicObject) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Blood; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lance_gg__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lance_gg___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lance_gg__);
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
+
+function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+
+
+var Blood =
+/*#__PURE__*/
+function (_DynamicObject) {
+  _inherits(Blood, _DynamicObject);
+
+  _createClass(Blood, null, [{
+    key: "netScheme",
+    get: function get() {
+      return Object.assign({// add serializable properties here
+      }, _get(_getPrototypeOf(Blood), "netScheme", this));
+    }
+  }]);
+
+  function Blood(gameEngine, options, props) {
+    var _this;
+
+    _classCallCheck(this, Blood);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Blood).call(this, gameEngine, options, props));
+    _this.class = Blood;
+    _this.type = "Blood";
+    _this.width = 2;
+    _this.height = 2;
+    _this.splatter = [[Math.random(), Math.random(), Math.random()], [Math.random(), -Math.random(), Math.random()], [-Math.random(), Math.random(), Math.random()], [-Math.random(), -Math.random(), Math.random()]];
+    return _this;
+  }
+
+  _createClass(Blood, [{
+    key: "syncTo",
+    value: function syncTo(other) {
+      _get(_getPrototypeOf(Blood.prototype), "syncTo", this).call(this, other);
+    }
+  }, {
+    key: "collidesWith",
+    value: function collidesWith(other) {
+      return false;
+    }
+  }]);
+
+  return Blood;
+}(__WEBPACK_IMPORTED_MODULE_0_lance_gg__["DynamicObject"]);
+
+
+
+/***/ }),
+/* 25 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_query_string__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_query_string__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_query_string___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_query_string__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lance_gg__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lance_gg___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_lance_gg__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__client_KombatClientEngine__ = __webpack_require__(48);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__common_KombatGameEngine__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__client_KombatClientEngine__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__common_KombatGameEngine__ = __webpack_require__(51);
 
 
 
@@ -13691,7 +13775,7 @@ var defaults = {
   delayInputCount: 5,
   scheduler: 'render-schedule',
   syncOptions: {
-    sync: 'extrapolate',
+    sync: 'interpolate',
     localObjBending: 1,
     remoteObjBending: 1,
     bendingIncrements: 6
@@ -13706,13 +13790,13 @@ document.addEventListener('DOMContentLoaded', function (e) {
 });
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var strictUriEncode = __webpack_require__(26);
-var objectAssign = __webpack_require__(27);
+var strictUriEncode = __webpack_require__(27);
+var objectAssign = __webpack_require__(28);
 
 function encoderForArrayFormat(opts) {
 	switch (opts.arrayFormat) {
@@ -13918,7 +14002,7 @@ exports.stringify = function (obj, opts) {
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13931,7 +14015,7 @@ module.exports = function (str) {
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14028,7 +14112,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14186,7 +14270,7 @@ function fromByteArray (uint8) {
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports) {
 
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -14276,14 +14360,14 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(Buffer, global, process) {var capability = __webpack_require__(11)
 var inherits = __webpack_require__(3)
 var response = __webpack_require__(12)
 var stream = __webpack_require__(13)
-var toArrayBuffer = __webpack_require__(38)
+var toArrayBuffer = __webpack_require__(39)
 
 var IncomingMessage = response.IncomingMessage
 var rStates = response.readyStates
@@ -14610,13 +14694,13 @@ var unsafeHeaders = [
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4).Buffer, __webpack_require__(0), __webpack_require__(2)))
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14625,7 +14709,7 @@ var unsafeHeaders = [
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Buffer = __webpack_require__(8).Buffer;
-var util = __webpack_require__(33);
+var util = __webpack_require__(34);
 
 function copyBuffer(src, target, offset) {
   src.copy(target, offset);
@@ -14701,13 +14785,13 @@ if (util && util.inspect && util.inspect.custom) {
 }
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var scope = (typeof global !== "undefined" && global) ||
@@ -14763,7 +14847,7 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(35);
+__webpack_require__(36);
 // On some exotic environments, it's not clear which object `setimmediate` was
 // able to install onto.  Search each possibility in the same order as the
 // `setimmediate` library.
@@ -14777,7 +14861,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -14970,7 +15054,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(2)))
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -15044,7 +15128,7 @@ function config (name) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15097,7 +15181,7 @@ PassThrough.prototype._transform = function (chunk, encoding, cb) {
 };
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Buffer = __webpack_require__(4).Buffer
@@ -15130,7 +15214,7 @@ module.exports = function (buf) {
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports) {
 
 module.exports = extend
@@ -15155,7 +15239,7 @@ function extend() {
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -15225,7 +15309,7 @@ module.exports = {
 
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15252,8 +15336,8 @@ module.exports = {
 
 
 
-var punycode = __webpack_require__(42);
-var util = __webpack_require__(44);
+var punycode = __webpack_require__(43);
+var util = __webpack_require__(45);
 
 exports.parse = urlParse;
 exports.resolve = urlResolve;
@@ -15328,7 +15412,7 @@ var protocolPattern = /^([a-z0-9.+-]+:)/i,
       'gopher:': true,
       'file:': true
     },
-    querystring = __webpack_require__(45);
+    querystring = __webpack_require__(46);
 
 function urlParse(url, parseQueryString, slashesDenoteHost) {
   if (url && util.isObject(url) && url instanceof Url) return url;
@@ -15964,7 +16048,7 @@ Url.prototype.parseHost = function() {
 
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*! https://mths.be/punycode v1.4.1 by @mathias */
@@ -16500,10 +16584,10 @@ Url.prototype.parseHost = function() {
 
 }(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(43)(module), __webpack_require__(0)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(44)(module), __webpack_require__(0)))
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -16531,7 +16615,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16554,18 +16638,18 @@ module.exports = {
 
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-exports.decode = exports.parse = __webpack_require__(46);
-exports.encode = exports.stringify = __webpack_require__(47);
+exports.decode = exports.parse = __webpack_require__(47);
+exports.encode = exports.stringify = __webpack_require__(48);
 
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16656,7 +16740,7 @@ var isArray = Array.isArray || function (xs) {
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16748,14 +16832,14 @@ var objectKeys = Object.keys || function (obj) {
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return KombatClientEngine; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lance_gg__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lance_gg___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lance_gg__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__client_KombatRenderer__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__client_KombatRenderer__ = __webpack_require__(50);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -16807,14 +16891,13 @@ function (_ClientEngine) {
     }); // restart game
 
 
-    document.querySelector('#tryAgain').addEventListener('click', function () {
+    document.querySelector('#try-again').addEventListener('click', function () {
       window.location.reload();
     }); // show try-again button
 
     gameEngine.on('objectDestroyed', function (obj) {
       if (obj.playerId === gameEngine.playerId && obj.type === "Kombat") {
-        document.body.classList.add('lostGame');
-        document.querySelector('#tryAgain').disabled = false;
+        document.querySelector('#try-again').style.display = "block";
       }
     });
     _this.mouseX = null;
@@ -16825,7 +16908,7 @@ function (_ClientEngine) {
       return _this.shoot(e);
     });
 
-    _this.gameEngine.on('client__preStep', _this.sendMouseAngle.bind(_assertThisInitialized(_this)));
+    _this.gameEngine.on('client__preStep', _this.preStep.bind(_assertThisInitialized(_this)));
 
     return _this;
   }
@@ -16834,26 +16917,28 @@ function (_ClientEngine) {
     key: "updateMouseXY",
     value: function updateMouseXY(e) {
       e.preventDefault();
-      this.mouseX = e.pageX;
-      this.mouseY = e.pageY;
+      this.mouseX = e.pageX - 400;
+      this.mouseY = e.pageY - 300;
     }
   }, {
-    key: "sendMouseAngle",
-    value: function sendMouseAngle() {
+    key: "preStep",
+    value: function preStep() {
+      var debugContainer = document.getElementById('debug');
       var player = this.gameEngine.world.queryObject({
         playerId: this.gameEngine.playerId
       });
-      if (this.mouseY === null || player === null) return;
-      var mouseX = this.mouseX / this.zoom;
-      var mouseY = this.mouseY / this.zoom;
-      var dx = mouseX;
-      var dy = mouseY;
-      var angle = Math.atan2(dx, dy);
-      this.sendInput(angle, {
-        movement: true
-      });
-      var debugContainer = document.getElementById('debug');
-      debugContainer.innerHTML = "\n            PlayerPos:\n            <br/> \n            X: ".concat(player.position.x, "\n            <br/> \n            Y: ").concat(player.position.y, "\n            <br/>\n            ----------------------------\n            <br/>\n            MousePos: \n            <br/> \n            X: ").concat(dx, "\n            <br/> \n            Y: ").concat(dy, "\n            <br/> \n            ----------------------------\n            <br/>\n            Direction: ").concat(angle, "\n        ");
+
+      if (player === null) {
+        debugContainer.innerHTML = "";
+      } else {
+        if (this.mouseY) {
+          var angle = Math.atan2(this.mouseY, this.mouseX);
+          this.sendInput(angle, {
+            movement: true
+          });
+          debugContainer.innerHTML = "\n                PlayerPos:\n                <br/> \n                X: ".concat(player.position.x, "\n                <br/> \n                Y: ").concat(player.position.y, "\n                <br/>\n                ----------------------------\n                <br/>\n                MousePos: \n                <br/> \n                X: ").concat(this.mouseX, "\n                <br/> \n                Y: ").concat(this.mouseY, "\n                <br/> \n                ----------------------------\n                <br/>\n                Angle: ").concat(angle, "\n                <br/>\n                ----------------------------\n            ");
+        }
+      }
     }
   }, {
     key: "shoot",
@@ -16870,7 +16955,7 @@ function (_ClientEngine) {
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -16879,7 +16964,8 @@ function (_ClientEngine) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lance_gg___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lance_gg__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__common_Kombat__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_Bullet__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__common_Box__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__common_Wall__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__common_Blood__ = __webpack_require__(24);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -16906,10 +16992,10 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var ctx = null;
 var canvas = null;
 var game = null;
-var c = 0;
 var C_WIDTH = 800;
 var C_HEIGHT = 600;
 
@@ -16928,16 +17014,14 @@ function (_Renderer) {
     canvas = document.createElement('canvas');
     canvas.width = C_WIDTH;
     canvas.height = C_HEIGHT;
-    document.body.insertBefore(canvas, document.getElementById('logo'));
+    document.body.appendChild(canvas);
     game.w = canvas.width;
     game.h = canvas.height;
-    clientEngine.zoom = 15; // if (game.w / game.spaceWidth < clientEngine.zoom) clientEngine.zoom = game.w / game.spaceWidth;
-
+    clientEngine.zoom = 10;
     ctx = canvas.getContext('2d');
     ctx.lineWidth = 2 / clientEngine.zoom;
-    ctx.strokeStyle = 'white';
-    ctx.fildlStyle = "red";
-    _this.viewPort = new __WEBPACK_IMPORTED_MODULE_0_lance_gg__["TwoVector"](0, 0);
+    _this.offsetX = 0;
+    _this.offsetY = 0;
     return _this;
   }
 
@@ -16948,13 +17032,7 @@ function (_Renderer) {
 
       _get(_getPrototypeOf(KombatRenderer.prototype), "draw", this).call(this, t, dt);
 
-      ctx.clearRect(0, 0, game.w, game.h);
-      ctx.save();
-      ctx.fillRect(0, 0, 800, 600);
-      ctx.translate(0, 0);
-      ctx.scale(this.clientEngine.zoom, this.clientEngine.zoom); // Zoom in and flip y axis
-
-      this.drawBounds();
+      this.resetRender();
       var playerKombat = this.gameEngine.world.queryObject({
         playerId: this.gameEngine.playerId,
         instanceType: __WEBPACK_IMPORTED_MODULE_1__common_Kombat__["a" /* default */]
@@ -16962,40 +17040,95 @@ function (_Renderer) {
 
       if (playerKombat) {
         this.offsetX = C_WIDTH / 2 / this.clientEngine.zoom - playerKombat.position.x - playerKombat.width / 2;
-        this.offsetY = C_HEIGHT / 2 / this.clientEngine.zoom - playerKombat.position.y - playerKombat.height / 2;
-      }
+        this.offsetY = C_HEIGHT / 2 / this.clientEngine.zoom - playerKombat.position.y - playerKombat.height / 2; //draw blood stains first // layer 0
 
-      game.world.forEachObject(function (id, obj) {
-        if (obj instanceof __WEBPACK_IMPORTED_MODULE_1__common_Kombat__["a" /* default */]) _this2.drawKombat(obj);else if (obj instanceof __WEBPACK_IMPORTED_MODULE_2__common_Bullet__["a" /* default */]) _this2.drawBullet(obj);else if (obj instanceof __WEBPACK_IMPORTED_MODULE_3__common_Box__["a" /* default */]) _this2.drawBox(obj.position.x, obj.position.y, obj.width, obj.height);
-      }); // ctx.translate(game.w/2 - 2, game.h/2 - 2);
+        game.world.queryObjects({
+          instanceType: __WEBPACK_IMPORTED_MODULE_4__common_Blood__["a" /* default */]
+        }).forEach(function (obj) {
+          _this2.drawBlood(obj);
+        });
+        game.world.forEachObject(function (id, obj) {
+          if (obj instanceof __WEBPACK_IMPORTED_MODULE_1__common_Kombat__["a" /* default */]) _this2.drawKombat(obj);else if (obj instanceof __WEBPACK_IMPORTED_MODULE_2__common_Bullet__["a" /* default */]) _this2.drawBullet(obj);else if (obj instanceof __WEBPACK_IMPORTED_MODULE_3__common_Wall__["a" /* default */]) _this2.drawWall(obj);
+        });
+        this.drawUI(playerKombat);
+      }
 
       ctx.restore();
     }
   }, {
+    key: "resetRender",
+    value: function resetRender() {
+      ctx.clearRect(0, 0, game.w, game.h);
+      ctx.save();
+      ctx.fillStyle = "black";
+      ctx.fillRect(0, 0, 800, 600);
+      ctx.translate(0, 0);
+      ctx.scale(this.clientEngine.zoom, this.clientEngine.zoom); // Zoom in and flip y axis
+    }
+  }, {
+    key: "drawUI",
+    value: function drawUI(obj) {
+      ctx.fillStyle = "red";
+      ctx.fillRect(10 / this.clientEngine.zoom, 580 / this.clientEngine.zoom, obj.health * (780 / obj.max_health) / this.clientEngine.zoom, 10 / this.clientEngine.zoom);
+    }
+  }, {
+    key: "getCenter",
+    value: function getCenter(obj) {
+      return new __WEBPACK_IMPORTED_MODULE_0_lance_gg__["TwoVector"](obj.position.x + this.offsetX + obj.width / 2, obj.position.y + this.offsetY + obj.height / 2);
+    }
+  }, {
+    key: "getCircumscribedRadiusLength",
+    value: function getCircumscribedRadiusLength(edge) {
+      return edge * Math.SQRT2 / 2;
+    }
+  }, {
     key: "drawKombat",
     value: function drawKombat(obj) {
-      this.drawCircumscribedCircle(obj.position.x + this.offsetX, obj.position.y + this.offsetY, obj.width);
-      this.drawBox(obj.position.x + this.offsetX, obj.position.y + this.offsetY, obj.width, obj.height);
+      ctx.fillStyle = "transparent";
+      ctx.strokeStyle = obj.playerId === this.gameEngine.playerId ? "dodgerblue" : "crimson";
+      var center = this.getCenter(obj);
+      var radius = this.getCircumscribedRadiusLength(obj.width);
+      this.drawCircle(center.x, center.y, radius);
+      ctx.beginPath();
+      ctx.moveTo(center.x, center.y);
+      ctx.lineTo(center.x + radius * Math.cos(obj.direction), center.y + radius * Math.sin(obj.direction));
+      ctx.stroke();
     }
   }, {
     key: "drawBullet",
     value: function drawBullet(obj) {
-      this.drawCircumscribedCircle(obj.position.x + this.offsetX, obj.position.y + this.offsetY, obj.width);
-      this.drawBox(obj.position.x + this.offsetX, obj.position.y + this.offsetY, obj.width, obj.height);
+      ctx.fillStyle = "transparent";
+      ctx.strokeStyle = "yellow";
+      var center = this.getCenter(obj);
+      var radius = this.getCircumscribedRadiusLength(obj.width);
+      this.drawCircle(center.x, center.y, radius);
+      this.drawBox(center.x, center.y, obj.width, obj.height);
+    }
+  }, {
+    key: "drawWall",
+    value: function drawWall(obj) {
+      ctx.strokeStyle = "white";
+      var center = this.getCenter(obj);
+      this.drawBox(center.x, center.y, obj.width, obj.height);
+    }
+  }, {
+    key: "drawBlood",
+    value: function drawBlood(obj) {
+      ctx.fillStyle = 'rgba(255,0,0,.6)';
+      var center = this.getCenter(obj);
+      obj.splatter.forEach(function (sp) {
+        ctx.beginPath();
+        ctx.arc(center.x + sp[0], center.y + sp[1], sp[2], 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.closePath();
+      });
     }
   }, {
     key: "drawCircle",
     value: function drawCircle(x, y, r) {
       ctx.beginPath();
-      ctx.arc(x + r, y + r, r, 0, 2 * Math.PI);
-      ctx.stroke();
-      ctx.closePath();
-    }
-  }, {
-    key: "drawCircumscribedCircle",
-    value: function drawCircumscribedCircle(x, y, l) {
-      ctx.beginPath();
-      ctx.arc(x + l / 2, y + l / 2, l * Math.SQRT2 / 2, 0, 2 * Math.PI);
+      ctx.arc(x, y, r, 0, 2 * Math.PI);
+      ctx.fill();
       ctx.stroke();
       ctx.closePath();
     }
@@ -17003,14 +17136,9 @@ function (_Renderer) {
     key: "drawBox",
     value: function drawBox(x, y, w, h) {
       ctx.beginPath();
-      ctx.rect(x, y, w, h);
+      ctx.rect(x - w / 2, y - h / 2, w, h);
       ctx.stroke();
       ctx.closePath();
-    }
-  }, {
-    key: "drawBounds",
-    value: function drawBounds() {
-      ctx.strokeRect(0 + this.offsetX, 0 + this.offsetY, 30, 12);
     }
   }]);
 
@@ -17020,18 +17148,17 @@ function (_Renderer) {
 
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return KombatGameEngine; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lance_gg__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lance_gg___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lance_gg__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Wiggle__ = __webpack_require__(51);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Kombat__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Food__ = __webpack_require__(52);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Box__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Bullet__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Kombat__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Wall__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Bullet__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Blood__ = __webpack_require__(24);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -17053,7 +17180,6 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
 
 
 
@@ -17080,6 +17206,9 @@ function (_GameEngine) {
     });
 
     _this.on('preStep', _this.moveAll.bind(_assertThisInitialized(_this)));
+
+    _this.on('postStep', function (e) {// console.log('poststep', e);
+    });
 
     _this.on('collisionStart', function (e) {
       return _this.handleCollision(e);
@@ -17109,11 +17238,10 @@ function (_GameEngine) {
   _createClass(KombatGameEngine, [{
     key: "registerClasses",
     value: function registerClasses(serializer) {
-      serializer.registerClass(__WEBPACK_IMPORTED_MODULE_2__Kombat__["a" /* default */]);
-      serializer.registerClass(__WEBPACK_IMPORTED_MODULE_5__Bullet__["a" /* default */]);
-      serializer.registerClass(__WEBPACK_IMPORTED_MODULE_3__Food__["a" /* default */]);
-      serializer.registerClass(__WEBPACK_IMPORTED_MODULE_1__Wiggle__["a" /* default */]);
-      serializer.registerClass(__WEBPACK_IMPORTED_MODULE_4__Box__["a" /* default */]);
+      serializer.registerClass(__WEBPACK_IMPORTED_MODULE_1__Kombat__["a" /* default */]);
+      serializer.registerClass(__WEBPACK_IMPORTED_MODULE_3__Bullet__["a" /* default */]);
+      serializer.registerClass(__WEBPACK_IMPORTED_MODULE_2__Wall__["a" /* default */]);
+      serializer.registerClass(__WEBPACK_IMPORTED_MODULE_4__Blood__["a" /* default */]);
     }
   }, {
     key: "start",
@@ -17161,169 +17289,48 @@ function (_GameEngine) {
   }, {
     key: "handleCollision",
     value: function handleCollision(e) {
-      if (e.o1 instanceof __WEBPACK_IMPORTED_MODULE_2__Kombat__["a" /* default */]) {
-        if (e.o2 instanceof __WEBPACK_IMPORTED_MODULE_5__Bullet__["a" /* default */]) {
-          this.destroyBullet(e.o2.id);
+      if (e.o1 instanceof __WEBPACK_IMPORTED_MODULE_1__Kombat__["a" /* default */]) {
+        if (e.o2 instanceof __WEBPACK_IMPORTED_MODULE_3__Bullet__["a" /* default */]) {
+          this.handleBulletHit(e.o1, e.o2);
         }
-      } else if (e.o1 instanceof __WEBPACK_IMPORTED_MODULE_5__Bullet__["a" /* default */]) {
-        if (e.o2 instanceof __WEBPACK_IMPORTED_MODULE_2__Kombat__["a" /* default */]) {
-          this.destroyBullet(e.o1.id);
+      } else if (e.o1 instanceof __WEBPACK_IMPORTED_MODULE_3__Bullet__["a" /* default */]) {
+        if (e.o2 instanceof __WEBPACK_IMPORTED_MODULE_1__Kombat__["a" /* default */]) {
+          this.handleBulletHit(e.o2, e.o1);
+        } else if (e.o2 instanceof __WEBPACK_IMPORTED_MODULE_2__Wall__["a" /* default */]) {
+          this.destroyObjectById(e.o1.id);
+        }
+      } else if (e.o1 instanceof __WEBPACK_IMPORTED_MODULE_2__Wall__["a" /* default */]) {
+        if (e.o2 instanceof __WEBPACK_IMPORTED_MODULE_3__Bullet__["a" /* default */]) {
+          this.destroyObjectById(e.o2.id);
         }
       }
     }
   }, {
-    key: "destroyBullet",
-    value: function destroyBullet(bulletId) {
-      if (this.world.objects[bulletId]) {
-        this.removeObjectFromWorld(bulletId);
+    key: "handleBulletHit",
+    value: function handleBulletHit(kombat, bullet) {
+      this.destroyObjectById(bullet.id);
+      kombat.health--;
+      var blood = new __WEBPACK_IMPORTED_MODULE_4__Blood__["a" /* default */](this, null, {
+        position: kombat.position.clone()
+      });
+      this.addObjectToWorld(blood);
+      this.timer.add(120, this.destroyObjectById, this, [blood.id]);
+
+      if (kombat.health === 0) {
+        this.destroyObjectById(kombat.id);
+      }
+    }
+  }, {
+    key: "destroyObjectById",
+    value: function destroyObjectById(id) {
+      if (this.world.objects[id]) {
+        this.removeObjectFromWorld(id);
       }
     }
   }]);
 
   return KombatGameEngine;
 }(__WEBPACK_IMPORTED_MODULE_0_lance_gg__["GameEngine"]);
-
-
-
-/***/ }),
-/* 51 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Wiggle; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lance_gg__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lance_gg___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lance_gg__);
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
-
-function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-
-
-var Wiggle =
-/*#__PURE__*/
-function (_DynamicObject) {
-  _inherits(Wiggle, _DynamicObject);
-
-  _createClass(Wiggle, null, [{
-    key: "netScheme",
-    get: function get() {
-      return Object.assign({
-        direction: {
-          type: __WEBPACK_IMPORTED_MODULE_0_lance_gg__["BaseTypes"].TYPES.FLOAT32
-        }
-      }, _get(_getPrototypeOf(Wiggle), "netScheme", this));
-    }
-  }]);
-
-  function Wiggle(gameEngine, options, props) {
-    var _this;
-
-    _classCallCheck(this, Wiggle);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Wiggle).call(this, gameEngine, options, props));
-    _this.class = Wiggle;
-    return _this;
-  }
-
-  _createClass(Wiggle, [{
-    key: "syncTo",
-    value: function syncTo(other) {
-      _get(_getPrototypeOf(Wiggle.prototype), "syncTo", this).call(this, other);
-
-      this.direction = other.direction;
-    }
-  }, {
-    key: "toString",
-    value: function toString() {
-      return "Wiggle::".concat(_get(_getPrototypeOf(Wiggle.prototype), "toString", this).call(this), " direction=").concat(this.direction, " length=").concat(this.bodyLength);
-    }
-  }]);
-
-  return Wiggle;
-}(__WEBPACK_IMPORTED_MODULE_0_lance_gg__["DynamicObject"]);
-
-
-
-/***/ }),
-/* 52 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Food; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lance_gg__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lance_gg___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lance_gg__);
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
-
-function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-
-
-var Food =
-/*#__PURE__*/
-function (_DynamicObject) {
-  _inherits(Food, _DynamicObject);
-
-  _createClass(Food, [{
-    key: "syncTo",
-    value: function syncTo(other) {
-      _get(_getPrototypeOf(Food.prototype), "syncTo", this).call(this, other);
-    }
-  }], [{
-    key: "netScheme",
-    get: function get() {
-      return Object.assign({// add serializable properties here
-      }, _get(_getPrototypeOf(Food), "netScheme", this));
-    }
-  }]);
-
-  function Food(gameEngine, options, props) {
-    var _this;
-
-    _classCallCheck(this, Food);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Food).call(this, gameEngine, options, props));
-    _this.class = Food;
-    return _this;
-  }
-
-  return Food;
-}(__WEBPACK_IMPORTED_MODULE_0_lance_gg__["DynamicObject"]);
 
 
 

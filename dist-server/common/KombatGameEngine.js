@@ -7,15 +7,13 @@ exports.default = void 0;
 
 var _lanceGg = require("lance-gg");
 
-var _Wiggle = _interopRequireDefault(require("./Wiggle"));
-
 var _Kombat = _interopRequireDefault(require("./Kombat"));
 
-var _Food = _interopRequireDefault(require("./Food"));
-
-var _Box = _interopRequireDefault(require("./Box"));
+var _Wall = _interopRequireDefault(require("./Wall"));
 
 var _Bullet = _interopRequireDefault(require("./Bullet"));
+
+var _Blood = _interopRequireDefault(require("./Blood"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -61,6 +59,9 @@ function (_GameEngine) {
 
     _this.on('preStep', _this.moveAll.bind(_assertThisInitialized(_this)));
 
+    _this.on('postStep', function (e) {// console.log('poststep', e);
+    });
+
     _this.on('collisionStart', function (e) {
       return _this.handleCollision(e);
     }); // game variables
@@ -91,9 +92,8 @@ function (_GameEngine) {
     value: function registerClasses(serializer) {
       serializer.registerClass(_Kombat.default);
       serializer.registerClass(_Bullet.default);
-      serializer.registerClass(_Food.default);
-      serializer.registerClass(_Wiggle.default);
-      serializer.registerClass(_Box.default);
+      serializer.registerClass(_Wall.default);
+      serializer.registerClass(_Blood.default);
     }
   }, {
     key: "start",
@@ -143,19 +143,40 @@ function (_GameEngine) {
     value: function handleCollision(e) {
       if (e.o1 instanceof _Kombat.default) {
         if (e.o2 instanceof _Bullet.default) {
-          this.destroyBullet(e.o2.id);
+          this.handleBulletHit(e.o1, e.o2);
         }
       } else if (e.o1 instanceof _Bullet.default) {
         if (e.o2 instanceof _Kombat.default) {
-          this.destroyBullet(e.o1.id);
+          this.handleBulletHit(e.o2, e.o1);
+        } else if (e.o2 instanceof _Wall.default) {
+          this.destroyObjectById(e.o1.id);
+        }
+      } else if (e.o1 instanceof _Wall.default) {
+        if (e.o2 instanceof _Bullet.default) {
+          this.destroyObjectById(e.o2.id);
         }
       }
     }
   }, {
-    key: "destroyBullet",
-    value: function destroyBullet(bulletId) {
-      if (this.world.objects[bulletId]) {
-        this.removeObjectFromWorld(bulletId);
+    key: "handleBulletHit",
+    value: function handleBulletHit(kombat, bullet) {
+      this.destroyObjectById(bullet.id);
+      kombat.health--;
+      var blood = new _Blood.default(this, null, {
+        position: kombat.position.clone()
+      });
+      this.addObjectToWorld(blood);
+      this.timer.add(120, this.destroyObjectById, this, [blood.id]);
+
+      if (kombat.health === 0) {
+        this.destroyObjectById(kombat.id);
+      }
+    }
+  }, {
+    key: "destroyObjectById",
+    value: function destroyObjectById(id) {
+      if (this.world.objects[id]) {
+        this.removeObjectFromWorld(id);
       }
     }
   }]);

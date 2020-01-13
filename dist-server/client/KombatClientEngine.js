@@ -59,14 +59,13 @@ function (_ClientEngine) {
     }); // restart game
 
 
-    document.querySelector('#tryAgain').addEventListener('click', function () {
+    document.querySelector('#try-again').addEventListener('click', function () {
       window.location.reload();
     }); // show try-again button
 
     gameEngine.on('objectDestroyed', function (obj) {
       if (obj.playerId === gameEngine.playerId && obj.type === "Kombat") {
-        document.body.classList.add('lostGame');
-        document.querySelector('#tryAgain').disabled = false;
+        document.querySelector('#try-again').style.display = "block";
       }
     });
     _this.mouseX = null;
@@ -77,7 +76,7 @@ function (_ClientEngine) {
       return _this.shoot(e);
     });
 
-    _this.gameEngine.on('client__preStep', _this.sendMouseAngle.bind(_assertThisInitialized(_this)));
+    _this.gameEngine.on('client__preStep', _this.preStep.bind(_assertThisInitialized(_this)));
 
     return _this;
   }
@@ -86,26 +85,28 @@ function (_ClientEngine) {
     key: "updateMouseXY",
     value: function updateMouseXY(e) {
       e.preventDefault();
-      this.mouseX = e.pageX;
-      this.mouseY = e.pageY;
+      this.mouseX = e.pageX - 400;
+      this.mouseY = e.pageY - 300;
     }
   }, {
-    key: "sendMouseAngle",
-    value: function sendMouseAngle() {
+    key: "preStep",
+    value: function preStep() {
+      var debugContainer = document.getElementById('debug');
       var player = this.gameEngine.world.queryObject({
         playerId: this.gameEngine.playerId
       });
-      if (this.mouseY === null || player === null) return;
-      var mouseX = this.mouseX / this.zoom;
-      var mouseY = this.mouseY / this.zoom;
-      var dx = mouseX;
-      var dy = mouseY;
-      var angle = Math.atan2(dx, dy);
-      this.sendInput(angle, {
-        movement: true
-      });
-      var debugContainer = document.getElementById('debug');
-      debugContainer.innerHTML = "\n            PlayerPos:\n            <br/> \n            X: ".concat(player.position.x, "\n            <br/> \n            Y: ").concat(player.position.y, "\n            <br/>\n            ----------------------------\n            <br/>\n            MousePos: \n            <br/> \n            X: ").concat(dx, "\n            <br/> \n            Y: ").concat(dy, "\n            <br/> \n            ----------------------------\n            <br/>\n            Direction: ").concat(angle, "\n        ");
+
+      if (player === null) {
+        debugContainer.innerHTML = "";
+      } else {
+        if (this.mouseY) {
+          var angle = Math.atan2(this.mouseY, this.mouseX);
+          this.sendInput(angle, {
+            movement: true
+          });
+          debugContainer.innerHTML = "\n                PlayerPos:\n                <br/> \n                X: ".concat(player.position.x, "\n                <br/> \n                Y: ").concat(player.position.y, "\n                <br/>\n                ----------------------------\n                <br/>\n                MousePos: \n                <br/> \n                X: ").concat(this.mouseX, "\n                <br/> \n                Y: ").concat(this.mouseY, "\n                <br/> \n                ----------------------------\n                <br/>\n                Angle: ").concat(angle, "\n                <br/>\n                ----------------------------\n            ");
+        }
+      }
     }
   }, {
     key: "shoot",

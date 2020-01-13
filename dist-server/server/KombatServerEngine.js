@@ -11,7 +11,7 @@ var _Kombat = _interopRequireDefault(require("../common/Kombat"));
 
 var _Bullet = _interopRequireDefault(require("../common/Bullet"));
 
-var _Box = _interopRequireDefault(require("../common/Box"));
+var _Wall = _interopRequireDefault(require("../common/Wall"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -57,9 +57,18 @@ function (_ServerEngine) {
   _createClass(KombatServerEngine, [{
     key: "start",
     value: function start() {
-      _get(_getPrototypeOf(KombatServerEngine.prototype), "start", this).call(this); // let testBox = new Box(this.gameEngine, null, { position: new TwoVector(0, 0) });
-      // this.gameEngine.addObjectToWorld(testBox);
+      var _this2 = this;
 
+      _get(_getPrototypeOf(KombatServerEngine.prototype), "start", this).call(this);
+
+      var walls = [[0, 0], [2, 19], [12, 4], [3, 9], [16, 16], [22, 13], [8, 26]];
+      walls.forEach(function (w) {
+        var wall = new _Wall.default(_this2.gameEngine, null, {
+          position: new _lanceGg.TwoVector(w[0], w[1])
+        });
+
+        _this2.gameEngine.addObjectToWorld(wall);
+      });
     }
   }, {
     key: "onPlayerConnected",
@@ -69,8 +78,9 @@ function (_ServerEngine) {
       var playerKombat = new _Kombat.default(this.gameEngine, null, {
         position: new _lanceGg.TwoVector(10, 10)
       });
-      playerKombat.direction = 0;
       playerKombat.playerId = socket.playerId;
+      playerKombat.max_health = 10;
+      playerKombat.health = 10;
       this.gameEngine.addObjectToWorld(playerKombat);
     }
   }, {
@@ -87,7 +97,9 @@ function (_ServerEngine) {
   }, {
     key: "shoot",
     value: function shoot(player) {
-      var speed = 0.01;
+      var speed = 0.7;
+      var liveTimer = 70; //gameloops
+
       var bullet = new _Bullet.default(this.gameEngine, null, {
         direction: player.direction,
         playerId: player.playerId,
@@ -96,13 +108,13 @@ function (_ServerEngine) {
         velocity: new _lanceGg.TwoVector(Math.cos(player.direction) * speed, Math.sin(player.direction) * speed)
       });
       this.gameEngine.addObjectToWorld(bullet);
-      this.gameEngine.timer.add(60, this.destroyBullet, this, [bullet.id]);
+      this.gameEngine.timer.add(liveTimer, this.destroyObjectById, this, [bullet.id]);
     }
   }, {
-    key: "destroyBullet",
-    value: function destroyBullet(bulletId) {
-      if (this.gameEngine.world.objects[bulletId]) {
-        this.gameEngine.removeObjectFromWorld(bulletId);
+    key: "destroyObjectById",
+    value: function destroyObjectById(id) {
+      if (this.gameEngine.world.objects[id]) {
+        this.gameEngine.removeObjectFromWorld(id);
       }
     }
   }]);

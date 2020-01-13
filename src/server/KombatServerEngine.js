@@ -1,7 +1,7 @@
 import { ServerEngine, TwoVector } from 'lance-gg';
 import Kombat from '../common/Kombat';
 import Bullet from '../common/Bullet';
-import Box from '../common/Box';
+import Wall from '../common/Wall';
 
 export default class KombatServerEngine extends ServerEngine {
 
@@ -12,15 +12,28 @@ export default class KombatServerEngine extends ServerEngine {
 
     start() {
         super.start();
-        // let testBox = new Box(this.gameEngine, null, { position: new TwoVector(0, 0) });
-        // this.gameEngine.addObjectToWorld(testBox);
+        let walls = [
+
+            [0,0],
+            [2, 19],
+            [12,4],
+            [3,9],
+            [16, 16],
+            [22, 13],
+            [8,26],
+        ];
+        walls.forEach(w => {
+            let wall = new Wall(this.gameEngine, null, { position: new TwoVector(w[0], w[1]) });
+            this.gameEngine.addObjectToWorld(wall);
+        });
     }
 
     onPlayerConnected(socket) {
         super.onPlayerConnected(socket);
         let playerKombat = new Kombat(this.gameEngine, null, { position: new TwoVector(10, 10) });
-        playerKombat.direction = 0;
         playerKombat.playerId = socket.playerId;
+        playerKombat.max_health = 10;
+        playerKombat.health = 10;
         this.gameEngine.addObjectToWorld(playerKombat);
     }
 
@@ -32,12 +45,13 @@ export default class KombatServerEngine extends ServerEngine {
 
     shoot(player) {
         
-        let speed = 0.01;
-  
+        let speed = 0.7;
+        let liveTimer = 70; //gameloops
         let bullet = new Bullet(this.gameEngine, null, { 
             direction: player.direction,
             playerId: player.playerId,
             ownerId: player.id,
+           
             position: new TwoVector(
                 player.position.x + (player.width / 4),
                 player.position.y + (player.height / 4)
@@ -48,12 +62,12 @@ export default class KombatServerEngine extends ServerEngine {
             )
         });
         this.gameEngine.addObjectToWorld(bullet);
-        this.gameEngine.timer.add(60, this.destroyBullet, this, [bullet.id]);
+        this.gameEngine.timer.add(liveTimer, this.destroyObjectById, this, [bullet.id]);
     }
 
-    destroyBullet(bulletId) {
-        if (this.gameEngine.world.objects[bulletId]) {
-            this.gameEngine.removeObjectFromWorld(bulletId);
+    destroyObjectById(id) {
+        if (this.gameEngine.world.objects[id]) {
+            this.gameEngine.removeObjectFromWorld(id);
         }
     }
 

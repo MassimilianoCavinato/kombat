@@ -19,7 +19,7 @@ var defaults = {
   delayInputCount: 5,
   scheduler: 'render-schedule',
   syncOptions: {
-    sync: 'extrapolate',
+    sync: 'interpolate',
     localObjBending: 1,
     remoteObjBending: 1,
     bendingIncrements: 6

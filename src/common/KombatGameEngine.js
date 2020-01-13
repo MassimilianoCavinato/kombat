@@ -1,9 +1,8 @@
 import { GameEngine, SimplePhysicsEngine, TwoVector } from 'lance-gg';
-import Wiggle from './Wiggle';
 import Kombat from './Kombat';
-import Food from './Food';
-import Box from './Box';
+import Wall from './Wall';
 import Bullet from './Bullet';
+import Blood from './Blood';
 
 export default class KombatGameEngine extends GameEngine {
 
@@ -17,6 +16,9 @@ export default class KombatGameEngine extends GameEngine {
         });
         
         this.on('preStep', this.moveAll.bind(this));
+        this.on('postStep', (e) => {
+            // console.log('poststep', e);
+        });
         this.on('collisionStart', (e) => this.handleCollision(e));
            
         // game variables
@@ -42,9 +44,8 @@ export default class KombatGameEngine extends GameEngine {
     registerClasses(serializer) {
         serializer.registerClass(Kombat);
         serializer.registerClass(Bullet);
-        serializer.registerClass(Food);
-        serializer.registerClass(Wiggle);
-        serializer.registerClass(Box);
+        serializer.registerClass(Wall);
+        serializer.registerClass(Blood);
     }
 
     start() {
@@ -90,19 +91,38 @@ export default class KombatGameEngine extends GameEngine {
     handleCollision(e){
         if(e.o1 instanceof Kombat){
             if(e.o2 instanceof Bullet){
-                this.destroyBullet(e.o2.id);
+                this.handleBulletHit(e.o1, e.o2)
             }
         }
         else if(e.o1 instanceof Bullet){
             if(e.o2 instanceof Kombat){
-                this.destroyBullet(e.o1.id);
+                this.handleBulletHit(e.o2, e.o1)
+            }
+            else if( e.o2 instanceof Wall){
+                this.destroyObjectById(e.o1.id);
+            }
+        }
+        else if(e.o1 instanceof Wall){
+            if(e.o2 instanceof Bullet){
+                this.destroyObjectById(e.o2.id);
             }
         }
     }
 
-    destroyBullet(bulletId) {
-        if (this.world.objects[bulletId]) {
-            this.removeObjectFromWorld(bulletId);
+    handleBulletHit(kombat, bullet){
+        this.destroyObjectById(bullet.id);
+        kombat.health--;
+        let blood = new Blood(this, null, { position: kombat.position.clone() });
+        this.addObjectToWorld(blood);
+        this.timer.add(120, this.destroyObjectById, this, [blood.id]);
+        if(kombat.health === 0){
+            this.destroyObjectById(kombat.id);
+        }
+    }
+
+    destroyObjectById(id){
+        if (this.world.objects[id]) {
+            this.removeObjectFromWorld(id);
         }
     }
 }

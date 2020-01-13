@@ -12,14 +12,13 @@ export default class KombatClientEngine extends ClientEngine {
         this.controls.bindKey('a', 'left', { repeat: true } );
         this.controls.bindKey('d', 'right', { repeat: true } );
         // restart game
-        document.querySelector('#tryAgain').addEventListener('click', () => {
+        document.querySelector('#try-again').addEventListener('click', () => {
             window.location.reload();
         });
         // show try-again button
         gameEngine.on('objectDestroyed', (obj) => {
             if (obj.playerId === gameEngine.playerId && obj.type === "Kombat") {
-                document.body.classList.add('lostGame');
-                document.querySelector('#tryAgain').disabled = false;
+                document.querySelector('#try-again').style.display = "block";
             }
         });
 
@@ -28,47 +27,52 @@ export default class KombatClientEngine extends ClientEngine {
         document.addEventListener('mousemove', this.updateMouseXY.bind(this), false);
         document.addEventListener('mouseenter', this.updateMouseXY.bind(this), false);
         document.addEventListener('mousedown', (e) => this.shoot(e));
-        this.gameEngine.on('client__preStep', this.sendMouseAngle.bind(this));
+        this.gameEngine.on('client__preStep', this.preStep.bind(this));
     }
 
     updateMouseXY(e) {
         e.preventDefault();
-        this.mouseX = e.pageX;
-        this.mouseY = e.pageY;
+        this.mouseX = e.pageX - 400;
+        this.mouseY = e.pageY - 300;
     }
-
-    sendMouseAngle() {
-        let player = this.gameEngine.world.queryObject({ playerId: this.gameEngine.playerId });
-        if (this.mouseY === null || player === null) return;
-        let mouseX = (this.mouseX / this.zoom);
-        let mouseY = (this.mouseY / this.zoom) ;
-        let dx = mouseX;
-        let dy = mouseY;
-        let angle = Math.atan2(dx, dy);
-        this.sendInput(angle, { movement: true });
-
+    
+    preStep() {
         let debugContainer = document.getElementById('debug');
-        debugContainer.innerHTML = `
-            PlayerPos:
-            <br/> 
-            X: ${player.position.x}
-            <br/> 
-            Y: ${player.position.y}
-            <br/>
-            ----------------------------
-            <br/>
-            MousePos: 
-            <br/> 
-            X: ${dx}
-            <br/> 
-            Y: ${dy}
-            <br/> 
-            ----------------------------
-            <br/>
-            Direction: ${angle}
-        `
+        let player = this.gameEngine.world.queryObject({ playerId: this.gameEngine.playerId });
+        if(player === null){
+            debugContainer.innerHTML = ``;
+        }
+        else{
+            if (this.mouseY){
+                let angle = Math.atan2(this.mouseY, this.mouseX);
+                this.sendInput(angle, { movement: true });
+                debugContainer.innerHTML = `
+                PlayerPos:
+                <br/> 
+                X: ${player.position.x}
+                <br/> 
+                Y: ${player.position.y}
+                <br/>
+                ----------------------------
+                <br/>
+                MousePos: 
+                <br/> 
+                X: ${this.mouseX}
+                <br/> 
+                Y: ${this.mouseY}
+                <br/> 
+                ----------------------------
+                <br/>
+                Angle: ${angle}
+                <br/>
+                ----------------------------
+            `
+            }
+           
+        }
     }
 
+    
     shoot(){
         this.sendInput("shoot", { movement: true });
     }

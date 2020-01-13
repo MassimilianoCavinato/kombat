@@ -29,66 +29,47 @@ function _superPropBase(object, property) { while (!Object.prototype.hasOwnPrope
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
-var Kombat =
+var Wall =
 /*#__PURE__*/
 function (_DynamicObject) {
-  _inherits(Kombat, _DynamicObject);
+  _inherits(Wall, _DynamicObject);
 
-  _createClass(Kombat, null, [{
+  _createClass(Wall, null, [{
     key: "netScheme",
     get: function get() {
-      return Object.assign({
-        direction: {
-          type: _lanceGg.BaseTypes.TYPES.FLOAT32
-        },
-        max_health: {
-          type: _lanceGg.BaseTypes.TYPES.UINT8
-        },
-        health: {
-          type: _lanceGg.BaseTypes.TYPES.UINT8
-        }
-      }, _get(_getPrototypeOf(Kombat), "netScheme", this));
+      return Object.assign({// add serializable properties here
+      }, _get(_getPrototypeOf(Wall), "netScheme", this));
     }
   }]);
 
-  function Kombat(gameEngine, options, props) {
+  function Wall(gameEngine, options, props) {
     var _this;
 
-    _classCallCheck(this, Kombat);
+    _classCallCheck(this, Wall);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Kombat).call(this, gameEngine, options, props));
-    _this.class = Kombat;
-    _this.type = "Kombat";
-    _this.width = 2;
-    _this.height = 2;
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Wall).call(this, gameEngine, options, props));
+    _this.class = Wall;
+    _this.type = "Wall";
+    _this.width = 3;
+    _this.height = 3;
+    _this.isStatic = 1;
     return _this;
   }
 
-  _createClass(Kombat, [{
+  _createClass(Wall, [{
     key: "syncTo",
     value: function syncTo(other) {
-      _get(_getPrototypeOf(Kombat.prototype), "syncTo", this).call(this, other);
+      _get(_getPrototypeOf(Wall.prototype), "syncTo", this).call(this, other);
     }
   }, {
     key: "collidesWith",
     value: function collidesWith(other) {
-      if (this.playerId === other.playerId) {
-        return false;
-      } else if (other.type === "Blood") {
-        return false;
-      } else {
-        return true;
-      }
-    }
-  }, {
-    key: "toString",
-    value: function toString() {
-      return "Kombat";
+      return true;
     }
   }]);
 
-  return Kombat;
+  return Wall;
 }(_lanceGg.DynamicObject);
 
-exports.default = Kombat;
-//# sourceMappingURL=Kombat.js.map
+exports.default = Wall;
+//# sourceMappingURL=Wall.js.map

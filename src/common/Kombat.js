@@ -5,6 +5,8 @@ export default class Kombat extends  DynamicObject {
     static get netScheme() {
         return Object.assign({
             direction: { type: BaseTypes.TYPES.FLOAT32 },
+            max_health: { type: BaseTypes.TYPES.UINT8 }, 
+            health: { type: BaseTypes.TYPES.UINT8 }
         }, 
         super.netScheme);
     }
@@ -22,7 +24,10 @@ export default class Kombat extends  DynamicObject {
     }
 
     collidesWith(other){
-        if(this.playerId === other.playerId){
+        if(this.playerId === other.playerId ){
+            return false;
+        }
+        else if(other.type === "Blood"){
             return false;
         }
         else{

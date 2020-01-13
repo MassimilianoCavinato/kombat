@@ -11,7 +11,9 @@ var _Kombat = _interopRequireDefault(require("../common/Kombat"));
 
 var _Bullet = _interopRequireDefault(require("../common/Bullet"));
 
-var _Box = _interopRequireDefault(require("../common/Box"));
+var _Wall = _interopRequireDefault(require("../common/Wall"));
+
+var _Blood = _interopRequireDefault(require("../common/Blood"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -40,7 +42,6 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 var ctx = null;
 var canvas = null;
 var game = null;
-var c = 0;
 var C_WIDTH = 800;
 var C_HEIGHT = 600;
 
@@ -59,16 +60,14 @@ function (_Renderer) {
     canvas = document.createElement('canvas');
     canvas.width = C_WIDTH;
     canvas.height = C_HEIGHT;
-    document.body.insertBefore(canvas, document.getElementById('logo'));
+    document.body.appendChild(canvas);
     game.w = canvas.width;
     game.h = canvas.height;
-    clientEngine.zoom = 15; // if (game.w / game.spaceWidth < clientEngine.zoom) clientEngine.zoom = game.w / game.spaceWidth;
-
+    clientEngine.zoom = 10;
     ctx = canvas.getContext('2d');
     ctx.lineWidth = 2 / clientEngine.zoom;
-    ctx.strokeStyle = 'white';
-    ctx.fildlStyle = "red";
-    _this.viewPort = new _lanceGg.TwoVector(0, 0);
+    _this.offsetX = 0;
+    _this.offsetY = 0;
     return _this;
   }
 
@@ -79,13 +78,7 @@ function (_Renderer) {
 
       _get(_getPrototypeOf(KombatRenderer.prototype), "draw", this).call(this, t, dt);
 
-      ctx.clearRect(0, 0, game.w, game.h);
-      ctx.save();
-      ctx.fillRect(0, 0, 800, 600);
-      ctx.translate(0, 0);
-      ctx.scale(this.clientEngine.zoom, this.clientEngine.zoom); // Zoom in and flip y axis
-
-      this.drawBounds();
+      this.resetRender();
       var playerKombat = this.gameEngine.world.queryObject({
         playerId: this.gameEngine.playerId,
         instanceType: _Kombat.default
@@ -93,40 +86,95 @@ function (_Renderer) {
 
       if (playerKombat) {
         this.offsetX = C_WIDTH / 2 / this.clientEngine.zoom - playerKombat.position.x - playerKombat.width / 2;
-        this.offsetY = C_HEIGHT / 2 / this.clientEngine.zoom - playerKombat.position.y - playerKombat.height / 2;
-      }
+        this.offsetY = C_HEIGHT / 2 / this.clientEngine.zoom - playerKombat.position.y - playerKombat.height / 2; //draw blood stains first // layer 0
 
-      game.world.forEachObject(function (id, obj) {
-        if (obj instanceof _Kombat.default) _this2.drawKombat(obj);else if (obj instanceof _Bullet.default) _this2.drawBullet(obj);else if (obj instanceof _Box.default) _this2.drawBox(obj.position.x, obj.position.y, obj.width, obj.height);
-      }); // ctx.translate(game.w/2 - 2, game.h/2 - 2);
+        game.world.queryObjects({
+          instanceType: _Blood.default
+        }).forEach(function (obj) {
+          _this2.drawBlood(obj);
+        });
+        game.world.forEachObject(function (id, obj) {
+          if (obj instanceof _Kombat.default) _this2.drawKombat(obj);else if (obj instanceof _Bullet.default) _this2.drawBullet(obj);else if (obj instanceof _Wall.default) _this2.drawWall(obj);
+        });
+        this.drawUI(playerKombat);
+      }
 
       ctx.restore();
     }
   }, {
+    key: "resetRender",
+    value: function resetRender() {
+      ctx.clearRect(0, 0, game.w, game.h);
+      ctx.save();
+      ctx.fillStyle = "black";
+      ctx.fillRect(0, 0, 800, 600);
+      ctx.translate(0, 0);
+      ctx.scale(this.clientEngine.zoom, this.clientEngine.zoom); // Zoom in and flip y axis
+    }
+  }, {
+    key: "drawUI",
+    value: function drawUI(obj) {
+      ctx.fillStyle = "red";
+      ctx.fillRect(10 / this.clientEngine.zoom, 580 / this.clientEngine.zoom, obj.health * (780 / obj.max_health) / this.clientEngine.zoom, 10 / this.clientEngine.zoom);
+    }
+  }, {
+    key: "getCenter",
+    value: function getCenter(obj) {
+      return new _lanceGg.TwoVector(obj.position.x + this.offsetX + obj.width / 2, obj.position.y + this.offsetY + obj.height / 2);
+    }
+  }, {
+    key: "getCircumscribedRadiusLength",
+    value: function getCircumscribedRadiusLength(edge) {
+      return edge * Math.SQRT2 / 2;
+    }
+  }, {
     key: "drawKombat",
     value: function drawKombat(obj) {
-      this.drawCircumscribedCircle(obj.position.x + this.offsetX, obj.position.y + this.offsetY, obj.width);
-      this.drawBox(obj.position.x + this.offsetX, obj.position.y + this.offsetY, obj.width, obj.height);
+      ctx.fillStyle = "transparent";
+      ctx.strokeStyle = obj.playerId === this.gameEngine.playerId ? "dodgerblue" : "crimson";
+      var center = this.getCenter(obj);
+      var radius = this.getCircumscribedRadiusLength(obj.width);
+      this.drawCircle(center.x, center.y, radius);
+      ctx.beginPath();
+      ctx.moveTo(center.x, center.y);
+      ctx.lineTo(center.x + radius * Math.cos(obj.direction), center.y + radius * Math.sin(obj.direction));
+      ctx.stroke();
     }
   }, {
     key: "drawBullet",
     value: function drawBullet(obj) {
-      this.drawCircumscribedCircle(obj.position.x + this.offsetX, obj.position.y + this.offsetY, obj.width);
-      this.drawBox(obj.position.x + this.offsetX, obj.position.y + this.offsetY, obj.width, obj.height);
+      ctx.fillStyle = "transparent";
+      ctx.strokeStyle = "yellow";
+      var center = this.getCenter(obj);
+      var radius = this.getCircumscribedRadiusLength(obj.width);
+      this.drawCircle(center.x, center.y, radius);
+      this.drawBox(center.x, center.y, obj.width, obj.height);
+    }
+  }, {
+    key: "drawWall",
+    value: function drawWall(obj) {
+      ctx.strokeStyle = "white";
+      var center = this.getCenter(obj);
+      this.drawBox(center.x, center.y, obj.width, obj.height);
+    }
+  }, {
+    key: "drawBlood",
+    value: function drawBlood(obj) {
+      ctx.fillStyle = 'rgba(255,0,0,.6)';
+      var center = this.getCenter(obj);
+      obj.splatter.forEach(function (sp) {
+        ctx.beginPath();
+        ctx.arc(center.x + sp[0], center.y + sp[1], sp[2], 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.closePath();
+      });
     }
   }, {
     key: "drawCircle",
     value: function drawCircle(x, y, r) {
       ctx.beginPath();
-      ctx.arc(x + r, y + r, r, 0, 2 * Math.PI);
-      ctx.stroke();
-      ctx.closePath();
-    }
-  }, {
-    key: "drawCircumscribedCircle",
-    value: function drawCircumscribedCircle(x, y, l) {
-      ctx.beginPath();
-      ctx.arc(x + l / 2, y + l / 2, l * Math.SQRT2 / 2, 0, 2 * Math.PI);
+      ctx.arc(x, y, r, 0, 2 * Math.PI);
+      ctx.fill();
       ctx.stroke();
       ctx.closePath();
     }
@@ -134,14 +182,9 @@ function (_Renderer) {
     key: "drawBox",
     value: function drawBox(x, y, w, h) {
       ctx.beginPath();
-      ctx.rect(x, y, w, h);
+      ctx.rect(x - w / 2, y - h / 2, w, h);
       ctx.stroke();
       ctx.closePath();
-    }
-  }, {
-    key: "drawBounds",
-    value: function drawBounds() {
-      ctx.strokeRect(0 + this.offsetX, 0 + this.offsetY, 30, 12);
     }
   }]);
 

@@ -102,7 +102,7 @@ export default class KombatRenderer extends Renderer {
     }
 
     drawBlood(obj){
-        ctx.fillStyle = 'rgba(255,0,0,.6)';
+        ctx.fillStyle = 'rgba(255,0,0,.5)';
         let center = this.getCenter(obj);
         obj.splatter.forEach(sp => {
             ctx.beginPath();

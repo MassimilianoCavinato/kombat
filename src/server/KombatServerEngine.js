@@ -12,18 +12,62 @@ export default class KombatServerEngine extends ServerEngine {
 
     start() {
         super.start();
+        let sideA = 50;
+        let sideB = 3;
+
+        let wallNorth = new Wall(this.gameEngine, null, { 
+            position: new TwoVector(0,0), 
+            width: sideA,
+            height: sideB,
+        });
+        this.gameEngine.addObjectToWorld(wallNorth);
+
+        let wallEast = new Wall(this.gameEngine, null, { 
+            position: new TwoVector(sideA,0), 
+            width: sideB,
+            height: sideA,
+        });
+        this.gameEngine.addObjectToWorld(wallEast);
+
+        let wallSouth = new Wall(this.gameEngine, null, { 
+            position: new TwoVector(sideB,sideA), 
+            width: sideA,
+            height: sideB,
+        });
+        this.gameEngine.addObjectToWorld(wallSouth);
+
+
+        let wallWest = new Wall(this.gameEngine, null, { 
+            position: new TwoVector(0,sideB), 
+            width: sideB,
+            height: sideA,
+        });
+        this.gameEngine.addObjectToWorld(wallWest);
+
+
+
         let walls = [
-            [0,0],
-            [2, 19],
-            [12,4],
-            [3,9],
-            [16, 16],
-            [22, 13],
-            [8,26],
+            [14,21],
+            [23,18],
+            [20,37],
+            [42, 24],
+            [37,41],
+            [19,9],
+            [8, 16],
+            [36, 23],
+            [37,9],
+            [40,9],
+            [43,9],
+            [43,12],
+            [10, 40],
         ];
 
         walls.forEach(w => {
-            let wall = new Wall(this.gameEngine, null, { position: new TwoVector(w[0], w[1]) });
+            let wall = new Wall(this.gameEngine, null, { 
+                position: new TwoVector(w[0], w[1]), 
+                width: 3,
+                height: 3,
+            });
             this.gameEngine.addObjectToWorld(wall);
         });
     }

@@ -50,8 +50,6 @@ function (_DynamicObject) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Wall).call(this, gameEngine, options, props));
     _this.class = Wall;
     _this.type = "Wall";
-    _this.width = 3;
-    _this.height = 3;
     _this.isStatic = 1;
     return _this;
   }

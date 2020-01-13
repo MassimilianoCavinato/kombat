@@ -72,8 +72,8 @@ export default class KombatClientEngine extends ClientEngine {
                 Angle: ${angle}
                 <br/>
                 ----------------------------
-                 <br/>
-                IsShooting: ${this.isShooting}
+                <br/>
+                IsShooting: ${this.mouseIsDown ? "true" : "false"}
                 <br/>
                 ----------------------------
             `

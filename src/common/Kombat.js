@@ -18,7 +18,7 @@ export default class Kombat extends  DynamicObject {
         this.type = "Kombat";
         this.width = 2;
         this.height = 2;
-    }
+   }
 
     syncTo(other) {
         super.syncTo(other);

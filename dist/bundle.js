@@ -13655,8 +13655,6 @@ function (_DynamicObject) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Wall).call(this, gameEngine, options, props));
     _this.class = Wall;
     _this.type = "Wall";
-    _this.width = 3;
-    _this.height = 3;
     _this.isStatic = 1;
     return _this;
   }
@@ -16950,7 +16948,7 @@ function (_ClientEngine) {
             });
           }
 
-          debugContainer.innerHTML = "\n                PlayerPos:\n                <br/> \n                X: ".concat(player.position.x, "\n                <br/> \n                Y: ").concat(player.position.y, "\n                <br/>\n                ----------------------------\n                <br/>\n                MousePos: \n                <br/> \n                X: ").concat(this.mouseX, "\n                <br/> \n                Y: ").concat(this.mouseY, "\n                <br/> \n                ----------------------------\n                <br/>\n                Angle: ").concat(angle, "\n                <br/>\n                ----------------------------\n                 <br/>\n                IsShooting: ").concat(this.isShooting, "\n                <br/>\n                ----------------------------\n            ");
+          debugContainer.innerHTML = "\n                PlayerPos:\n                <br/> \n                X: ".concat(player.position.x, "\n                <br/> \n                Y: ").concat(player.position.y, "\n                <br/>\n                ----------------------------\n                <br/>\n                MousePos: \n                <br/> \n                X: ").concat(this.mouseX, "\n                <br/> \n                Y: ").concat(this.mouseY, "\n                <br/> \n                ----------------------------\n                <br/>\n                Angle: ").concat(angle, "\n                <br/>\n                ----------------------------\n                <br/>\n                IsShooting: ").concat(this.mouseIsDown ? "true" : "false", "\n                <br/>\n                ----------------------------\n            ");
         }
       }
     }
@@ -17067,16 +17065,20 @@ function (_Renderer) {
     value: function resetRender() {
       ctx.clearRect(0, 0, game.w, game.h);
       ctx.save();
-      ctx.fillStyle = "black";
-      ctx.fillRect(0, 0, 800, 600);
       ctx.translate(0, 0);
       ctx.scale(this.clientEngine.zoom, this.clientEngine.zoom); // Zoom in and flip y axis
     }
   }, {
     key: "drawUI",
     value: function drawUI(obj) {
+      //Health Bar
       ctx.fillStyle = "red";
-      ctx.fillRect(10 / this.clientEngine.zoom, 580 / this.clientEngine.zoom, obj.health * (780 / obj.max_health) / this.clientEngine.zoom, 10 / this.clientEngine.zoom);
+      ctx.fillRect(10 / this.clientEngine.zoom, 570 / this.clientEngine.zoom, obj.health * (780 / obj.max_health) / this.clientEngine.zoom, 10 / this.clientEngine.zoom);
+      ctx.beginPath();
+      ctx.strokeStyle = "white";
+      ctx.rect(10 / this.clientEngine.zoom, 570 / this.clientEngine.zoom, 780 / this.clientEngine.zoom, 10 / this.clientEngine.zoom);
+      ctx.stroke();
+      ctx.closePath();
     }
   }, {
     key: "getCenter",
@@ -17096,7 +17098,6 @@ function (_Renderer) {
       var center = this.getCenter(obj);
       var radius = this.getCircumscribedRadiusLength(obj.width);
       this.drawCircle(center.x, center.y, radius);
-      ctx.beginPath();
       ctx.moveTo(center.x, center.y);
       ctx.lineTo(center.x + radius * Math.cos(obj.direction), center.y + radius * Math.sin(obj.direction));
       ctx.stroke();
@@ -17135,17 +17136,16 @@ function (_Renderer) {
     value: function drawCircle(x, y, r) {
       ctx.beginPath();
       ctx.arc(x, y, r, 0, 2 * Math.PI);
-      ctx.fill();
-      ctx.stroke();
       ctx.closePath();
+      ctx.stroke();
     }
   }, {
     key: "drawBox",
     value: function drawBox(x, y, w, h) {
       ctx.beginPath();
       ctx.rect(x - w / 2, y - h / 2, w, h);
-      ctx.stroke();
       ctx.closePath();
+      ctx.stroke();
     }
   }]);
 

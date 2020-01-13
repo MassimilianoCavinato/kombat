@@ -106,16 +106,20 @@ function (_Renderer) {
     value: function resetRender() {
       ctx.clearRect(0, 0, game.w, game.h);
       ctx.save();
-      ctx.fillStyle = "black";
-      ctx.fillRect(0, 0, 800, 600);
       ctx.translate(0, 0);
       ctx.scale(this.clientEngine.zoom, this.clientEngine.zoom); // Zoom in and flip y axis
     }
   }, {
     key: "drawUI",
     value: function drawUI(obj) {
+      //Health Bar
       ctx.fillStyle = "red";
-      ctx.fillRect(10 / this.clientEngine.zoom, 580 / this.clientEngine.zoom, obj.health * (780 / obj.max_health) / this.clientEngine.zoom, 10 / this.clientEngine.zoom);
+      ctx.fillRect(10 / this.clientEngine.zoom, 570 / this.clientEngine.zoom, obj.health * (780 / obj.max_health) / this.clientEngine.zoom, 10 / this.clientEngine.zoom);
+      ctx.beginPath();
+      ctx.strokeStyle = "white";
+      ctx.rect(10 / this.clientEngine.zoom, 570 / this.clientEngine.zoom, 780 / this.clientEngine.zoom, 10 / this.clientEngine.zoom);
+      ctx.stroke();
+      ctx.closePath();
     }
   }, {
     key: "getCenter",
@@ -135,7 +139,6 @@ function (_Renderer) {
       var center = this.getCenter(obj);
       var radius = this.getCircumscribedRadiusLength(obj.width);
       this.drawCircle(center.x, center.y, radius);
-      ctx.beginPath();
       ctx.moveTo(center.x, center.y);
       ctx.lineTo(center.x + radius * Math.cos(obj.direction), center.y + radius * Math.sin(obj.direction));
       ctx.stroke();
@@ -174,17 +177,16 @@ function (_Renderer) {
     value: function drawCircle(x, y, r) {
       ctx.beginPath();
       ctx.arc(x, y, r, 0, 2 * Math.PI);
-      ctx.fill();
-      ctx.stroke();
       ctx.closePath();
+      ctx.stroke();
     }
   }, {
     key: "drawBox",
     value: function drawBox(x, y, w, h) {
       ctx.beginPath();
       ctx.rect(x - w / 2, y - h / 2, w, h);
-      ctx.stroke();
       ctx.closePath();
+      ctx.stroke();
     }
   }]);
 

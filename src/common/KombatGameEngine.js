@@ -128,6 +128,6 @@ export default class KombatGameEngine extends GameEngine {
     destroyObjectById(id){
         if (this.world.objects[id]) {
             this.removeObjectFromWorld(id);
-        }
+        }   
     }
 }

@@ -12,8 +12,6 @@ export default class Wall extends  DynamicObject {
         super(gameEngine, options, props);
         this.class = Wall;
         this.type = "Wall";
-        this.width = 3;
-        this.height = 3;
         this.isStatic = 1;
     };
 

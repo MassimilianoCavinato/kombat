@@ -61,10 +61,38 @@ function (_ServerEngine) {
 
       _get(_getPrototypeOf(KombatServerEngine.prototype), "start", this).call(this);
 
-      var walls = [[0, 0], [2, 19], [12, 4], [3, 9], [16, 16], [22, 13], [8, 26]];
+      var sideA = 50;
+      var sideB = 3;
+      var wallNorth = new _Wall.default(this.gameEngine, null, {
+        position: new _lanceGg.TwoVector(0, 0),
+        width: sideA,
+        height: sideB
+      });
+      this.gameEngine.addObjectToWorld(wallNorth);
+      var wallEast = new _Wall.default(this.gameEngine, null, {
+        position: new _lanceGg.TwoVector(sideA, 0),
+        width: sideB,
+        height: sideA
+      });
+      this.gameEngine.addObjectToWorld(wallEast);
+      var wallSouth = new _Wall.default(this.gameEngine, null, {
+        position: new _lanceGg.TwoVector(sideB, sideA),
+        width: sideA,
+        height: sideB
+      });
+      this.gameEngine.addObjectToWorld(wallSouth);
+      var wallWest = new _Wall.default(this.gameEngine, null, {
+        position: new _lanceGg.TwoVector(0, sideB),
+        width: sideB,
+        height: sideA
+      });
+      this.gameEngine.addObjectToWorld(wallWest);
+      var walls = [[14, 21], [23, 18], [20, 37], [42, 24], [37, 41], [19, 9], [8, 16], [36, 23], [37, 9], [40, 9], [43, 9], [43, 12], [10, 40]];
       walls.forEach(function (w) {
         var wall = new _Wall.default(_this2.gameEngine, null, {
-          position: new _lanceGg.TwoVector(w[0], w[1])
+          position: new _lanceGg.TwoVector(w[0], w[1]),
+          width: 3,
+          height: 3
         });
 
         _this2.gameEngine.addObjectToWorld(wall);

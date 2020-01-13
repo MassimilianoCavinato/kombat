@@ -90,12 +90,13 @@ export default class KombatRenderer extends Renderer {
     }
 
     drawBullet(obj){
-        ctx.fillStyle = "transparent";
-        ctx.strokeStyle = "yellow";
+        ctx.fillStyle = "yellow";
         let center = this.getCenter(obj);
         let radius = this.getCircumscribedRadiusLength(obj.width);
-        this.drawCircle(center.x, center.y, radius);
-        this.drawBox(center.x, center.y, obj.width, obj.height);
+        ctx.beginPath();
+        ctx.arc(center.x, center.y, radius, 0, 2*Math.PI);
+        ctx.fill();
+        ctx.closePath();
     }
 
     drawWall(obj){

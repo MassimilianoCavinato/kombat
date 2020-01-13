@@ -126,8 +126,8 @@ function (_ServerEngine) {
   }, {
     key: "shoot",
     value: function shoot(kombat) {
-      var speed = 0.7;
-      var liveTimer = 70; //gameloops
+      var speed = 0.4;
+      var liveTimer = 100; //gameloops
 
       var bullet = new _Bullet.default(this.gameEngine, null, {
         direction: kombat.direction,

@@ -17105,12 +17105,13 @@ function (_Renderer) {
   }, {
     key: "drawBullet",
     value: function drawBullet(obj) {
-      ctx.fillStyle = "transparent";
-      ctx.strokeStyle = "yellow";
+      ctx.fillStyle = "yellow";
       var center = this.getCenter(obj);
       var radius = this.getCircumscribedRadiusLength(obj.width);
-      this.drawCircle(center.x, center.y, radius);
-      this.drawBox(center.x, center.y, obj.width, obj.height);
+      ctx.beginPath();
+      ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.closePath();
     }
   }, {
     key: "drawWall",
@@ -17275,7 +17276,7 @@ function (_GameEngine) {
       var player = this.world.queryObject({
         playerId: playerId
       });
-      var speed = 0.25;
+      var speed = 0.16;
 
       if (player) {
         if (inputData.input === 'up') {

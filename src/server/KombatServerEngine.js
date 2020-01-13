@@ -74,7 +74,9 @@ export default class KombatServerEngine extends ServerEngine {
 
     onPlayerConnected(socket) {
         super.onPlayerConnected(socket);
-        let kombat = new Kombat(this.gameEngine, null, { position: new TwoVector(10, 10) });
+        let kombat = new Kombat(this.gameEngine, null, { 
+            position: new TwoVector(10, 10),
+        });
         kombat.playerId = socket.playerId;
         kombat.max_health = 10;
         kombat.health = 10;
@@ -89,8 +91,8 @@ export default class KombatServerEngine extends ServerEngine {
     }
 
     shoot(kombat) {
-        let speed = 0.7;
-        let liveTimer = 70; //gameloops
+        let speed = 0.4;
+        let liveTimer = 100; //gameloops
         let bullet = new Bullet(this.gameEngine, null, { 
             direction: kombat.direction,
             playerId: kombat.playerId,

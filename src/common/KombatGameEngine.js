@@ -65,7 +65,7 @@ export default class KombatGameEngine extends GameEngine {
     processInput(inputData, playerId) {
         super.processInput(inputData, playerId);
         let player = this.world.queryObject({ playerId });
-        let speed = 0.25;
+        let speed = 0.16;
         if (player) {
             if (inputData.input === 'up') {
                 player.position.y-=speed;

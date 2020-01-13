@@ -120,7 +120,7 @@ function (_GameEngine) {
       var player = this.world.queryObject({
         playerId: playerId
       });
-      var speed = 0.25;
+      var speed = 0.16;
 
       if (player) {
         if (inputData.input === 'up') {

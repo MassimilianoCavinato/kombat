@@ -46,6 +46,9 @@ function (_DynamicObject) {
         },
         health: {
           type: _lanceGg.BaseTypes.TYPES.UINT8
+        },
+        last_shot: {
+          type: _lanceGg.BaseTypes.TYPES.UINT8
         }
       }, _get(_getPrototypeOf(Kombat), "netScheme", this));
     }

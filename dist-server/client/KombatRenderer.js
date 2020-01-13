@@ -160,7 +160,7 @@ function (_Renderer) {
   }, {
     key: "drawBlood",
     value: function drawBlood(obj) {
-      ctx.fillStyle = 'rgba(255,0,0,.6)';
+      ctx.fillStyle = 'rgba(255,0,0,.5)';
       var center = this.getCenter(obj);
       obj.splatter.forEach(function (sp) {
         ctx.beginPath();

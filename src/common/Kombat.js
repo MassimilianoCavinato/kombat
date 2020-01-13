@@ -6,7 +6,8 @@ export default class Kombat extends  DynamicObject {
         return Object.assign({
             direction: { type: BaseTypes.TYPES.FLOAT32 },
             max_health: { type: BaseTypes.TYPES.UINT8 }, 
-            health: { type: BaseTypes.TYPES.UINT8 }
+            health: { type: BaseTypes.TYPES.UINT8 },
+            last_shot: { type: BaseTypes.TYPES.UINT8 }, 
         }, 
         super.netScheme);
     }

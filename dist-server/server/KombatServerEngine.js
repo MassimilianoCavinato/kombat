@@ -75,37 +75,38 @@ function (_ServerEngine) {
     value: function onPlayerConnected(socket) {
       _get(_getPrototypeOf(KombatServerEngine.prototype), "onPlayerConnected", this).call(this, socket);
 
-      var playerKombat = new _Kombat.default(this.gameEngine, null, {
+      var kombat = new _Kombat.default(this.gameEngine, null, {
         position: new _lanceGg.TwoVector(10, 10)
       });
-      playerKombat.playerId = socket.playerId;
-      playerKombat.max_health = 10;
-      playerKombat.health = 10;
-      this.gameEngine.addObjectToWorld(playerKombat);
+      kombat.playerId = socket.playerId;
+      kombat.max_health = 10;
+      kombat.health = 10;
+      kombat.last_shot = 0;
+      this.gameEngine.addObjectToWorld(kombat);
     }
   }, {
     key: "onPlayerDisconnected",
     value: function onPlayerDisconnected(socketId, playerId) {
       _get(_getPrototypeOf(KombatServerEngine.prototype), "onPlayerDisconnected", this).call(this, socketId, playerId);
 
-      var playerKombat = this.gameEngine.world.queryObject({
+      var kombat = this.gameEngine.world.queryObject({
         playerId: playerId,
         instanceType: _Kombat.default
       });
-      if (playerKombat) this.gameEngine.removeObjectFromWorld(playerKombat.id);
+      if (kombat) this.gameEngine.removeObjectFromWorld(kombat.id);
     }
   }, {
     key: "shoot",
-    value: function shoot(player) {
+    value: function shoot(kombat) {
       var speed = 0.7;
       var liveTimer = 70; //gameloops
 
       var bullet = new _Bullet.default(this.gameEngine, null, {
-        direction: player.direction,
-        playerId: player.playerId,
-        ownerId: player.id,
-        position: new _lanceGg.TwoVector(player.position.x + player.width / 4, player.position.y + player.height / 4),
-        velocity: new _lanceGg.TwoVector(Math.cos(player.direction) * speed, Math.sin(player.direction) * speed)
+        direction: kombat.direction,
+        playerId: kombat.playerId,
+        ownerId: kombat.id,
+        position: new _lanceGg.TwoVector(kombat.position.x + kombat.width / 4, kombat.position.y + kombat.height / 4),
+        velocity: new _lanceGg.TwoVector(Math.cos(kombat.direction) * speed, Math.sin(kombat.direction) * speed)
       });
       this.gameEngine.addObjectToWorld(bullet);
       this.gameEngine.timer.add(liveTimer, this.destroyObjectById, this, [bullet.id]);

@@ -13,7 +13,6 @@ export default class KombatServerEngine extends ServerEngine {
     start() {
         super.start();
         let walls = [
-
             [0,0],
             [2, 19],
             [12,4],
@@ -22,6 +21,7 @@ export default class KombatServerEngine extends ServerEngine {
             [22, 13],
             [8,26],
         ];
+
         walls.forEach(w => {
             let wall = new Wall(this.gameEngine, null, { position: new TwoVector(w[0], w[1]) });
             this.gameEngine.addObjectToWorld(wall);
@@ -30,37 +30,37 @@ export default class KombatServerEngine extends ServerEngine {
 
     onPlayerConnected(socket) {
         super.onPlayerConnected(socket);
-        let playerKombat = new Kombat(this.gameEngine, null, { position: new TwoVector(10, 10) });
-        playerKombat.playerId = socket.playerId;
-        playerKombat.max_health = 10;
-        playerKombat.health = 10;
-        this.gameEngine.addObjectToWorld(playerKombat);
+        let kombat = new Kombat(this.gameEngine, null, { position: new TwoVector(10, 10) });
+        kombat.playerId = socket.playerId;
+        kombat.max_health = 10;
+        kombat.health = 10;
+        kombat.last_shot = 0;
+        this.gameEngine.addObjectToWorld(kombat);
     }
 
     onPlayerDisconnected(socketId, playerId) {
         super.onPlayerDisconnected(socketId, playerId);
-        let playerKombat = this.gameEngine.world.queryObject({ playerId: playerId,  instanceType: Kombat });
-        if (playerKombat) this.gameEngine.removeObjectFromWorld(playerKombat.id);
+        let kombat = this.gameEngine.world.queryObject({ playerId: playerId,  instanceType: Kombat });
+        if (kombat) this.gameEngine.removeObjectFromWorld(kombat.id);
     }
 
-    shoot(player) {
-        
+    shoot(kombat) {
         let speed = 0.7;
         let liveTimer = 70; //gameloops
         let bullet = new Bullet(this.gameEngine, null, { 
-            direction: player.direction,
-            playerId: player.playerId,
-            ownerId: player.id,
-           
+            direction: kombat.direction,
+            playerId: kombat.playerId,
+            ownerId: kombat.id,
             position: new TwoVector(
-                player.position.x + (player.width / 4),
-                player.position.y + (player.height / 4)
+                kombat.position.x + (kombat.width / 4),
+                kombat.position.y + (kombat.height / 4)
             ),
             velocity: new TwoVector(
-                Math.cos(player.direction) * speed ,
-                Math.sin(player.direction) * speed
+                Math.cos(kombat.direction) * speed ,
+                Math.sin(kombat.direction) * speed
             )
         });
+
         this.gameEngine.addObjectToWorld(bullet);
         this.gameEngine.timer.add(liveTimer, this.destroyObjectById, this, [bullet.id]);
     }

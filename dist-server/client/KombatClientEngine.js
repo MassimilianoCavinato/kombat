@@ -56,8 +56,9 @@ function (_ClientEngine) {
 
     _this.controls.bindKey('d', 'right', {
       repeat: true
-    }); // restart game
+    });
 
+    _this.mouseIsDown = false; // restart game
 
     document.querySelector('#try-again').addEventListener('click', function () {
       window.location.reload();
@@ -70,10 +71,13 @@ function (_ClientEngine) {
     });
     _this.mouseX = null;
     _this.mouseY = null;
-    document.addEventListener('mousemove', _this.updateMouseXY.bind(_assertThisInitialized(_this)), false);
     document.addEventListener('mouseenter', _this.updateMouseXY.bind(_assertThisInitialized(_this)), false);
-    document.addEventListener('mousedown', function (e) {
-      return _this.shoot(e);
+    document.addEventListener('mousemove', _this.updateMouseXY.bind(_assertThisInitialized(_this)), false);
+    document.addEventListener('mousedown', function () {
+      return _this.mouseIsDown = true;
+    });
+    document.addEventListener('mouseup', function () {
+      return _this.mouseIsDown = false;
     });
 
     _this.gameEngine.on('client__preStep', _this.preStep.bind(_assertThisInitialized(_this)));
@@ -104,16 +108,16 @@ function (_ClientEngine) {
           this.sendInput(angle, {
             movement: true
           });
-          debugContainer.innerHTML = "\n                PlayerPos:\n                <br/> \n                X: ".concat(player.position.x, "\n                <br/> \n                Y: ").concat(player.position.y, "\n                <br/>\n                ----------------------------\n                <br/>\n                MousePos: \n                <br/> \n                X: ").concat(this.mouseX, "\n                <br/> \n                Y: ").concat(this.mouseY, "\n                <br/> \n                ----------------------------\n                <br/>\n                Angle: ").concat(angle, "\n                <br/>\n                ----------------------------\n            ");
+
+          if (this.mouseIsDown === true) {
+            this.sendInput("shoot", {
+              repeat: true
+            });
+          }
+
+          debugContainer.innerHTML = "\n                PlayerPos:\n                <br/> \n                X: ".concat(player.position.x, "\n                <br/> \n                Y: ").concat(player.position.y, "\n                <br/>\n                ----------------------------\n                <br/>\n                MousePos: \n                <br/> \n                X: ").concat(this.mouseX, "\n                <br/> \n                Y: ").concat(this.mouseY, "\n                <br/> \n                ----------------------------\n                <br/>\n                Angle: ").concat(angle, "\n                <br/>\n                ----------------------------\n                 <br/>\n                IsShooting: ").concat(this.isShooting, "\n                <br/>\n                ----------------------------\n            ");
         }
       }
-    }
-  }, {
-    key: "shoot",
-    value: function shoot() {
-      this.sendInput("shoot", {
-        movement: true
-      });
     }
   }]);
 

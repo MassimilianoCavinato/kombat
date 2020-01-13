@@ -11,6 +11,7 @@ export default class KombatClientEngine extends ClientEngine {
         this.controls.bindKey('s', 'down', { repeat: true } );
         this.controls.bindKey('a', 'left', { repeat: true } );
         this.controls.bindKey('d', 'right', { repeat: true } );
+        this.mouseIsDown = false;
         // restart game
         document.querySelector('#try-again').addEventListener('click', () => {
             window.location.reload();
@@ -24,9 +25,10 @@ export default class KombatClientEngine extends ClientEngine {
 
         this.mouseX = null;
         this.mouseY = null;
-        document.addEventListener('mousemove', this.updateMouseXY.bind(this), false);
         document.addEventListener('mouseenter', this.updateMouseXY.bind(this), false);
-        document.addEventListener('mousedown', (e) => this.shoot(e));
+        document.addEventListener('mousemove', this.updateMouseXY.bind(this), false);
+        document.addEventListener('mousedown', () => this.mouseIsDown = true );
+        document.addEventListener('mouseup', () => this.mouseIsDown = false);
         this.gameEngine.on('client__preStep', this.preStep.bind(this));
     }
 
@@ -46,6 +48,10 @@ export default class KombatClientEngine extends ClientEngine {
             if (this.mouseY){
                 let angle = Math.atan2(this.mouseY, this.mouseX);
                 this.sendInput(angle, { movement: true });
+                if(this.mouseIsDown === true){
+                    this.sendInput("shoot", { repeat: true });
+                }
+
                 debugContainer.innerHTML = `
                 PlayerPos:
                 <br/> 
@@ -66,14 +72,13 @@ export default class KombatClientEngine extends ClientEngine {
                 Angle: ${angle}
                 <br/>
                 ----------------------------
+                 <br/>
+                IsShooting: ${this.isShooting}
+                <br/>
+                ----------------------------
             `
             }
            
         }
-    }
-
-    
-    shoot(){
-        this.sendInput("shoot", { movement: true });
     }
 }

@@ -132,7 +132,12 @@ function (_GameEngine) {
         } else if (inputData.input === 'left') {
           player.position.x -= speed;
         } else if (inputData.input === 'shoot') {
-          this.emit('shoot', player);
+          var step = inputData.step;
+
+          if (step >= player.last_shot + 15) {
+            player.last_shot = step;
+            this.emit('shoot', player);
+          }
         } else {
           player.direction = inputData.input;
         }

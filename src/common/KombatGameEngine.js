@@ -80,7 +80,12 @@ export default class KombatGameEngine extends GameEngine {
                 player.position.x-=speed;
             }
             else if (inputData.input === 'shoot'){
-                this.emit('shoot', player);
+                let step = inputData.step;
+                if(step  >= player.last_shot + 15){
+                    player.last_shot = step;
+                    this.emit('shoot', player);
+                }
+                
             }
             else {
                 player.direction = inputData.input;

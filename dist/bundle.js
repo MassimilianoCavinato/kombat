@@ -17636,12 +17636,33 @@ function (_GameEngine) {
       var player = this.world.queryObject({
         playerId: playerId
       });
-      var speed = 0.24;
 
       if (player) {
-        if (inputData.input === 'step') {
+        var step = inputData.step;
+
+        if (inputData.input === 'shoot') {
+          if (step >= player.last_shot + 15) {
+            player.last_shot = step;
+            this.emit('shoot', player);
+          }
+        } else if (inputData.input === 'throw_power') {
+          player.throwing_granade = 1;
+          player.throw_power = .03;
+        } else if (inputData.input === 'granade') {
+          player.throwing_granade = 0;
+          this.emit('granade', player);
+        } else if (inputData.input === 'step') {
+          var speed;
           var x = 0;
           var y = 0;
+
+          if (player.throwing_granade === 1) {
+            speed = 0.16;
+          } else if (step <= player.last_shot + 15) {
+            speed = 0.21;
+          } else {
+            speed = 0.24;
+          }
 
           if (inputData.options.right) {
             x++;
@@ -17669,19 +17690,6 @@ function (_GameEngine) {
           }
 
           player.direction = inputData.options.angle;
-        } else if (inputData.input === 'shoot') {
-          var step = inputData.step;
-
-          if (step >= player.last_shot + 15) {
-            player.last_shot = step;
-            this.emit('shoot', player);
-          }
-        } else if (inputData.input === 'throw_power') {
-          player.throwing_granade = 1;
-          player.throw_power = .015;
-        } else if (inputData.input === 'granade') {
-          player.throwing_granade = 0;
-          this.emit('granade', player);
         }
       }
     }

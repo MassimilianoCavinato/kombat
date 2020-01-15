@@ -69,6 +69,10 @@ function (_ClientEngine) {
     document.addEventListener('keyup', function (e) {
       return _this.handleKeyUp(e);
     });
+    setTimeout(function () {
+      var instructions = document.getElementById('kombat-instructions');
+      instructions.style.display = 'none';
+    }, 3000);
 
     _this.gameEngine.on('client__preStep', function (step) {
       return _this.preStep(step);

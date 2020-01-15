@@ -49,10 +49,32 @@
             background-color: black;
             transform: translate(-50%, -50%);
           }
+          #kombat-instructions{
+            position: absolute;
+            left: 50%;
+            top: 40%;
+            background-color: rgba(0,0,0,.5);
+            transform: translate(-50%, -100%);
+            color: white;
+            z-index: 102;
+            padding: 6px;
+            border: 2px solid white;
+            border-radius: 8px;
+            font-size: 24px;
+          }
         </style>
     </head>
     <body>
       <div id='debug'></div>
+      <div id='kombat-instructions'>
+        MOVE: W A S D , 🡅 🡄 🡆 🡇 keys 
+        <br/>
+        AIM: mouse
+        <br/>
+        SHOOT: mouse left click
+        <br/>
+        GRANADE: mouse right click
+      </div>
       <button id='try-again'>GAME OVER! Try again?</div>
       <script src="bundle.js" type="text/javascript"></script>
     </body>

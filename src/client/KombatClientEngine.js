@@ -30,6 +30,10 @@ export default class KombatClientEngine extends ClientEngine {
         document.addEventListener('keydown', (e) => this.handleKeyDown(e));
         document.addEventListener('keyup', (e) => this.handleKeyUp(e));
 
+        setTimeout( () => {
+            let instructions = document.getElementById('kombat-instructions');
+            instructions.style.display = 'none';
+        }, 3000);
         this.gameEngine.on('client__preStep', (step) => this.preStep(step));
         this.gameEngine.on('objectDestroyed', (obj) => {
             if (obj.playerId === gameEngine.playerId && obj.type === "Kombat") {

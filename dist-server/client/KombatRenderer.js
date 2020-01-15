@@ -48,6 +48,7 @@ var canvas = null;
 var game = null;
 var C_WIDTH = 800;
 var C_HEIGHT = 600;
+var QPI = Math.PI / 4;
 
 var KombatRenderer =
 /*#__PURE__*/
@@ -66,7 +67,7 @@ function (_Renderer) {
     canvas.width = C_WIDTH;
     canvas.height = C_HEIGHT;
     document.body.appendChild(canvas);
-    clientEngine.zoom = 10;
+    clientEngine.zoom = 13;
     ctx = canvas.getContext('2d');
     ctx.lineWidth = 3 / clientEngine.zoom;
     ctx.shadowOffsetX = 0;
@@ -102,12 +103,23 @@ function (_Renderer) {
         game.world.queryObjects({
           instanceType: _Blood.default
         }).forEach(function (obj) {
-          _this2.drawBlood(obj);
+          return _this2.drawBlood(obj);
+        });
+        game.world.queryObjects({
+          instanceType: _Wall.default
+        }).forEach(function (obj) {
+          return _this2.drawWall(obj);
         });
         game.world.forEachObject(function (id, obj) {
-          if (obj instanceof _Kombat.default) _this2.drawKombat(obj);else if (obj instanceof _Bullet.default) _this2.drawBullet(obj);else if (obj instanceof _Granade.default) _this2.drawGranade(obj);else if (obj instanceof _Wall.default) _this2.drawWall(obj);else if (obj instanceof _Explosion.default) _this2.drawExplosion(obj);
+          if (obj instanceof _Kombat.default) _this2.drawKombat(obj);else if (obj instanceof _Bullet.default) _this2.drawBullet(obj);else if (obj instanceof _Granade.default) _this2.drawGranade(obj);
+        });
+        game.world.queryObjects({
+          instanceType: _Explosion.default
+        }).forEach(function (obj) {
+          return _this2.drawExplosion(obj);
         });
         this.drawHUD(playerKombat);
+        this.updateDebugger(playerKombat, t, dt);
       }
 
       ctx.restore();
@@ -150,6 +162,12 @@ function (_Renderer) {
       ctx.stroke();
     }
   }, {
+    key: "updateDebugger",
+    value: function updateDebugger(player, t, dt) {
+      var debugContainer = document.getElementById('debug');
+      debugContainer.innerHTML = "\n            Pos X: ".concat(player.position.x, "\n            <hr/> \n            Pos Y: ").concat(player.position.y, "\n            <hr/>\n            Angle: ").concat(this.angle, "\n            <hr/>\n            Is shooting: ").concat(this.mouseIsDown ? "true" : "false", "\n            <hr/>\n            Ammo: ").concat(player.ammo_loaded, "\n            <hr/>\n            Is reloading: ").concat(player.ammo_loaded === -1 ? "true" : "false", "\n            <hr/>\n            t: ").concat(t, "\n            <hr/>\n            dt: ").concat(dt, "\n        ");
+    }
+  }, {
     key: "getCenter",
     value: function getCenter(obj) {
       return new _lanceGg.TwoVector(obj.position.x + this.offset.x + obj.width / 2, obj.position.y + this.offset.y + obj.height / 2);
@@ -180,10 +198,16 @@ function (_Renderer) {
 
       if (obj.ammo_loaded === -1) {
         ctx.beginPath();
-        ctx.arc(center.x, center.y, radius + radius / 2, .1, Math.PI / 2 - .1);
+        ctx.arc(center.x, center.y, radius + radius / 2, .1, QPI - .1);
         ctx.stroke();
         ctx.beginPath();
-        ctx.arc(center.x, center.y, radius + radius / 2, Math.PI + .1, Math.PI + Math.PI / 2 - .1);
+        ctx.arc(center.x, center.y, radius + radius / 2, 2 * QPI + .1, 3 * QPI - .1);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(center.x, center.y, radius + radius / 2, 4 * QPI + .1, 5 * QPI - .1);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(center.x, center.y, radius + radius / 2, 6 * QPI + .1, 7 * QPI - .1);
         ctx.stroke();
       }
 
@@ -191,10 +215,16 @@ function (_Renderer) {
         ctx.strokeStyle = "white";
         ctx.shadowColor = "white";
         ctx.beginPath();
-        ctx.arc(center.x, center.y, radius + radius / 2 + .1, Math.PI / 2, Math.PI - .1);
+        ctx.arc(center.x, center.y, radius + radius / 2, QPI + .1, 2 * QPI - .1);
         ctx.stroke();
         ctx.beginPath();
-        ctx.arc(center.x, center.y, radius + radius / 2, Math.PI + Math.PI / 2 + .1, 2 * Math.PI - .1);
+        ctx.arc(center.x, center.y, radius + radius / 2, 3 * QPI + .1, 4 * QPI - .1);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(center.x, center.y, radius + radius / 2, 5 * QPI + .1, 6 * QPI - .1);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(center.x, center.y, radius + radius / 2, 7 * QPI + .1, 8 * QPI - .1);
         ctx.stroke();
       }
     }

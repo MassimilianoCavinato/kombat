@@ -14,13 +14,8 @@ export default class KombatClientEngine extends ClientEngine {
         this.down = false;
         this.mouseIsDown = false;
         this.controls = new KeyboardControls(this);
-        
-        // restart game
-        document.querySelector('#try-again').addEventListener('click', () => {
-            window.location.reload();
-        });
-        // show try-again button
-
+        //LISTENERS
+        document.querySelector('#try-again').addEventListener('click', () => window.location.reload());
         document.addEventListener('mouseenter', this.updateAngle.bind(this), false);
         document.addEventListener('mousemove', this.updateAngle.bind(this), false);
         document.addEventListener('mousedown', (e) => this.handleMouse(e) );
@@ -28,17 +23,13 @@ export default class KombatClientEngine extends ClientEngine {
         document.addEventListener('contextmenu', (e) => e.preventDefault());
         document.addEventListener('keydown', (e) => this.handleKeyDown(e));
         document.addEventListener('keyup', (e) => this.handleKeyUp(e));
-
-        setTimeout( () => {
-            let instructions = document.getElementById('kombat-instructions');
-            instructions.style.display = 'none';
-        }, 5000);
-        this.gameEngine.on('client__preStep', (step) => this.preStep(step));
+        this.gameEngine.on('client__preStep', () => this.preStep());
         this.gameEngine.on('objectDestroyed', (obj) => {
             if (obj.playerId === gameEngine.playerId && obj.type === "Kombat") {
                 document.querySelector('#try-again').style.display = "block";
             }
         });
+        setTimeout( () => document.getElementById('kombat-instructions').style.display = 'none', 5000);
     }
 
     updateAngle(e) {
@@ -47,12 +38,11 @@ export default class KombatClientEngine extends ClientEngine {
     }
     
     preStep() {
-        let debugContainer = document.getElementById('debug');
+        
         let player = this.gameEngine.world.queryObject({ playerId: this.gameEngine.playerId });
-        if(player === null){
-            debugContainer.innerHTML = ``;
-        }
-        else{
+        
+        if(player !== null){
+            
             this.sendInput('step', { 
                 up: this.up,
                 left: this.left,
@@ -64,21 +54,6 @@ export default class KombatClientEngine extends ClientEngine {
             if(this.mouseIsDown === true){
                 this.sendInput("shoot", { repeat: true });
             }
-
-            debugContainer.innerHTML = `
-            Pos X: ${player.position.x}
-            <hr/> 
-            Pos Y: ${player.position.y}
-            <hr/>
-            Angle: ${this.angle}
-            <hr/>
-            Is shooting: ${this.mouseIsDown ? "true" : "false"}
-            <hr/>
-            Ammo: ${player.ammo_loaded}
-            <hr/>
-            Is reloading: ${player.ammo_loaded === -1 ? "true" : "false"}
-            <hr/>
-        `
         }
     }
 

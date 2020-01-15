@@ -46,12 +46,11 @@ function (_ClientEngine) {
     _this.left = false;
     _this.down = false;
     _this.mouseIsDown = false;
-    _this.controls = new _lanceGg.KeyboardControls(_assertThisInitialized(_this)); // restart game
+    _this.controls = new _lanceGg.KeyboardControls(_assertThisInitialized(_this)); //LISTENERS
 
     document.querySelector('#try-again').addEventListener('click', function () {
-      window.location.reload();
-    }); // show try-again button
-
+      return window.location.reload();
+    });
     document.addEventListener('mouseenter', _this.updateAngle.bind(_assertThisInitialized(_this)), false);
     document.addEventListener('mousemove', _this.updateAngle.bind(_assertThisInitialized(_this)), false);
     document.addEventListener('mousedown', function (e) {
@@ -69,13 +68,9 @@ function (_ClientEngine) {
     document.addEventListener('keyup', function (e) {
       return _this.handleKeyUp(e);
     });
-    setTimeout(function () {
-      var instructions = document.getElementById('kombat-instructions');
-      instructions.style.display = 'none';
-    }, 5000);
 
-    _this.gameEngine.on('client__preStep', function (step) {
-      return _this.preStep(step);
+    _this.gameEngine.on('client__preStep', function () {
+      return _this.preStep();
     });
 
     _this.gameEngine.on('objectDestroyed', function (obj) {
@@ -84,6 +79,9 @@ function (_ClientEngine) {
       }
     });
 
+    setTimeout(function () {
+      return document.getElementById('kombat-instructions').style.display = 'none';
+    }, 5000);
     return _this;
   }
 
@@ -96,14 +94,11 @@ function (_ClientEngine) {
   }, {
     key: "preStep",
     value: function preStep() {
-      var debugContainer = document.getElementById('debug');
       var player = this.gameEngine.world.queryObject({
         playerId: this.gameEngine.playerId
       });
 
-      if (player === null) {
-        debugContainer.innerHTML = "";
-      } else {
+      if (player !== null) {
         this.sendInput('step', {
           up: this.up,
           left: this.left,
@@ -117,8 +112,6 @@ function (_ClientEngine) {
             repeat: true
           });
         }
-
-        debugContainer.innerHTML = "\n            Pos X: ".concat(player.position.x, "\n            <hr/> \n            Pos Y: ").concat(player.position.y, "\n            <hr/>\n            Angle: ").concat(this.angle, "\n            <hr/>\n            Is shooting: ").concat(this.mouseIsDown ? "true" : "false", "\n            <hr/>\n            Ammo: ").concat(player.ammo_loaded, "\n            <hr/>\n            Is reloading: ").concat(player.ammo_loaded === -1 ? "true" : "false", "\n            <hr/>\n        ");
       }
     }
   }, {

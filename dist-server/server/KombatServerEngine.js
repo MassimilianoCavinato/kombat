@@ -11,7 +11,11 @@ var _Kombat = _interopRequireDefault(require("../common/Kombat"));
 
 var _Bullet = _interopRequireDefault(require("../common/Bullet"));
 
+var _Granade = _interopRequireDefault(require("../common/Granade"));
+
 var _Wall = _interopRequireDefault(require("../common/Wall"));
+
+var _Explosion = _interopRequireDefault(require("../common/Explosion2"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -50,6 +54,8 @@ function (_ServerEngine) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(KombatServerEngine).call(this, io, gameEngine, inputOptions));
 
     _this.gameEngine.on('shoot', _this.shoot.bind(_assertThisInitialized(_this)));
+
+    _this.gameEngine.on('granade', _this.granade.bind(_assertThisInitialized(_this)));
 
     return _this;
   }
@@ -109,7 +115,10 @@ function (_ServerEngine) {
       kombat.playerId = socket.playerId;
       kombat.max_health = 10;
       kombat.health = 10;
+      kombat.ammo_capacity = 21;
+      kombat.ammo_loaded = 21;
       kombat.last_shot = 0;
+      kombat.throw_power = 0;
       this.gameEngine.addObjectToWorld(kombat);
     }
   }, {
@@ -126,24 +135,74 @@ function (_ServerEngine) {
   }, {
     key: "shoot",
     value: function shoot(kombat) {
-      var speed = 0.4;
-      var liveTimer = 100; //gameloops
+      if (kombat.ammo_loaded > 0) {
+        kombat.ammo_loaded--;
+        var speed = 0.4;
+        var liveTimer = 100; //gameloops
 
-      var bullet = new _Bullet.default(this.gameEngine, null, {
+        var bullet = new _Bullet.default(this.gameEngine, null, {
+          direction: kombat.direction,
+          playerId: kombat.playerId,
+          ownerId: kombat.id,
+          position: new _lanceGg.TwoVector(kombat.position.x + kombat.width / 4, kombat.position.y + kombat.height / 4),
+          velocity: new _lanceGg.TwoVector(Math.cos(kombat.direction) * speed, Math.sin(kombat.direction) * speed)
+        });
+        this.gameEngine.addObjectToWorld(bullet);
+        this.gameEngine.timer.add(liveTimer, this.destroyObjectById, this, [bullet.id]);
+      } else if (kombat.ammo_loaded === 0) {
+        kombat.ammo_loaded--;
+        this.gameEngine.timer.add(240, this.reloadAmmo, this, [kombat.id]);
+      }
+    }
+  }, {
+    key: "granade",
+    value: function granade(kombat) {
+      var speed = .4 * kombat.throw_power;
+      var granade = new _Granade.default(this.gameEngine, null, {
         direction: kombat.direction,
-        playerId: kombat.playerId,
-        ownerId: kombat.id,
         position: new _lanceGg.TwoVector(kombat.position.x + kombat.width / 4, kombat.position.y + kombat.height / 4),
         velocity: new _lanceGg.TwoVector(Math.cos(kombat.direction) * speed, Math.sin(kombat.direction) * speed)
       });
-      this.gameEngine.addObjectToWorld(bullet);
-      this.gameEngine.timer.add(liveTimer, this.destroyObjectById, this, [bullet.id]);
+      kombat.throw_power = 0;
+      granade.playerId = kombat.playerId;
+      this.gameEngine.addObjectToWorld(granade);
+      this.gameEngine.timer.add(100, this.explode, this, [granade.id]);
     }
   }, {
     key: "destroyObjectById",
     value: function destroyObjectById(id) {
       if (this.gameEngine.world.objects[id]) {
         this.gameEngine.removeObjectFromWorld(id);
+      }
+    }
+  }, {
+    key: "reloadAmmo",
+    value: function reloadAmmo(kombatId) {
+      var kombat = this.gameEngine.world.queryObject({
+        id: kombatId,
+        instanceType: _Kombat.default
+      });
+
+      if (kombat) {
+        kombat.ammo_loaded = kombat.ammo_capacity;
+      }
+    }
+  }, {
+    key: "explode",
+    value: function explode(granadeId) {
+      var granade = this.gameEngine.world.queryObject({
+        id: granadeId,
+        instanceType: _Granade.default
+      });
+
+      if (granade) {
+        var explosion = new _Explosion.default(this.gameEngine, null, {
+          position: granade.position.clone()
+        });
+        this.destroyObjectById(granadeId);
+        explosion.radius = 10;
+        this.gameEngine.addObjectToWorld(explosion);
+        this.gameEngine.timer.add(150, this.destroyObjectById, this, [explosion.id]);
       }
     }
   }]);

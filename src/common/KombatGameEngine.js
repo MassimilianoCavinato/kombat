@@ -2,7 +2,9 @@ import { GameEngine, SimplePhysicsEngine, TwoVector } from 'lance-gg';
 import Kombat from './Kombat';
 import Wall from './Wall';
 import Bullet from './Bullet';
+import Granade from './Granade';
 import Blood from './Blood';
+import Explosion2 from './Explosion2';
 
 export default class KombatGameEngine extends GameEngine {
 
@@ -14,11 +16,8 @@ export default class KombatGameEngine extends GameEngine {
                 autoResolve: true,
             }
         });
-        
-        this.on('preStep', this.moveAll.bind(this));
-        this.on('postStep', (e) => {
-            // console.log('poststep', e);
-        });
+     
+        this.on('postStep', (stepInfo) => this.postStep(stepInfo));
         this.on('collisionStart', (e) => this.handleCollision(e));
 
         // game variables
@@ -44,8 +43,10 @@ export default class KombatGameEngine extends GameEngine {
     registerClasses(serializer) {
         serializer.registerClass(Kombat);
         serializer.registerClass(Bullet);
+        serializer.registerClass(Granade);
         serializer.registerClass(Wall);
         serializer.registerClass(Blood);
+        serializer.registerClass(Explosion2);
     }
 
     start() {
@@ -58,26 +59,37 @@ export default class KombatGameEngine extends GameEngine {
         return new TwoVector(x, y);
     }
 
-    moveAll(stepInfo) {
-        return;
-    }
-
     processInput(inputData, playerId) {
         super.processInput(inputData, playerId);
         let player = this.world.queryObject({ playerId });
-        let speed = 0.16;
+        let speed = 0.24;
         if (player) {
-            if (inputData.input === 'up') {
-                player.position.y-=speed;
-            }
-            else if (inputData.input === 'down') {
-                player.position.y+=speed;
-            }
-            else if (inputData.input === 'right') {
-                player.position.x+=speed;
-            }
-            else if (inputData.input === 'left') {
-                player.position.x-=speed;
+            if (inputData.input === 'step') {
+                let x = 0;
+                let y = 0;
+                if(inputData.options.right){
+                    x++;
+                }
+                if(inputData.options.left){
+                    x--;
+                }
+                if(inputData.options.up){
+                    y--;
+                }
+                if(inputData.options.down){
+                    y++;
+                }
+                if(x == 0 && y === 0){
+                    player.velocity.x = 0;
+                    player.velocity.y = 0;
+                }
+                else{
+                    let move_angle = Math.atan2(y, x);
+                    player.velocity.x = speed * Math.cos(move_angle);
+                    player.velocity.y = speed * Math.sin(move_angle);
+                }
+                
+                player.direction =  inputData.options.angle;
             }
             else if (inputData.input === 'shoot'){
                 let step = inputData.step;
@@ -87,8 +99,11 @@ export default class KombatGameEngine extends GameEngine {
                 }
                 
             }
-            else {
-                player.direction = inputData.input;
+            else if (inputData.input === 'throw_power'){
+                player.throw_power = .015;
+            }
+            else if (inputData.input === 'granade'){
+                this.emit('granade', player);
             }
         }
     }
@@ -129,5 +144,17 @@ export default class KombatGameEngine extends GameEngine {
         if (this.world.objects[id]) {
             this.removeObjectFromWorld(id);
         }   
+    }
+
+    postStep(stepInfo){
+        let kombats = this.world.queryObjects({ instanceType : Kombat });
+        kombats.forEach(kombat => {
+            if(kombat.throw_power > 0){
+                kombat.throw_power += .015
+                if(kombat.throw_power  > 1){
+                    kombat.throw_power = 1
+                }
+            }
+        });
     }
 }

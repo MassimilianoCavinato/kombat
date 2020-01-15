@@ -11,9 +11,13 @@ var _Kombat = _interopRequireDefault(require("../common/Kombat"));
 
 var _Bullet = _interopRequireDefault(require("../common/Bullet"));
 
+var _Granade = _interopRequireDefault(require("../common/Granade"));
+
 var _Wall = _interopRequireDefault(require("../common/Wall"));
 
 var _Blood = _interopRequireDefault(require("../common/Blood"));
+
+var _Explosion = _interopRequireDefault(require("../common/Explosion2"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -58,20 +62,25 @@ function (_Renderer) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(KombatRenderer).call(this, gameEngine, clientEngine));
     game = gameEngine;
     canvas = document.createElement('canvas');
+    canvas.setAttribute('id', 'kc');
     canvas.width = C_WIDTH;
     canvas.height = C_HEIGHT;
     document.body.appendChild(canvas);
-    game.w = canvas.width;
-    game.h = canvas.height;
     clientEngine.zoom = 10;
     ctx = canvas.getContext('2d');
-    ctx.lineWidth = 2 / clientEngine.zoom;
-    _this.offsetX = 0;
-    _this.offsetY = 0;
+    ctx.lineWidth = 3 / clientEngine.zoom;
+    _this.offset = new _lanceGg.TwoVector(0, 0);
     return _this;
   }
 
   _createClass(KombatRenderer, [{
+    key: "setOffset",
+    value: function setOffset(playerKombat) {
+      var c = document.getElementById('kc');
+      this.offset.x = C_WIDTH / 2 / this.clientEngine.zoom - playerKombat.position.x - playerKombat.width / 2;
+      this.offset.y = C_HEIGHT / 2 / this.clientEngine.zoom - playerKombat.position.y - playerKombat.height / 2;
+    }
+  }, {
     key: "draw",
     value: function draw(t, dt) {
       var _this2 = this;
@@ -85,8 +94,7 @@ function (_Renderer) {
       });
 
       if (playerKombat) {
-        this.offsetX = C_WIDTH / 2 / this.clientEngine.zoom - playerKombat.position.x - playerKombat.width / 2;
-        this.offsetY = C_HEIGHT / 2 / this.clientEngine.zoom - playerKombat.position.y - playerKombat.height / 2; //draw blood stains first // layer 0
+        this.setOffset(playerKombat); //draw blood stains first // layer 0
 
         game.world.queryObjects({
           instanceType: _Blood.default
@@ -94,9 +102,9 @@ function (_Renderer) {
           _this2.drawBlood(obj);
         });
         game.world.forEachObject(function (id, obj) {
-          if (obj instanceof _Kombat.default) _this2.drawKombat(obj);else if (obj instanceof _Bullet.default) _this2.drawBullet(obj);else if (obj instanceof _Wall.default) _this2.drawWall(obj);
+          if (obj instanceof _Kombat.default) _this2.drawKombat(obj);else if (obj instanceof _Bullet.default) _this2.drawBullet(obj);else if (obj instanceof _Granade.default) _this2.drawGranade(obj);else if (obj instanceof _Wall.default) _this2.drawWall(obj);else if (obj instanceof _Explosion.default) _this2.drawExplosion(obj);
         });
-        this.drawUI(playerKombat);
+        this.drawHUD(playerKombat);
       }
 
       ctx.restore();
@@ -104,27 +112,43 @@ function (_Renderer) {
   }, {
     key: "resetRender",
     value: function resetRender() {
-      ctx.clearRect(0, 0, game.w, game.h);
+      ctx.clearRect(0, 0, C_WIDTH, C_HEIGHT);
       ctx.save();
       ctx.translate(0, 0);
       ctx.scale(this.clientEngine.zoom, this.clientEngine.zoom); // Zoom in and flip y axis
     }
   }, {
-    key: "drawUI",
-    value: function drawUI(obj) {
-      //Health Bar
-      ctx.fillStyle = "red";
-      ctx.fillRect(10 / this.clientEngine.zoom, 570 / this.clientEngine.zoom, obj.health * (780 / obj.max_health) / this.clientEngine.zoom, 10 / this.clientEngine.zoom);
-      ctx.beginPath();
+    key: "drawHUD",
+    value: function drawHUD(obj) {
+      //Bullets
+      ctx.fillStyle = "orange";
+
+      for (var i = 0; i < obj.ammo_loaded; i++) {
+        ctx.fillRect((125 + i * 6) / this.clientEngine.zoom, 543 / this.clientEngine.zoom, 2 / this.clientEngine.zoom, 2 / this.clientEngine.zoom);
+        ctx.fillRect((124 + i * 6) / this.clientEngine.zoom, 545 / this.clientEngine.zoom, 4 / this.clientEngine.zoom, 20 / this.clientEngine.zoom);
+      } //Throw Power
+
+
       ctx.strokeStyle = "white";
-      ctx.rect(10 / this.clientEngine.zoom, 570 / this.clientEngine.zoom, 780 / this.clientEngine.zoom, 10 / this.clientEngine.zoom);
-      ctx.stroke();
+      ctx.fillStyle = "rgba(100, 100, 100, .5)";
+      ctx.fillRect(20 / this.clientEngine.zoom, 544 / this.clientEngine.zoom, obj.throw_power * 100 / this.clientEngine.zoom, 18 / this.clientEngine.zoom);
+      ctx.beginPath();
+      ctx.rect(20 / this.clientEngine.zoom, 545 / this.clientEngine.zoom, 100 / this.clientEngine.zoom, 18 / this.clientEngine.zoom);
       ctx.closePath();
+      ctx.stroke(); //Life
+
+      ctx.strokeStyle = "white";
+      ctx.fillStyle = "rgba(255, 0, 0, .5)";
+      ctx.fillRect(20 / this.clientEngine.zoom, 570 / this.clientEngine.zoom, obj.health * (760 / obj.max_health) / this.clientEngine.zoom, 18 / this.clientEngine.zoom);
+      ctx.beginPath();
+      ctx.rect(20 / this.clientEngine.zoom, 570 / this.clientEngine.zoom, 760 / this.clientEngine.zoom, 16 / this.clientEngine.zoom);
+      ctx.closePath();
+      ctx.stroke();
     }
   }, {
     key: "getCenter",
     value: function getCenter(obj) {
-      return new _lanceGg.TwoVector(obj.position.x + this.offsetX + obj.width / 2, obj.position.y + this.offsetY + obj.height / 2);
+      return new _lanceGg.TwoVector(obj.position.x + this.offset.x + obj.width / 2, obj.position.y + this.offset.y + obj.height / 2);
     }
   }, {
     key: "getCircumscribedRadiusLength",
@@ -139,6 +163,11 @@ function (_Renderer) {
       var center = this.getCenter(obj);
       var radius = this.getCircumscribedRadiusLength(obj.width);
       this.drawCircle(center.x, center.y, radius);
+
+      if (obj.ammo_loaded === -1) {
+        this.drawCircle(center.x, center.y, radius + .4);
+      }
+
       ctx.moveTo(center.x, center.y);
       ctx.lineTo(center.x + radius * Math.cos(obj.direction), center.y + radius * Math.sin(obj.direction));
       ctx.stroke();
@@ -146,12 +175,26 @@ function (_Renderer) {
   }, {
     key: "drawBullet",
     value: function drawBullet(obj) {
-      ctx.fillStyle = "yellow";
+      ctx.fillStyle = "orange";
+      ctx.strokeStyle = "white";
       var center = this.getCenter(obj);
       var radius = this.getCircumscribedRadiusLength(obj.width);
       ctx.beginPath();
-      ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
+      ctx.arc(center.x, center.y, .5, 0, 2 * Math.PI);
       ctx.fill();
+      ctx.stroke();
+      ctx.closePath();
+    }
+  }, {
+    key: "drawGranade",
+    value: function drawGranade(obj) {
+      ctx.fillStyle = "olive";
+      ctx.strokeStyle = "green";
+      var center = this.getCenter(obj);
+      ctx.beginPath();
+      ctx.arc(center.x, center.y, .8, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.stroke();
       ctx.closePath();
     }
   }, {
@@ -168,10 +211,20 @@ function (_Renderer) {
       var center = this.getCenter(obj);
       obj.splatter.forEach(function (sp) {
         ctx.beginPath();
-        ctx.arc(center.x + sp[0], center.y + sp[1], sp[2], 0, 2 * Math.PI);
+        ctx.arc(center.x + 1 + sp[0], center.y + 1 + sp[1], sp[2], 0, 2 * Math.PI);
         ctx.fill();
         ctx.closePath();
       });
+    }
+  }, {
+    key: "drawExplosion",
+    value: function drawExplosion(obj) {
+      ctx.fillStyle = "rgba(200,100,0,.4)";
+      var center = new _lanceGg.TwoVector(obj.position.x + this.offset.x, obj.position.y + this.offset.y);
+      ctx.beginPath();
+      ctx.arc(center.x, center.y, obj.radius, 0, 2 * Math.PI);
+      ctx.closePath();
+      ctx.fill();
     }
   }, {
     key: "drawCircle",

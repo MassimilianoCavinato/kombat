@@ -38,6 +38,12 @@ function (_DynamicObject) {
     key: "netScheme",
     get: function get() {
       return Object.assign({
+        width: {
+          type: _lanceGg.BaseTypes.TYPES.FLOAT32
+        },
+        height: {
+          type: _lanceGg.BaseTypes.TYPES.FLOAT32
+        },
         direction: {
           type: _lanceGg.BaseTypes.TYPES.FLOAT32
         },
@@ -56,8 +62,6 @@ function (_DynamicObject) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Bullet).call(this, gameEngine, options, props));
     _this.class = Bullet;
     _this.type = "Bullet";
-    _this.width = 1;
-    _this.height = 1;
     return _this;
   }
 
@@ -75,11 +79,21 @@ function (_DynamicObject) {
         } else {
           return true;
         }
-      } else if (other.type === "Bullet") {
-        return false;
-      } else {
-        return true;
-      }
+      } // else if(other.type === "Wall"){
+      //     return true;
+      // }
+      // else if(other.type === "Bullet"){
+      //     return false;
+      // }
+      // else if(other.type === "Blood"){
+      //     return false;
+      // }
+      // else if(other.type === "Granade"){
+      //     return false;
+      // }
+      else {
+          return false;
+        }
     }
   }, {
     key: "toString",

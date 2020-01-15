@@ -40,57 +40,54 @@ function (_ClientEngine) {
     _classCallCheck(this, KombatClientEngine);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(KombatClientEngine).call(this, gameEngine, options, _KombatRenderer.default));
-    _this.controls = new _lanceGg.KeyboardControls(_assertThisInitialized(_this));
-
-    _this.controls.bindKey('w', 'up', {
-      repeat: true
-    });
-
-    _this.controls.bindKey('s', 'down', {
-      repeat: true
-    });
-
-    _this.controls.bindKey('a', 'left', {
-      repeat: true
-    });
-
-    _this.controls.bindKey('d', 'right', {
-      repeat: true
-    });
-
-    _this.mouseIsDown = false; // restart game
+    _this.angle = 0;
+    _this.up = false;
+    _this.down = false;
+    _this.left = false;
+    _this.down = false;
+    _this.mouseIsDown = false;
+    _this.controls = new _lanceGg.KeyboardControls(_assertThisInitialized(_this)); // restart game
 
     document.querySelector('#try-again').addEventListener('click', function () {
       window.location.reload();
     }); // show try-again button
 
-    gameEngine.on('objectDestroyed', function (obj) {
+    document.addEventListener('mouseenter', _this.updateAngle.bind(_assertThisInitialized(_this)), false);
+    document.addEventListener('mousemove', _this.updateAngle.bind(_assertThisInitialized(_this)), false);
+    document.addEventListener('mousedown', function (e) {
+      return _this.handleMouse(e);
+    });
+    document.addEventListener('mouseup', function (e) {
+      return _this.handleMouse(e);
+    });
+    document.addEventListener('contextmenu', function (e) {
+      return e.preventDefault();
+    });
+    document.addEventListener('keydown', function (e) {
+      return _this.handleKeyDown(e);
+    });
+    document.addEventListener('keyup', function (e) {
+      return _this.handleKeyUp(e);
+    });
+
+    _this.gameEngine.on('client__preStep', function (step) {
+      return _this.preStep(step);
+    });
+
+    _this.gameEngine.on('objectDestroyed', function (obj) {
       if (obj.playerId === gameEngine.playerId && obj.type === "Kombat") {
         document.querySelector('#try-again').style.display = "block";
       }
     });
-    _this.mouseX = null;
-    _this.mouseY = null;
-    document.addEventListener('mouseenter', _this.updateMouseXY.bind(_assertThisInitialized(_this)), false);
-    document.addEventListener('mousemove', _this.updateMouseXY.bind(_assertThisInitialized(_this)), false);
-    document.addEventListener('mousedown', function () {
-      return _this.mouseIsDown = true;
-    });
-    document.addEventListener('mouseup', function () {
-      return _this.mouseIsDown = false;
-    });
-
-    _this.gameEngine.on('client__preStep', _this.preStep.bind(_assertThisInitialized(_this)));
 
     return _this;
   }
 
   _createClass(KombatClientEngine, [{
-    key: "updateMouseXY",
-    value: function updateMouseXY(e) {
+    key: "updateAngle",
+    value: function updateAngle(e) {
       e.preventDefault();
-      this.mouseX = e.pageX - 400;
-      this.mouseY = e.pageY - 300;
+      this.angle = Math.atan2(e.pageY - window.innerHeight / 2, e.pageX - window.innerWidth / 2);
     }
   }, {
     key: "preStep",
@@ -103,19 +100,73 @@ function (_ClientEngine) {
       if (player === null) {
         debugContainer.innerHTML = "";
       } else {
-        if (this.mouseY) {
-          var angle = Math.atan2(this.mouseY, this.mouseX);
-          this.sendInput(angle, {
-            movement: true
-          });
+        this.sendInput('step', {
+          up: this.up,
+          left: this.left,
+          down: this.down,
+          right: this.right,
+          angle: this.angle
+        });
 
-          if (this.mouseIsDown === true) {
-            this.sendInput("shoot", {
-              repeat: true
+        if (this.mouseIsDown === true) {
+          this.sendInput("shoot", {
+            repeat: true
+          });
+        }
+
+        debugContainer.innerHTML = "\n            PlayerPos:\n            <br/> \n            X: ".concat(player.position.x, "\n            <br/> \n            Y: ").concat(player.position.y, "\n            <br/>\n            ----------------------------\n            <br/>\n            MousePos: \n            <br/> \n            X: ").concat(this.mouseX, "\n            <br/> \n            Y: ").concat(this.mouseY, "\n            <br/> \n            ----------------------------\n            <br/>\n            Angle: ").concat(this.angle, "\n            <br/>\n            ----------------------------\n            <br/>\n            Is shooting: ").concat(this.mouseIsDown ? "true" : "false", "\n            <br/>\n            ----------------------------\n            <br/>\n            Ammo: ").concat(player.ammo_loaded, "\n            <br/>\n            ----------------------------\n            <br/>\n            Is reloading: ").concat(player.ammo_loaded === 0 ? "true" : "false", "\n            <br/>\n            ----------------------------\n        ");
+      }
+    }
+  }, {
+    key: "handleKeyDown",
+    value: function handleKeyDown(e) {
+      if (e.isTrusted === true) {
+        if (e.key === "w" || e.key === "ArrowUp") {
+          this.up = true;
+        } else if (e.key === "a" || e.key === "ArrowLeft") {
+          this.left = true;
+        } else if (e.key === "s" || e.key === "ArrowDown") {
+          this.down = true;
+        } else if (e.key === "d" || e.key === "ArrowRight") {
+          this.right = true;
+        }
+      }
+    }
+  }, {
+    key: "handleKeyUp",
+    value: function handleKeyUp(e) {
+      if (e.isTrusted === true) {
+        if (e.key === "w" || e.key === "ArrowUp") {
+          this.up = false;
+        } else if (e.key === "a" || e.key === "ArrowLeft") {
+          this.left = false;
+        } else if (e.key === "s" || e.key === "ArrowDown") {
+          this.down = false;
+        } else if (e.key === "d" || e.key === "ArrowRight") {
+          this.right = false;
+        }
+      }
+    }
+  }, {
+    key: "handleMouse",
+    value: function handleMouse(e) {
+      e.preventDefault();
+
+      if (e.isTrusted === true) {
+        if (e.which === 1) {
+          this.mouseIsDown = e.type === "mousedown";
+        } else if (e.which === 3) {
+          if (e.type === 'mousedown') {
+            this.sendInput('throw_power', {
+              repeat: false
             });
           }
 
-          debugContainer.innerHTML = "\n                PlayerPos:\n                <br/> \n                X: ".concat(player.position.x, "\n                <br/> \n                Y: ").concat(player.position.y, "\n                <br/>\n                ----------------------------\n                <br/>\n                MousePos: \n                <br/> \n                X: ").concat(this.mouseX, "\n                <br/> \n                Y: ").concat(this.mouseY, "\n                <br/> \n                ----------------------------\n                <br/>\n                Angle: ").concat(angle, "\n                <br/>\n                ----------------------------\n                <br/>\n                IsShooting: ").concat(this.mouseIsDown ? "true" : "false", "\n                <br/>\n                ----------------------------\n            ");
+          if (e.type === 'mouseup') {
+            this.sendInput('granade', {
+              repeat: false
+            });
+          }
         }
       }
     }

@@ -29,77 +29,54 @@ function _superPropBase(object, property) { while (!Object.prototype.hasOwnPrope
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
-var Kombat =
+var Granade =
 /*#__PURE__*/
 function (_DynamicObject) {
-  _inherits(Kombat, _DynamicObject);
+  _inherits(Granade, _DynamicObject);
 
-  _createClass(Kombat, null, [{
+  _createClass(Granade, null, [{
     key: "netScheme",
     get: function get() {
       return Object.assign({
         direction: {
           type: _lanceGg.BaseTypes.TYPES.FLOAT32
         },
-        max_health: {
-          type: _lanceGg.BaseTypes.TYPES.UINT8
-        },
-        health: {
-          type: _lanceGg.BaseTypes.TYPES.UINT8
-        },
-        ammo_capacity: {
-          type: _lanceGg.BaseTypes.TYPES.UINT8
-        },
-        ammo_loaded: {
+        ownerId: {
           type: _lanceGg.BaseTypes.TYPES.INT8
-        },
-        last_shot: {
-          type: _lanceGg.BaseTypes.TYPES.UINT8
-        },
-        throw_power: {
-          type: _lanceGg.BaseTypes.TYPES.FLOAT32
         }
-      }, _get(_getPrototypeOf(Kombat), "netScheme", this));
+      }, _get(_getPrototypeOf(Granade), "netScheme", this));
     }
   }]);
 
-  function Kombat(gameEngine, options, props) {
+  function Granade(gameEngine, options, props) {
     var _this;
 
-    _classCallCheck(this, Kombat);
+    _classCallCheck(this, Granade);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Kombat).call(this, gameEngine, options, props));
-    _this.class = Kombat;
-    _this.type = "Kombat";
-    _this.width = 2;
-    _this.height = 2;
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Granade).call(this, gameEngine, options, props));
+    _this.class = Granade;
+    _this.type = "Granade";
+    _this.width = 1;
+    _this.height = 1;
     return _this;
   }
 
-  _createClass(Kombat, [{
+  _createClass(Granade, [{
     key: "syncTo",
     value: function syncTo(other) {
-      _get(_getPrototypeOf(Kombat.prototype), "syncTo", this).call(this, other);
+      _get(_getPrototypeOf(Granade.prototype), "syncTo", this).call(this, other);
     }
   }, {
     key: "collidesWith",
     value: function collidesWith(other) {
-      if (other.type === "Kombat") {
-        return true;
-      } else if (other.type === "Bullet") {
-        if (this.playerId === other.playerId) {
-          return false;
-        } else {
-          return true;
-        }
-      } else if (other.type === "Granade") {
-        if (this.playerId === other.playerId) {
-          return false;
-        } else {
-          return true;
-        }
-      } else if (other.type === "Blood") {
+      if (other.type === "Bullet") {
         return false;
+      } else if (other.type === "Kombat") {
+        if (this.playerId === other.playerId) {
+          return false;
+        } else {
+          return true;
+        }
       } else {
         return true;
       }
@@ -107,12 +84,12 @@ function (_DynamicObject) {
   }, {
     key: "toString",
     value: function toString() {
-      return "Kombat";
+      return "Granade";
     }
   }]);
 
-  return Kombat;
+  return Granade;
 }(_lanceGg.DynamicObject);
 
-exports.default = Kombat;
-//# sourceMappingURL=Kombat.js.map
+exports.default = Granade;
+//# sourceMappingURL=Granade.js.map

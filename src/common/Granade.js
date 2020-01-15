@@ -1,11 +1,9 @@
 import { BaseTypes, DynamicObject } from 'lance-gg';
 
-export default class Bullet extends DynamicObject {
+export default class Granade extends DynamicObject {
 
     static get netScheme() {
         return Object.assign({
-                width: { type: BaseTypes.TYPES.FLOAT32 },
-                height: { type: BaseTypes.TYPES.FLOAT32 },
                 direction: { type: BaseTypes.TYPES.FLOAT32 },
                 ownerId: {  type: BaseTypes.TYPES.INT8 }
             }, 
@@ -15,8 +13,10 @@ export default class Bullet extends DynamicObject {
 
     constructor(gameEngine, options, props) {
         super(gameEngine, options, props);
-        this.class = Bullet;
-        this.type = "Bullet";
+        this.class = Granade;
+        this.type = "Granade";
+        this.width = 1;
+        this.height = 1;
     }
 
     syncTo(other) {
@@ -24,7 +24,10 @@ export default class Bullet extends DynamicObject {
     }
 
     collidesWith(other){
-        if(other.type === "Kombat"){
+        if(other.type === "Bullet"){
+            return false;
+        }
+        else if(other.type === "Kombat"){
             if(this.playerId === other.playerId){
                 return false;
             }
@@ -32,24 +35,12 @@ export default class Bullet extends DynamicObject {
                 return true;
             }
         }
-        // else if(other.type === "Wall"){
-        //     return true;
-        // }
-        // else if(other.type === "Bullet"){
-        //     return false;
-        // }
-        // else if(other.type === "Blood"){
-        //     return false;
-        // }
-        // else if(other.type === "Granade"){
-        //     return false;
-        // }
         else{
-            return false;
+            return true;
         }
     }
     
     toString() {
-        return `Bullet`;
+        return `Granade`;
     }
 }

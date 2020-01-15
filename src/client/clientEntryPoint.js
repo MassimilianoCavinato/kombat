@@ -8,12 +8,12 @@ const qsOptions = querystring.parse(location.search);
 // is sent to both game engine and client engine
 const defaults = {
     traceLevel: Lib.Trace.TRACE_NONE,
-    delayInputCount: 15,
+    delayInputCount: 5,
     scheduler: 'render-schedule',
     syncOptions: {
         sync: 'interpolate',
-        localObjBending: .75,
-        remoteObjBending: .75,
+        localObjBending: .7,
+        remoteObjBending: .9,
         bendingIncrements: 2
     }
 };

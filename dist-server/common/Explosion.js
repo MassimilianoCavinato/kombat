@@ -29,90 +29,62 @@ function _superPropBase(object, property) { while (!Object.prototype.hasOwnPrope
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
-var Kombat =
+var Explosion =
 /*#__PURE__*/
 function (_DynamicObject) {
-  _inherits(Kombat, _DynamicObject);
+  _inherits(Explosion, _DynamicObject);
 
-  _createClass(Kombat, null, [{
+  _createClass(Explosion, null, [{
     key: "netScheme",
     get: function get() {
       return Object.assign({
-        direction: {
-          type: _lanceGg.BaseTypes.TYPES.FLOAT32
-        },
-        max_health: {
-          type: _lanceGg.BaseTypes.TYPES.UINT8
-        },
-        health: {
-          type: _lanceGg.BaseTypes.TYPES.UINT8
-        },
-        ammo_capacity: {
-          type: _lanceGg.BaseTypes.TYPES.UINT8
-        },
-        ammo_loaded: {
-          type: _lanceGg.BaseTypes.TYPES.INT8
-        },
-        last_shot: {
-          type: _lanceGg.BaseTypes.TYPES.UINT8
-        },
-        throw_power: {
+        radius: {
           type: _lanceGg.BaseTypes.TYPES.FLOAT32
         }
-      }, _get(_getPrototypeOf(Kombat), "netScheme", this));
+      }, _get(_getPrototypeOf(Explosion), "netScheme", this));
     }
   }]);
 
-  function Kombat(gameEngine, options, props) {
+  function Explosion(gameEngine, options, props) {
     var _this;
 
-    _classCallCheck(this, Kombat);
+    _classCallCheck(this, Explosion);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Kombat).call(this, gameEngine, options, props));
-    _this.class = Kombat;
-    _this.type = "Kombat";
-    _this.width = 2;
-    _this.height = 2;
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Explosion).call(this, gameEngine, options, props));
+    _this.class = Explosion;
+    _this.type = "Explosion";
+    _this.isStatic = true; // this.splatter = [
+    //     [Math.random()*5, Math.random()*5, Math.random()*5],
+    //     [Math.random()*5, -Math.random()*5, Math.random()*5],
+    //     [-Math.random()*5, Math.random()*5, Math.random()*5],
+    //     [-Math.random()*5, -Math.random()*5, Math.random()*5],
+    //     [Math.random()*5, Math.random()*5, Math.random()*5],
+    //     [Math.random()*5, -Math.random()*5, Math.random()*5],
+    //     [-Math.random()*5, Math.random()*5, Math.random()*5],
+    //     [-Math.random()*5, -Math.random()*5, Math.random()*5],
+    //     [Math.random()*5, Math.random()*5, Math.random()*5],
+    //     [Math.random()*5, -Math.random()*5, Math.random()*5],
+    //     [-Math.random()*5, Math.random()*5, Math.random()*5],
+    //     [-Math.random()*5, -Math.random()*5, Math.random()*5],
+    // ]
+
     return _this;
   }
 
-  _createClass(Kombat, [{
+  _createClass(Explosion, [{
     key: "syncTo",
     value: function syncTo(other) {
-      _get(_getPrototypeOf(Kombat.prototype), "syncTo", this).call(this, other);
+      _get(_getPrototypeOf(Explosion.prototype), "syncTo", this).call(this, other);
     }
   }, {
     key: "collidesWith",
     value: function collidesWith(other) {
-      if (other.type === "Kombat") {
-        return true;
-      } else if (other.type === "Bullet") {
-        if (this.playerId === other.playerId) {
-          return false;
-        } else {
-          return true;
-        }
-      } else if (other.type === "Granade") {
-        if (this.playerId === other.playerId) {
-          return false;
-        } else {
-          return true;
-        }
-      } else if (other.type === "Blood") {
-        return false;
-      } else {
-        return true;
-      }
-    }
-  }, {
-    key: "toString",
-    value: function toString() {
-      return "Kombat";
+      return false;
     }
   }]);
 
-  return Kombat;
+  return Explosion;
 }(_lanceGg.DynamicObject);
 
-exports.default = Kombat;
-//# sourceMappingURL=Kombat.js.map
+exports.default = Explosion;
+//# sourceMappingURL=Explosion.js.map

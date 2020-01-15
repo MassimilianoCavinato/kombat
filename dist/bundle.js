@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 25);
+/******/ 	return __webpack_require__(__webpack_require__.s = 27);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -8045,8 +8045,8 @@ if (typeof Object.create === 'function') {
 
 
 
-var base64 = __webpack_require__(29)
-var ieee754 = __webpack_require__(30)
+var base64 = __webpack_require__(31)
+var ieee754 = __webpack_require__(32)
 var isArray = __webpack_require__(9)
 
 exports.Buffer = Buffer
@@ -10213,11 +10213,11 @@ module.exports = Array.isArray || function (arr) {
 /* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {var ClientRequest = __webpack_require__(31)
+/* WEBPACK VAR INJECTION */(function(global) {var ClientRequest = __webpack_require__(33)
 var response = __webpack_require__(12)
-var extend = __webpack_require__(40)
-var statusCodes = __webpack_require__(41)
-var url = __webpack_require__(42)
+var extend = __webpack_require__(42)
+var statusCodes = __webpack_require__(43)
+var url = __webpack_require__(44)
 
 var http = exports
 
@@ -10621,7 +10621,7 @@ exports.Readable = exports;
 exports.Writable = __webpack_require__(18);
 exports.Duplex = __webpack_require__(5);
 exports.Transform = __webpack_require__(20);
-exports.PassThrough = __webpack_require__(38);
+exports.PassThrough = __webpack_require__(40);
 
 
 /***/ }),
@@ -10700,7 +10700,7 @@ util.inherits = __webpack_require__(3);
 /*</replacement>*/
 
 /*<replacement>*/
-var debugUtil = __webpack_require__(32);
+var debugUtil = __webpack_require__(34);
 var debug = void 0;
 if (debugUtil && debugUtil.debuglog) {
   debug = debugUtil.debuglog('stream');
@@ -10709,7 +10709,7 @@ if (debugUtil && debugUtil.debuglog) {
 }
 /*</replacement>*/
 
-var BufferList = __webpack_require__(33);
+var BufferList = __webpack_require__(35);
 var destroyImpl = __webpack_require__(17);
 var StringDecoder;
 
@@ -12269,7 +12269,7 @@ util.inherits = __webpack_require__(3);
 
 /*<replacement>*/
 var internalUtil = {
-  deprecate: __webpack_require__(37)
+  deprecate: __webpack_require__(39)
 };
 /*</replacement>*/
 
@@ -12884,7 +12884,7 @@ Writable.prototype._destroy = function (err, cb) {
   this.end();
   cb(err);
 };
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(35).setImmediate, __webpack_require__(0)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(37).setImmediate, __webpack_require__(0)))
 
 /***/ }),
 /* 19 */
@@ -13458,8 +13458,17 @@ function (_DynamicObject) {
         health: {
           type: __WEBPACK_IMPORTED_MODULE_0_lance_gg__["BaseTypes"].TYPES.UINT8
         },
+        ammo_capacity: {
+          type: __WEBPACK_IMPORTED_MODULE_0_lance_gg__["BaseTypes"].TYPES.UINT8
+        },
+        ammo_loaded: {
+          type: __WEBPACK_IMPORTED_MODULE_0_lance_gg__["BaseTypes"].TYPES.INT8
+        },
         last_shot: {
           type: __WEBPACK_IMPORTED_MODULE_0_lance_gg__["BaseTypes"].TYPES.UINT8
+        },
+        throw_power: {
+          type: __WEBPACK_IMPORTED_MODULE_0_lance_gg__["BaseTypes"].TYPES.FLOAT32
         }
       }, _get(_getPrototypeOf(Kombat), "netScheme", this));
     }
@@ -13486,8 +13495,20 @@ function (_DynamicObject) {
   }, {
     key: "collidesWith",
     value: function collidesWith(other) {
-      if (this.playerId === other.playerId) {
-        return false;
+      if (other.type === "Kombat") {
+        return true;
+      } else if (other.type === "Bullet") {
+        if (this.playerId === other.playerId) {
+          return false;
+        } else {
+          return true;
+        }
+      } else if (other.type === "Granade") {
+        if (this.playerId === other.playerId) {
+          return false;
+        } else {
+          return true;
+        }
       } else if (other.type === "Blood") {
         return false;
       } else {
@@ -13547,6 +13568,12 @@ function (_DynamicObject) {
     key: "netScheme",
     get: function get() {
       return Object.assign({
+        width: {
+          type: __WEBPACK_IMPORTED_MODULE_0_lance_gg__["BaseTypes"].TYPES.FLOAT32
+        },
+        height: {
+          type: __WEBPACK_IMPORTED_MODULE_0_lance_gg__["BaseTypes"].TYPES.FLOAT32
+        },
         direction: {
           type: __WEBPACK_IMPORTED_MODULE_0_lance_gg__["BaseTypes"].TYPES.FLOAT32
         },
@@ -13565,8 +13592,6 @@ function (_DynamicObject) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Bullet).call(this, gameEngine, options, props));
     _this.class = Bullet;
     _this.type = "Bullet";
-    _this.width = 1;
-    _this.height = 1;
     return _this;
   }
 
@@ -13584,11 +13609,21 @@ function (_DynamicObject) {
         } else {
           return true;
         }
-      } else if (other.type === "Bullet") {
-        return false;
-      } else {
-        return true;
-      }
+      } // else if(other.type === "Wall"){
+      //     return true;
+      // }
+      // else if(other.type === "Bullet"){
+      //     return false;
+      // }
+      // else if(other.type === "Blood"){
+      //     return false;
+      // }
+      // else if(other.type === "Granade"){
+      //     return false;
+      // }
+      else {
+          return false;
+        }
     }
   }, {
     key: "toString",
@@ -13604,6 +13639,102 @@ function (_DynamicObject) {
 
 /***/ }),
 /* 23 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Granade; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lance_gg__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lance_gg___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lance_gg__);
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
+
+function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+
+
+var Granade =
+/*#__PURE__*/
+function (_DynamicObject) {
+  _inherits(Granade, _DynamicObject);
+
+  _createClass(Granade, null, [{
+    key: "netScheme",
+    get: function get() {
+      return Object.assign({
+        direction: {
+          type: __WEBPACK_IMPORTED_MODULE_0_lance_gg__["BaseTypes"].TYPES.FLOAT32
+        },
+        ownerId: {
+          type: __WEBPACK_IMPORTED_MODULE_0_lance_gg__["BaseTypes"].TYPES.INT8
+        }
+      }, _get(_getPrototypeOf(Granade), "netScheme", this));
+    }
+  }]);
+
+  function Granade(gameEngine, options, props) {
+    var _this;
+
+    _classCallCheck(this, Granade);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Granade).call(this, gameEngine, options, props));
+    _this.class = Granade;
+    _this.type = "Granade";
+    _this.width = 1;
+    _this.height = 1;
+    return _this;
+  }
+
+  _createClass(Granade, [{
+    key: "syncTo",
+    value: function syncTo(other) {
+      _get(_getPrototypeOf(Granade.prototype), "syncTo", this).call(this, other);
+    }
+  }, {
+    key: "collidesWith",
+    value: function collidesWith(other) {
+      if (other.type === "Bullet") {
+        return false;
+      } else if (other.type === "Kombat") {
+        if (this.playerId === other.playerId) {
+          return false;
+        } else {
+          return true;
+        }
+      } else {
+        return true;
+      }
+    }
+  }, {
+    key: "toString",
+    value: function toString() {
+      return "Granade";
+    }
+  }]);
+
+  return Granade;
+}(__WEBPACK_IMPORTED_MODULE_0_lance_gg__["DynamicObject"]);
+
+
+
+/***/ }),
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13677,7 +13808,7 @@ function (_DynamicObject) {
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13729,8 +13860,8 @@ function (_DynamicObject) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Blood).call(this, gameEngine, options, props));
     _this.class = Blood;
     _this.type = "Blood";
-    _this.width = 2;
-    _this.height = 2;
+    _this.width = 0;
+    _this.height = 0;
     _this.splatter = [[Math.random(), Math.random(), Math.random()], [Math.random(), -Math.random(), Math.random()], [-Math.random(), Math.random(), Math.random()], [-Math.random(), -Math.random(), Math.random()]];
     return _this;
   }
@@ -13753,17 +13884,108 @@ function (_DynamicObject) {
 
 
 /***/ }),
-/* 25 */
+/* 26 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Explosion2; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lance_gg__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lance_gg___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lance_gg__);
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
+
+function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+
+
+var Explosion2 =
+/*#__PURE__*/
+function (_DynamicObject) {
+  _inherits(Explosion2, _DynamicObject);
+
+  _createClass(Explosion2, null, [{
+    key: "netScheme",
+    get: function get() {
+      return Object.assign({
+        radius: {
+          type: __WEBPACK_IMPORTED_MODULE_0_lance_gg__["BaseTypes"].TYPES.FLOAT32
+        }
+      }, _get(_getPrototypeOf(Explosion2), "netScheme", this));
+    }
+  }]);
+
+  function Explosion2(gameEngine, options, props) {
+    var _this;
+
+    _classCallCheck(this, Explosion2);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Explosion2).call(this, gameEngine, options, props));
+    _this.class = Explosion2;
+    _this.type = "Explosion2";
+    _this.isStatic = true; // this.splatter = [
+    //     [Math.random()*5, Math.random()*5, 3+Math.random()*3],
+    //     [Math.random()*5, -Math.random()*5, 3+Math.random()*3],
+    //     [-Math.random()*5, Math.random()*5, 3+Math.random()*3],
+    //     [-Math.random()*5, -Math.random()*5, 3+Math.random()*3],
+    //     [Math.random()*5+2, Math.random()*5+2,, 3+Math.random()*3],
+    //     [Math.random()*5+2,, -Math.random()*5-2, 3+Math.random()*3],
+    //     [-Math.random()*5-2, Math.random()*5+2,, 3+Math.random()*3],
+    //     [-Math.random()*5-2, -Math.random()*5-2, 3+Math.random()*3],
+    //     [Math.random()*5+4, Math.random()*5+4, 3+Math.random()*3],
+    //     [Math.random()*5+4, -Math.random()*5-4, 3+Math.random()*3],
+    //     [-Math.random()*5-4, Math.random()*5+4, 3+Math.random()*3],
+    //     [-Math.random()*5-4, -Math.random()*5+4, 3+Math.random()*3],
+    // ]
+
+    return _this;
+  }
+
+  _createClass(Explosion2, [{
+    key: "syncTo",
+    value: function syncTo(other) {
+      _get(_getPrototypeOf(Explosion2.prototype), "syncTo", this).call(this, other);
+    }
+  }, {
+    key: "collidesWith",
+    value: function collidesWith(other) {
+      return false;
+    }
+  }]);
+
+  return Explosion2;
+}(__WEBPACK_IMPORTED_MODULE_0_lance_gg__["DynamicObject"]);
+
+
+
+/***/ }),
+/* 27 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_query_string__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_query_string__ = __webpack_require__(28);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_query_string___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_query_string__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lance_gg__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lance_gg___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_lance_gg__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__client_KombatClientEngine__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__common_KombatGameEngine__ = __webpack_require__(51);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__client_KombatClientEngine__ = __webpack_require__(51);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__common_KombatGameEngine__ = __webpack_require__(53);
 
 
 
@@ -13773,12 +13995,12 @@ var qsOptions = __WEBPACK_IMPORTED_MODULE_0_query_string___default.a.parse(locat
 
 var defaults = {
   traceLevel: __WEBPACK_IMPORTED_MODULE_1_lance_gg__["Lib"].Trace.TRACE_NONE,
-  delayInputCount: 15,
+  delayInputCount: 5,
   scheduler: 'render-schedule',
   syncOptions: {
     sync: 'interpolate',
-    localObjBending: .75,
-    remoteObjBending: .75,
+    localObjBending: .7,
+    remoteObjBending: .9,
     bendingIncrements: 2
   }
 };
@@ -13791,13 +14013,13 @@ document.addEventListener('DOMContentLoaded', function (e) {
 });
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var strictUriEncode = __webpack_require__(27);
-var objectAssign = __webpack_require__(28);
+var strictUriEncode = __webpack_require__(29);
+var objectAssign = __webpack_require__(30);
 
 function encoderForArrayFormat(opts) {
 	switch (opts.arrayFormat) {
@@ -14003,7 +14225,7 @@ exports.stringify = function (obj, opts) {
 
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14016,7 +14238,7 @@ module.exports = function (str) {
 
 
 /***/ }),
-/* 28 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14113,7 +14335,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 
 /***/ }),
-/* 29 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14271,7 +14493,7 @@ function fromByteArray (uint8) {
 
 
 /***/ }),
-/* 30 */
+/* 32 */
 /***/ (function(module, exports) {
 
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -14361,14 +14583,14 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 
 
 /***/ }),
-/* 31 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(Buffer, global, process) {var capability = __webpack_require__(11)
 var inherits = __webpack_require__(3)
 var response = __webpack_require__(12)
 var stream = __webpack_require__(13)
-var toArrayBuffer = __webpack_require__(39)
+var toArrayBuffer = __webpack_require__(41)
 
 var IncomingMessage = response.IncomingMessage
 var rStates = response.readyStates
@@ -14695,13 +14917,13 @@ var unsafeHeaders = [
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4).Buffer, __webpack_require__(0), __webpack_require__(2)))
 
 /***/ }),
-/* 32 */
+/* 34 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
-/* 33 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14710,7 +14932,7 @@ var unsafeHeaders = [
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Buffer = __webpack_require__(8).Buffer;
-var util = __webpack_require__(34);
+var util = __webpack_require__(36);
 
 function copyBuffer(src, target, offset) {
   src.copy(target, offset);
@@ -14786,13 +15008,13 @@ if (util && util.inspect && util.inspect.custom) {
 }
 
 /***/ }),
-/* 34 */
+/* 36 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
-/* 35 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var scope = (typeof global !== "undefined" && global) ||
@@ -14848,7 +15070,7 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(36);
+__webpack_require__(38);
 // On some exotic environments, it's not clear which object `setimmediate` was
 // able to install onto.  Search each possibility in the same order as the
 // `setimmediate` library.
@@ -14862,7 +15084,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 36 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -15055,7 +15277,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(2)))
 
 /***/ }),
-/* 37 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -15129,7 +15351,7 @@ function config (name) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 38 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15182,7 +15404,7 @@ PassThrough.prototype._transform = function (chunk, encoding, cb) {
 };
 
 /***/ }),
-/* 39 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Buffer = __webpack_require__(4).Buffer
@@ -15215,7 +15437,7 @@ module.exports = function (buf) {
 
 
 /***/ }),
-/* 40 */
+/* 42 */
 /***/ (function(module, exports) {
 
 module.exports = extend
@@ -15240,7 +15462,7 @@ function extend() {
 
 
 /***/ }),
-/* 41 */
+/* 43 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -15310,7 +15532,7 @@ module.exports = {
 
 
 /***/ }),
-/* 42 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15337,8 +15559,8 @@ module.exports = {
 
 
 
-var punycode = __webpack_require__(43);
-var util = __webpack_require__(45);
+var punycode = __webpack_require__(45);
+var util = __webpack_require__(47);
 
 exports.parse = urlParse;
 exports.resolve = urlResolve;
@@ -15413,7 +15635,7 @@ var protocolPattern = /^([a-z0-9.+-]+:)/i,
       'gopher:': true,
       'file:': true
     },
-    querystring = __webpack_require__(46);
+    querystring = __webpack_require__(48);
 
 function urlParse(url, parseQueryString, slashesDenoteHost) {
   if (url && util.isObject(url) && url instanceof Url) return url;
@@ -16049,7 +16271,7 @@ Url.prototype.parseHost = function() {
 
 
 /***/ }),
-/* 43 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*! https://mths.be/punycode v1.4.1 by @mathias */
@@ -16585,10 +16807,10 @@ Url.prototype.parseHost = function() {
 
 }(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(44)(module), __webpack_require__(0)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(46)(module), __webpack_require__(0)))
 
 /***/ }),
-/* 44 */
+/* 46 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -16616,7 +16838,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 45 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16639,18 +16861,18 @@ module.exports = {
 
 
 /***/ }),
-/* 46 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-exports.decode = exports.parse = __webpack_require__(47);
-exports.encode = exports.stringify = __webpack_require__(48);
+exports.decode = exports.parse = __webpack_require__(49);
+exports.encode = exports.stringify = __webpack_require__(50);
 
 
 /***/ }),
-/* 47 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16741,7 +16963,7 @@ var isArray = Array.isArray || function (xs) {
 
 
 /***/ }),
-/* 48 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16833,14 +17055,14 @@ var objectKeys = Object.keys || function (obj) {
 
 
 /***/ }),
-/* 49 */
+/* 51 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return KombatClientEngine; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lance_gg__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lance_gg___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lance_gg__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__client_KombatRenderer__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__client_KombatRenderer__ = __webpack_require__(52);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -16873,57 +17095,54 @@ function (_ClientEngine) {
     _classCallCheck(this, KombatClientEngine);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(KombatClientEngine).call(this, gameEngine, options, __WEBPACK_IMPORTED_MODULE_1__client_KombatRenderer__["a" /* default */]));
-    _this.controls = new __WEBPACK_IMPORTED_MODULE_0_lance_gg__["KeyboardControls"](_assertThisInitialized(_this));
-
-    _this.controls.bindKey('w', 'up', {
-      repeat: true
-    });
-
-    _this.controls.bindKey('s', 'down', {
-      repeat: true
-    });
-
-    _this.controls.bindKey('a', 'left', {
-      repeat: true
-    });
-
-    _this.controls.bindKey('d', 'right', {
-      repeat: true
-    });
-
-    _this.mouseIsDown = false; // restart game
+    _this.angle = 0;
+    _this.up = false;
+    _this.down = false;
+    _this.left = false;
+    _this.down = false;
+    _this.mouseIsDown = false;
+    _this.controls = new __WEBPACK_IMPORTED_MODULE_0_lance_gg__["KeyboardControls"](_assertThisInitialized(_this)); // restart game
 
     document.querySelector('#try-again').addEventListener('click', function () {
       window.location.reload();
     }); // show try-again button
 
-    gameEngine.on('objectDestroyed', function (obj) {
+    document.addEventListener('mouseenter', _this.updateAngle.bind(_assertThisInitialized(_this)), false);
+    document.addEventListener('mousemove', _this.updateAngle.bind(_assertThisInitialized(_this)), false);
+    document.addEventListener('mousedown', function (e) {
+      return _this.handleMouse(e);
+    });
+    document.addEventListener('mouseup', function (e) {
+      return _this.handleMouse(e);
+    });
+    document.addEventListener('contextmenu', function (e) {
+      return e.preventDefault();
+    });
+    document.addEventListener('keydown', function (e) {
+      return _this.handleKeyDown(e);
+    });
+    document.addEventListener('keyup', function (e) {
+      return _this.handleKeyUp(e);
+    });
+
+    _this.gameEngine.on('client__preStep', function (step) {
+      return _this.preStep(step);
+    });
+
+    _this.gameEngine.on('objectDestroyed', function (obj) {
       if (obj.playerId === gameEngine.playerId && obj.type === "Kombat") {
         document.querySelector('#try-again').style.display = "block";
       }
     });
-    _this.mouseX = null;
-    _this.mouseY = null;
-    document.addEventListener('mouseenter', _this.updateMouseXY.bind(_assertThisInitialized(_this)), false);
-    document.addEventListener('mousemove', _this.updateMouseXY.bind(_assertThisInitialized(_this)), false);
-    document.addEventListener('mousedown', function () {
-      return _this.mouseIsDown = true;
-    });
-    document.addEventListener('mouseup', function () {
-      return _this.mouseIsDown = false;
-    });
-
-    _this.gameEngine.on('client__preStep', _this.preStep.bind(_assertThisInitialized(_this)));
 
     return _this;
   }
 
   _createClass(KombatClientEngine, [{
-    key: "updateMouseXY",
-    value: function updateMouseXY(e) {
+    key: "updateAngle",
+    value: function updateAngle(e) {
       e.preventDefault();
-      this.mouseX = e.pageX - 400;
-      this.mouseY = e.pageY - 300;
+      this.angle = Math.atan2(e.pageY - window.innerHeight / 2, e.pageX - window.innerWidth / 2);
     }
   }, {
     key: "preStep",
@@ -16936,19 +17155,73 @@ function (_ClientEngine) {
       if (player === null) {
         debugContainer.innerHTML = "";
       } else {
-        if (this.mouseY) {
-          var angle = Math.atan2(this.mouseY, this.mouseX);
-          this.sendInput(angle, {
-            movement: true
-          });
+        this.sendInput('step', {
+          up: this.up,
+          left: this.left,
+          down: this.down,
+          right: this.right,
+          angle: this.angle
+        });
 
-          if (this.mouseIsDown === true) {
-            this.sendInput("shoot", {
-              repeat: true
+        if (this.mouseIsDown === true) {
+          this.sendInput("shoot", {
+            repeat: true
+          });
+        }
+
+        debugContainer.innerHTML = "\n            PlayerPos:\n            <br/> \n            X: ".concat(player.position.x, "\n            <br/> \n            Y: ").concat(player.position.y, "\n            <br/>\n            ----------------------------\n            <br/>\n            MousePos: \n            <br/> \n            X: ").concat(this.mouseX, "\n            <br/> \n            Y: ").concat(this.mouseY, "\n            <br/> \n            ----------------------------\n            <br/>\n            Angle: ").concat(this.angle, "\n            <br/>\n            ----------------------------\n            <br/>\n            Is shooting: ").concat(this.mouseIsDown ? "true" : "false", "\n            <br/>\n            ----------------------------\n            <br/>\n            Ammo: ").concat(player.ammo_loaded, "\n            <br/>\n            ----------------------------\n            <br/>\n            Is reloading: ").concat(player.ammo_loaded === 0 ? "true" : "false", "\n            <br/>\n            ----------------------------\n        ");
+      }
+    }
+  }, {
+    key: "handleKeyDown",
+    value: function handleKeyDown(e) {
+      if (e.isTrusted === true) {
+        if (e.key === "w" || e.key === "ArrowUp") {
+          this.up = true;
+        } else if (e.key === "a" || e.key === "ArrowLeft") {
+          this.left = true;
+        } else if (e.key === "s" || e.key === "ArrowDown") {
+          this.down = true;
+        } else if (e.key === "d" || e.key === "ArrowRight") {
+          this.right = true;
+        }
+      }
+    }
+  }, {
+    key: "handleKeyUp",
+    value: function handleKeyUp(e) {
+      if (e.isTrusted === true) {
+        if (e.key === "w" || e.key === "ArrowUp") {
+          this.up = false;
+        } else if (e.key === "a" || e.key === "ArrowLeft") {
+          this.left = false;
+        } else if (e.key === "s" || e.key === "ArrowDown") {
+          this.down = false;
+        } else if (e.key === "d" || e.key === "ArrowRight") {
+          this.right = false;
+        }
+      }
+    }
+  }, {
+    key: "handleMouse",
+    value: function handleMouse(e) {
+      e.preventDefault();
+
+      if (e.isTrusted === true) {
+        if (e.which === 1) {
+          this.mouseIsDown = e.type === "mousedown";
+        } else if (e.which === 3) {
+          if (e.type === 'mousedown') {
+            this.sendInput('throw_power', {
+              repeat: false
             });
           }
 
-          debugContainer.innerHTML = "\n                PlayerPos:\n                <br/> \n                X: ".concat(player.position.x, "\n                <br/> \n                Y: ").concat(player.position.y, "\n                <br/>\n                ----------------------------\n                <br/>\n                MousePos: \n                <br/> \n                X: ").concat(this.mouseX, "\n                <br/> \n                Y: ").concat(this.mouseY, "\n                <br/> \n                ----------------------------\n                <br/>\n                Angle: ").concat(angle, "\n                <br/>\n                ----------------------------\n                <br/>\n                IsShooting: ").concat(this.mouseIsDown ? "true" : "false", "\n                <br/>\n                ----------------------------\n            ");
+          if (e.type === 'mouseup') {
+            this.sendInput('granade', {
+              repeat: false
+            });
+          }
         }
       }
     }
@@ -16960,7 +17233,7 @@ function (_ClientEngine) {
 
 
 /***/ }),
-/* 50 */
+/* 52 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -16969,8 +17242,10 @@ function (_ClientEngine) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lance_gg___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lance_gg__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__common_Kombat__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_Bullet__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__common_Wall__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__common_Blood__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__common_Granade__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__common_Wall__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__common_Blood__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__common_Explosion2__ = __webpack_require__(26);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -16992,6 +17267,8 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
 
 
 
@@ -17017,20 +17294,25 @@ function (_Renderer) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(KombatRenderer).call(this, gameEngine, clientEngine));
     game = gameEngine;
     canvas = document.createElement('canvas');
+    canvas.setAttribute('id', 'kc');
     canvas.width = C_WIDTH;
     canvas.height = C_HEIGHT;
     document.body.appendChild(canvas);
-    game.w = canvas.width;
-    game.h = canvas.height;
     clientEngine.zoom = 10;
     ctx = canvas.getContext('2d');
-    ctx.lineWidth = 2 / clientEngine.zoom;
-    _this.offsetX = 0;
-    _this.offsetY = 0;
+    ctx.lineWidth = 3 / clientEngine.zoom;
+    _this.offset = new __WEBPACK_IMPORTED_MODULE_0_lance_gg__["TwoVector"](0, 0);
     return _this;
   }
 
   _createClass(KombatRenderer, [{
+    key: "setOffset",
+    value: function setOffset(playerKombat) {
+      var c = document.getElementById('kc');
+      this.offset.x = C_WIDTH / 2 / this.clientEngine.zoom - playerKombat.position.x - playerKombat.width / 2;
+      this.offset.y = C_HEIGHT / 2 / this.clientEngine.zoom - playerKombat.position.y - playerKombat.height / 2;
+    }
+  }, {
     key: "draw",
     value: function draw(t, dt) {
       var _this2 = this;
@@ -17044,18 +17326,17 @@ function (_Renderer) {
       });
 
       if (playerKombat) {
-        this.offsetX = C_WIDTH / 2 / this.clientEngine.zoom - playerKombat.position.x - playerKombat.width / 2;
-        this.offsetY = C_HEIGHT / 2 / this.clientEngine.zoom - playerKombat.position.y - playerKombat.height / 2; //draw blood stains first // layer 0
+        this.setOffset(playerKombat); //draw blood stains first // layer 0
 
         game.world.queryObjects({
-          instanceType: __WEBPACK_IMPORTED_MODULE_4__common_Blood__["a" /* default */]
+          instanceType: __WEBPACK_IMPORTED_MODULE_5__common_Blood__["a" /* default */]
         }).forEach(function (obj) {
           _this2.drawBlood(obj);
         });
         game.world.forEachObject(function (id, obj) {
-          if (obj instanceof __WEBPACK_IMPORTED_MODULE_1__common_Kombat__["a" /* default */]) _this2.drawKombat(obj);else if (obj instanceof __WEBPACK_IMPORTED_MODULE_2__common_Bullet__["a" /* default */]) _this2.drawBullet(obj);else if (obj instanceof __WEBPACK_IMPORTED_MODULE_3__common_Wall__["a" /* default */]) _this2.drawWall(obj);
+          if (obj instanceof __WEBPACK_IMPORTED_MODULE_1__common_Kombat__["a" /* default */]) _this2.drawKombat(obj);else if (obj instanceof __WEBPACK_IMPORTED_MODULE_2__common_Bullet__["a" /* default */]) _this2.drawBullet(obj);else if (obj instanceof __WEBPACK_IMPORTED_MODULE_3__common_Granade__["a" /* default */]) _this2.drawGranade(obj);else if (obj instanceof __WEBPACK_IMPORTED_MODULE_4__common_Wall__["a" /* default */]) _this2.drawWall(obj);else if (obj instanceof __WEBPACK_IMPORTED_MODULE_6__common_Explosion2__["a" /* default */]) _this2.drawExplosion(obj);
         });
-        this.drawUI(playerKombat);
+        this.drawHUD(playerKombat);
       }
 
       ctx.restore();
@@ -17063,27 +17344,43 @@ function (_Renderer) {
   }, {
     key: "resetRender",
     value: function resetRender() {
-      ctx.clearRect(0, 0, game.w, game.h);
+      ctx.clearRect(0, 0, C_WIDTH, C_HEIGHT);
       ctx.save();
       ctx.translate(0, 0);
       ctx.scale(this.clientEngine.zoom, this.clientEngine.zoom); // Zoom in and flip y axis
     }
   }, {
-    key: "drawUI",
-    value: function drawUI(obj) {
-      //Health Bar
-      ctx.fillStyle = "red";
-      ctx.fillRect(10 / this.clientEngine.zoom, 570 / this.clientEngine.zoom, obj.health * (780 / obj.max_health) / this.clientEngine.zoom, 10 / this.clientEngine.zoom);
-      ctx.beginPath();
+    key: "drawHUD",
+    value: function drawHUD(obj) {
+      //Bullets
+      ctx.fillStyle = "orange";
+
+      for (var i = 0; i < obj.ammo_loaded; i++) {
+        ctx.fillRect((125 + i * 6) / this.clientEngine.zoom, 543 / this.clientEngine.zoom, 2 / this.clientEngine.zoom, 2 / this.clientEngine.zoom);
+        ctx.fillRect((124 + i * 6) / this.clientEngine.zoom, 545 / this.clientEngine.zoom, 4 / this.clientEngine.zoom, 20 / this.clientEngine.zoom);
+      } //Throw Power
+
+
       ctx.strokeStyle = "white";
-      ctx.rect(10 / this.clientEngine.zoom, 570 / this.clientEngine.zoom, 780 / this.clientEngine.zoom, 10 / this.clientEngine.zoom);
-      ctx.stroke();
+      ctx.fillStyle = "rgba(100, 100, 100, .5)";
+      ctx.fillRect(20 / this.clientEngine.zoom, 544 / this.clientEngine.zoom, obj.throw_power * 100 / this.clientEngine.zoom, 18 / this.clientEngine.zoom);
+      ctx.beginPath();
+      ctx.rect(20 / this.clientEngine.zoom, 545 / this.clientEngine.zoom, 100 / this.clientEngine.zoom, 18 / this.clientEngine.zoom);
       ctx.closePath();
+      ctx.stroke(); //Life
+
+      ctx.strokeStyle = "white";
+      ctx.fillStyle = "rgba(255, 0, 0, .5)";
+      ctx.fillRect(20 / this.clientEngine.zoom, 570 / this.clientEngine.zoom, obj.health * (760 / obj.max_health) / this.clientEngine.zoom, 18 / this.clientEngine.zoom);
+      ctx.beginPath();
+      ctx.rect(20 / this.clientEngine.zoom, 570 / this.clientEngine.zoom, 760 / this.clientEngine.zoom, 16 / this.clientEngine.zoom);
+      ctx.closePath();
+      ctx.stroke();
     }
   }, {
     key: "getCenter",
     value: function getCenter(obj) {
-      return new __WEBPACK_IMPORTED_MODULE_0_lance_gg__["TwoVector"](obj.position.x + this.offsetX + obj.width / 2, obj.position.y + this.offsetY + obj.height / 2);
+      return new __WEBPACK_IMPORTED_MODULE_0_lance_gg__["TwoVector"](obj.position.x + this.offset.x + obj.width / 2, obj.position.y + this.offset.y + obj.height / 2);
     }
   }, {
     key: "getCircumscribedRadiusLength",
@@ -17098,6 +17395,11 @@ function (_Renderer) {
       var center = this.getCenter(obj);
       var radius = this.getCircumscribedRadiusLength(obj.width);
       this.drawCircle(center.x, center.y, radius);
+
+      if (obj.ammo_loaded === -1) {
+        this.drawCircle(center.x, center.y, radius + .4);
+      }
+
       ctx.moveTo(center.x, center.y);
       ctx.lineTo(center.x + radius * Math.cos(obj.direction), center.y + radius * Math.sin(obj.direction));
       ctx.stroke();
@@ -17105,12 +17407,26 @@ function (_Renderer) {
   }, {
     key: "drawBullet",
     value: function drawBullet(obj) {
-      ctx.fillStyle = "yellow";
+      ctx.fillStyle = "orange";
+      ctx.strokeStyle = "white";
       var center = this.getCenter(obj);
       var radius = this.getCircumscribedRadiusLength(obj.width);
       ctx.beginPath();
-      ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
+      ctx.arc(center.x, center.y, .5, 0, 2 * Math.PI);
       ctx.fill();
+      ctx.stroke();
+      ctx.closePath();
+    }
+  }, {
+    key: "drawGranade",
+    value: function drawGranade(obj) {
+      ctx.fillStyle = "olive";
+      ctx.strokeStyle = "green";
+      var center = this.getCenter(obj);
+      ctx.beginPath();
+      ctx.arc(center.x, center.y, .8, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.stroke();
       ctx.closePath();
     }
   }, {
@@ -17127,10 +17443,20 @@ function (_Renderer) {
       var center = this.getCenter(obj);
       obj.splatter.forEach(function (sp) {
         ctx.beginPath();
-        ctx.arc(center.x + sp[0], center.y + sp[1], sp[2], 0, 2 * Math.PI);
+        ctx.arc(center.x + 1 + sp[0], center.y + 1 + sp[1], sp[2], 0, 2 * Math.PI);
         ctx.fill();
         ctx.closePath();
       });
+    }
+  }, {
+    key: "drawExplosion",
+    value: function drawExplosion(obj) {
+      ctx.fillStyle = "rgba(200,100,0,.4)";
+      var center = new __WEBPACK_IMPORTED_MODULE_0_lance_gg__["TwoVector"](obj.position.x + this.offset.x, obj.position.y + this.offset.y);
+      ctx.beginPath();
+      ctx.arc(center.x, center.y, obj.radius, 0, 2 * Math.PI);
+      ctx.closePath();
+      ctx.fill();
     }
   }, {
     key: "drawCircle",
@@ -17156,7 +17482,7 @@ function (_Renderer) {
 
 
 /***/ }),
-/* 51 */
+/* 53 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -17164,9 +17490,11 @@ function (_Renderer) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lance_gg__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lance_gg___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lance_gg__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Kombat__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Wall__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Wall__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Bullet__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Blood__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Granade__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Blood__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Explosion2__ = __webpack_require__(26);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -17195,6 +17523,8 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
+
 var KombatGameEngine =
 /*#__PURE__*/
 function (_GameEngine) {
@@ -17213,9 +17543,8 @@ function (_GameEngine) {
       }
     });
 
-    _this.on('preStep', _this.moveAll.bind(_assertThisInitialized(_this)));
-
-    _this.on('postStep', function (e) {// console.log('poststep', e);
+    _this.on('postStep', function (stepInfo) {
+      return _this.postStep(stepInfo);
     });
 
     _this.on('collisionStart', function (e) {
@@ -17248,8 +17577,10 @@ function (_GameEngine) {
     value: function registerClasses(serializer) {
       serializer.registerClass(__WEBPACK_IMPORTED_MODULE_1__Kombat__["a" /* default */]);
       serializer.registerClass(__WEBPACK_IMPORTED_MODULE_3__Bullet__["a" /* default */]);
+      serializer.registerClass(__WEBPACK_IMPORTED_MODULE_4__Granade__["a" /* default */]);
       serializer.registerClass(__WEBPACK_IMPORTED_MODULE_2__Wall__["a" /* default */]);
-      serializer.registerClass(__WEBPACK_IMPORTED_MODULE_4__Blood__["a" /* default */]);
+      serializer.registerClass(__WEBPACK_IMPORTED_MODULE_5__Blood__["a" /* default */]);
+      serializer.registerClass(__WEBPACK_IMPORTED_MODULE_6__Explosion2__["a" /* default */]);
     }
   }, {
     key: "start",
@@ -17264,11 +17595,6 @@ function (_GameEngine) {
       return new __WEBPACK_IMPORTED_MODULE_0_lance_gg__["TwoVector"](x, y);
     }
   }, {
-    key: "moveAll",
-    value: function moveAll(stepInfo) {
-      return;
-    }
-  }, {
     key: "processInput",
     value: function processInput(inputData, playerId) {
       _get(_getPrototypeOf(KombatGameEngine.prototype), "processInput", this).call(this, inputData, playerId);
@@ -17276,17 +17602,39 @@ function (_GameEngine) {
       var player = this.world.queryObject({
         playerId: playerId
       });
-      var speed = 0.16;
+      var speed = 0.24;
 
       if (player) {
-        if (inputData.input === 'up') {
-          player.position.y -= speed;
-        } else if (inputData.input === 'down') {
-          player.position.y += speed;
-        } else if (inputData.input === 'right') {
-          player.position.x += speed;
-        } else if (inputData.input === 'left') {
-          player.position.x -= speed;
+        if (inputData.input === 'step') {
+          var x = 0;
+          var y = 0;
+
+          if (inputData.options.right) {
+            x++;
+          }
+
+          if (inputData.options.left) {
+            x--;
+          }
+
+          if (inputData.options.up) {
+            y--;
+          }
+
+          if (inputData.options.down) {
+            y++;
+          }
+
+          if (x == 0 && y === 0) {
+            player.velocity.x = 0;
+            player.velocity.y = 0;
+          } else {
+            var move_angle = Math.atan2(y, x);
+            player.velocity.x = speed * Math.cos(move_angle);
+            player.velocity.y = speed * Math.sin(move_angle);
+          }
+
+          player.direction = inputData.options.angle;
         } else if (inputData.input === 'shoot') {
           var step = inputData.step;
 
@@ -17294,8 +17642,10 @@ function (_GameEngine) {
             player.last_shot = step;
             this.emit('shoot', player);
           }
-        } else {
-          player.direction = inputData.input;
+        } else if (inputData.input === 'throw_power') {
+          player.throw_power = .015;
+        } else if (inputData.input === 'granade') {
+          this.emit('granade', player);
         }
       }
     }
@@ -17323,7 +17673,7 @@ function (_GameEngine) {
     value: function handleBulletHit(kombat, bullet) {
       this.destroyObjectById(bullet.id);
       kombat.health--;
-      var blood = new __WEBPACK_IMPORTED_MODULE_4__Blood__["a" /* default */](this, null, {
+      var blood = new __WEBPACK_IMPORTED_MODULE_5__Blood__["a" /* default */](this, null, {
         position: kombat.position.clone()
       });
       this.addObjectToWorld(blood);
@@ -17339,6 +17689,22 @@ function (_GameEngine) {
       if (this.world.objects[id]) {
         this.removeObjectFromWorld(id);
       }
+    }
+  }, {
+    key: "postStep",
+    value: function postStep(stepInfo) {
+      var kombats = this.world.queryObjects({
+        instanceType: __WEBPACK_IMPORTED_MODULE_1__Kombat__["a" /* default */]
+      });
+      kombats.forEach(function (kombat) {
+        if (kombat.throw_power > 0) {
+          kombat.throw_power += .015;
+
+          if (kombat.throw_power > 1) {
+            kombat.throw_power = 1;
+          }
+        }
+      });
     }
   }]);
 

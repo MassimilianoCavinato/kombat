@@ -13,7 +13,11 @@ var _Wall = _interopRequireDefault(require("./Wall"));
 
 var _Bullet = _interopRequireDefault(require("./Bullet"));
 
+var _Granade = _interopRequireDefault(require("./Granade"));
+
 var _Blood = _interopRequireDefault(require("./Blood"));
+
+var _Explosion = _interopRequireDefault(require("./Explosion2"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -57,9 +61,8 @@ function (_GameEngine) {
       }
     });
 
-    _this.on('preStep', _this.moveAll.bind(_assertThisInitialized(_this)));
-
-    _this.on('postStep', function (e) {// console.log('poststep', e);
+    _this.on('postStep', function (stepInfo) {
+      return _this.postStep(stepInfo);
     });
 
     _this.on('collisionStart', function (e) {
@@ -92,8 +95,10 @@ function (_GameEngine) {
     value: function registerClasses(serializer) {
       serializer.registerClass(_Kombat.default);
       serializer.registerClass(_Bullet.default);
+      serializer.registerClass(_Granade.default);
       serializer.registerClass(_Wall.default);
       serializer.registerClass(_Blood.default);
+      serializer.registerClass(_Explosion.default);
     }
   }, {
     key: "start",
@@ -108,11 +113,6 @@ function (_GameEngine) {
       return new _lanceGg.TwoVector(x, y);
     }
   }, {
-    key: "moveAll",
-    value: function moveAll(stepInfo) {
-      return;
-    }
-  }, {
     key: "processInput",
     value: function processInput(inputData, playerId) {
       _get(_getPrototypeOf(KombatGameEngine.prototype), "processInput", this).call(this, inputData, playerId);
@@ -120,17 +120,39 @@ function (_GameEngine) {
       var player = this.world.queryObject({
         playerId: playerId
       });
-      var speed = 0.16;
+      var speed = 0.24;
 
       if (player) {
-        if (inputData.input === 'up') {
-          player.position.y -= speed;
-        } else if (inputData.input === 'down') {
-          player.position.y += speed;
-        } else if (inputData.input === 'right') {
-          player.position.x += speed;
-        } else if (inputData.input === 'left') {
-          player.position.x -= speed;
+        if (inputData.input === 'step') {
+          var x = 0;
+          var y = 0;
+
+          if (inputData.options.right) {
+            x++;
+          }
+
+          if (inputData.options.left) {
+            x--;
+          }
+
+          if (inputData.options.up) {
+            y--;
+          }
+
+          if (inputData.options.down) {
+            y++;
+          }
+
+          if (x == 0 && y === 0) {
+            player.velocity.x = 0;
+            player.velocity.y = 0;
+          } else {
+            var move_angle = Math.atan2(y, x);
+            player.velocity.x = speed * Math.cos(move_angle);
+            player.velocity.y = speed * Math.sin(move_angle);
+          }
+
+          player.direction = inputData.options.angle;
         } else if (inputData.input === 'shoot') {
           var step = inputData.step;
 
@@ -138,8 +160,10 @@ function (_GameEngine) {
             player.last_shot = step;
             this.emit('shoot', player);
           }
-        } else {
-          player.direction = inputData.input;
+        } else if (inputData.input === 'throw_power') {
+          player.throw_power = .015;
+        } else if (inputData.input === 'granade') {
+          this.emit('granade', player);
         }
       }
     }
@@ -183,6 +207,22 @@ function (_GameEngine) {
       if (this.world.objects[id]) {
         this.removeObjectFromWorld(id);
       }
+    }
+  }, {
+    key: "postStep",
+    value: function postStep(stepInfo) {
+      var kombats = this.world.queryObjects({
+        instanceType: _Kombat.default
+      });
+      kombats.forEach(function (kombat) {
+        if (kombat.throw_power > 0) {
+          kombat.throw_power += .015;
+
+          if (kombat.throw_power > 1) {
+            kombat.throw_power = 1;
+          }
+        }
+      });
     }
   }]);
 

@@ -16,12 +16,12 @@ var qsOptions = _queryString.default.parse(location.search); // default options,
 
 var defaults = {
   traceLevel: _lanceGg.Lib.Trace.TRACE_NONE,
-  delayInputCount: 15,
+  delayInputCount: 5,
   scheduler: 'render-schedule',
   syncOptions: {
     sync: 'interpolate',
-    localObjBending: .75,
-    remoteObjBending: .75,
+    localObjBending: .7,
+    remoteObjBending: .9,
     bendingIncrements: 2
   }
 };

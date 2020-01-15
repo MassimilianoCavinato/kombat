@@ -7,7 +7,10 @@ export default class Kombat extends  DynamicObject {
             direction: { type: BaseTypes.TYPES.FLOAT32 },
             max_health: { type: BaseTypes.TYPES.UINT8 }, 
             health: { type: BaseTypes.TYPES.UINT8 },
+            ammo_capacity: { type: BaseTypes.TYPES.UINT8 },
+            ammo_loaded: { type: BaseTypes.TYPES.INT8 },
             last_shot: { type: BaseTypes.TYPES.UINT8 }, 
+            throw_power: { type: BaseTypes.TYPES.FLOAT32 },
         }, 
         super.netScheme);
     }
@@ -25,8 +28,24 @@ export default class Kombat extends  DynamicObject {
     }
 
     collidesWith(other){
-        if(this.playerId === other.playerId ){
-            return false;
+        if(other.type === "Kombat"){
+            return true;
+        }
+        else if(other.type === "Bullet"){
+            if(this.playerId === other.playerId ){
+                return false;
+            }
+            else{
+                return true;
+            }
+        }
+        else if(other.type === "Granade"){
+            if(this.playerId === other.playerId){
+                return false;
+            }
+            else{
+                return true;
+            }
         }
         else if(other.type === "Blood"){
             return false;

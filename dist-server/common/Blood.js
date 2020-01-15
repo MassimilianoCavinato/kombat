@@ -50,8 +50,8 @@ function (_DynamicObject) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Blood).call(this, gameEngine, options, props));
     _this.class = Blood;
     _this.type = "Blood";
-    _this.width = 2;
-    _this.height = 2;
+    _this.width = 0;
+    _this.height = 0;
     _this.splatter = [[Math.random(), Math.random(), Math.random()], [Math.random(), -Math.random(), Math.random()], [-Math.random(), Math.random(), Math.random()], [-Math.random(), -Math.random(), Math.random()]];
     return _this;
   }

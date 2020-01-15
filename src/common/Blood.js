@@ -13,8 +13,8 @@ export default class Blood extends  DynamicObject {
         super(gameEngine, options, props);
         this.class = Blood;
         this.type = "Blood";
-        this.width = 2;
-        this.height = 2;
+        this.width = 0;
+        this.height = 0;
         this.splatter = [
             [Math.random(), Math.random(), Math.random()],
             [Math.random(), -Math.random(), Math.random()],

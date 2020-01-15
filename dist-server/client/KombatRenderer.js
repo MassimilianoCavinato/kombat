@@ -69,6 +69,9 @@ function (_Renderer) {
     clientEngine.zoom = 10;
     ctx = canvas.getContext('2d');
     ctx.lineWidth = 3 / clientEngine.zoom;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+    ctx.shadowBlur = 5;
     _this.offset = new _lanceGg.TwoVector(0, 0);
     return _this;
   }
@@ -121,6 +124,7 @@ function (_Renderer) {
     key: "drawHUD",
     value: function drawHUD(obj) {
       //Bullets
+      ctx.shadowColor = 'white';
       ctx.fillStyle = "orange";
 
       for (var i = 0; i < obj.ammo_loaded; i++) {
@@ -160,8 +164,9 @@ function (_Renderer) {
     value: function drawKombat(obj) {
       var center = this.getCenter(obj);
       var radius = this.getCircumscribedRadiusLength(obj.width);
-      ctx.fillStyle = "transparent";
-      ctx.strokeStyle = obj.playerId === this.gameEngine.playerId ? "dodgerblue" : "crimson"; //base circle
+      var color = obj.playerId === this.gameEngine.playerId ? "dodgerblue" : "crimson";
+      ctx.shadowColor = color;
+      ctx.strokeStyle = color; //base circle
 
       this.drawCircle(center.x, center.y, radius); //kombat name
 
@@ -174,31 +179,45 @@ function (_Renderer) {
       ctx.stroke(); //ammo reloading circle
 
       if (obj.ammo_loaded === -1) {
-        this.drawCircle(center.x, center.y, radius + .4);
+        ctx.beginPath();
+        ctx.arc(center.x, center.y, radius + radius / 2, .1, Math.PI / 2 - .1);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(center.x, center.y, radius + radius / 2, Math.PI + .1, Math.PI + Math.PI / 2 - .1);
+        ctx.stroke();
+      }
+
+      if (obj.throwing_granade === 1) {
+        ctx.strokeStyle = "white";
+        ctx.shadowColor = "white";
+        ctx.beginPath();
+        ctx.arc(center.x, center.y, radius + radius / 2 + .1, Math.PI / 2, Math.PI - .1);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(center.x, center.y, radius + radius / 2, Math.PI + Math.PI / 2 + .1, 2 * Math.PI - .1);
+        ctx.stroke();
       }
     }
   }, {
     key: "drawBullet",
     value: function drawBullet(obj) {
-      ctx.fillStyle = "orange";
-      ctx.strokeStyle = "white";
+      ctx.shadowColor = "yellow";
+      ctx.strokeStyle = "yellow";
       var center = this.getCenter(obj);
       var radius = this.getCircumscribedRadiusLength(obj.width);
       ctx.beginPath();
       ctx.arc(center.x, center.y, .5, 0, 2 * Math.PI);
-      ctx.fill();
       ctx.stroke();
       ctx.closePath();
     }
   }, {
     key: "drawGranade",
     value: function drawGranade(obj) {
-      ctx.fillStyle = "olive";
-      ctx.strokeStyle = "green";
+      ctx.shadowColor = "lime";
+      ctx.strokeStyle = "lime";
       var center = this.getCenter(obj);
       ctx.beginPath();
       ctx.arc(center.x, center.y, .8, 0, 2 * Math.PI);
-      ctx.fill();
       ctx.stroke();
       ctx.closePath();
     }
@@ -206,25 +225,29 @@ function (_Renderer) {
     key: "drawWall",
     value: function drawWall(obj) {
       ctx.strokeStyle = "white";
+      ctx.shadowColor = "white";
       var center = this.getCenter(obj);
       this.drawBox(center.x, center.y, obj.width, obj.height);
     }
   }, {
     key: "drawBlood",
     value: function drawBlood(obj) {
-      ctx.fillStyle = 'rgba(255,0,0,.5)';
+      ctx.fillStyle = "rgba(200,100,0,.4)";
+      ctx.shadowColor = "red";
       var center = this.getCenter(obj);
       obj.splatter.forEach(function (sp) {
         ctx.beginPath();
         ctx.arc(center.x + 1 + sp[0], center.y + 1 + sp[1], sp[2], 0, 2 * Math.PI);
-        ctx.fill();
         ctx.closePath();
+        ctx.fill();
       });
     }
   }, {
     key: "drawExplosion",
     value: function drawExplosion(obj) {
-      ctx.fillStyle = "rgba(200,100,0,.4)";
+      ctx.fillStyle = "rgba(200, 200, 10, .4)";
+      ctx.shadowColor = "rgba(200, 200, 10, .4)";
+      ;
       var center = new _lanceGg.TwoVector(obj.position.x + this.offset.x, obj.position.y + this.offset.y);
       ctx.beginPath();
       ctx.arc(center.x, center.y, obj.radius, 0, 2 * Math.PI);

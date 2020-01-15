@@ -82,6 +82,7 @@ export default class KombatServerEngine extends ServerEngine {
         kombat.ammo_loaded =  21;
         kombat.last_shot = 0;
         kombat.throw_power = 0;
+        kombat.thrwing_granade = false;
         this.gameEngine.addObjectToWorld(kombat);
     }
 
@@ -109,7 +110,6 @@ export default class KombatServerEngine extends ServerEngine {
                     Math.sin(kombat.direction) * speed
                 )
             });
-
             this.gameEngine.addObjectToWorld(bullet);
             this.gameEngine.timer.add(liveTimer, this.destroyObjectById, this, [bullet.id]);
         }

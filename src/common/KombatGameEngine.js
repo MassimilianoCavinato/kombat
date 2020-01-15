@@ -100,9 +100,11 @@ export default class KombatGameEngine extends GameEngine {
                 
             }
             else if (inputData.input === 'throw_power'){
+                player.throwing_granade = 1;
                 player.throw_power = .015;
             }
             else if (inputData.input === 'granade'){
+                player.throwing_granade = 0;
                 this.emit('granade', player);
             }
         }

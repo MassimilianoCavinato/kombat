@@ -56,11 +56,20 @@ function (_DynamicObject) {
         ammo_loaded: {
           type: _lanceGg.BaseTypes.TYPES.INT8
         },
+        granade_capacity: {
+          type: _lanceGg.BaseTypes.TYPES.UINT8
+        },
+        granade_loaded: {
+          type: _lanceGg.BaseTypes.TYPES.INT8
+        },
         last_shot: {
           type: _lanceGg.BaseTypes.TYPES.UINT8
         },
         throw_power: {
           type: _lanceGg.BaseTypes.TYPES.FLOAT32
+        },
+        throwing_granade: {
+          type: _lanceGg.BaseTypes.TYPES.INT8
         }
       }, _get(_getPrototypeOf(Kombat), "netScheme", this));
     }

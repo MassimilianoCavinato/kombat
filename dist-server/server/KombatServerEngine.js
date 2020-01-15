@@ -122,6 +122,7 @@ function (_ServerEngine) {
       kombat.ammo_loaded = 21;
       kombat.last_shot = 0;
       kombat.throw_power = 0;
+      kombat.thrwing_granade = false;
       this.gameEngine.addObjectToWorld(kombat);
     }
   }, {

@@ -25,6 +25,9 @@ export default class KombatRenderer extends Renderer {
         clientEngine.zoom = 10;
         ctx = canvas.getContext('2d');
         ctx.lineWidth = 3 / clientEngine.zoom;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+        ctx.shadowBlur = 5; 
         this.offset = new TwoVector(0, 0);
     }
 
@@ -66,6 +69,7 @@ export default class KombatRenderer extends Renderer {
 
     drawHUD(obj){
         //Bullets
+        ctx.shadowColor = 'white';
         ctx.fillStyle = "orange";
         for(let i=0; i < obj.ammo_loaded; i++){
             ctx.fillRect(
@@ -125,8 +129,9 @@ export default class KombatRenderer extends Renderer {
      
         let center = this.getCenter(obj);
         let radius = this.getCircumscribedRadiusLength(obj.width);
-        ctx.fillStyle = "transparent";
-        ctx.strokeStyle = obj.playerId === this.gameEngine.playerId ? "dodgerblue" : "crimson";
+        let color = obj.playerId === this.gameEngine.playerId ? "dodgerblue" : "crimson";
+        ctx.shadowColor = color;
+        ctx.strokeStyle = color;
         //base circle
         this.drawCircle(center.x, center.y, radius);
         //kombat name
@@ -139,53 +144,69 @@ export default class KombatRenderer extends Renderer {
         ctx.stroke();
         //ammo reloading circle
         if(obj.ammo_loaded === -1){
-            this.drawCircle(center.x, center.y, radius+.4);
+            ctx.beginPath();
+            ctx.arc(center.x, center.y, radius+ radius/2, .1, Math.PI/2 - .1);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(center.x, center.y, radius+ radius/2,  Math.PI+.1, Math.PI + Math.PI/2 -.1);
+            ctx.stroke();
         }
-      
+
+        if(obj.throwing_granade === 1){
+            ctx.strokeStyle = "white";
+            ctx.shadowColor = "white";
+            ctx.beginPath();
+            ctx.arc(center.x, center.y, radius+ radius/2 + .1, Math.PI/2, Math.PI - .1);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(center.x, center.y, radius+ radius/2,  Math.PI + Math.PI/2 +.1, 2*Math.PI - .1);
+            ctx.stroke();
+        }
     }
 
     drawBullet(obj){
-        ctx.fillStyle = "orange";
-        ctx.strokeStyle = "white";
+        ctx.shadowColor = "yellow";
+        ctx.strokeStyle = "yellow";
         let center = this.getCenter(obj);
         let radius = this.getCircumscribedRadiusLength(obj.width);
         ctx.beginPath();
         ctx.arc(center.x, center.y, .5, 0, 2*Math.PI);
-        ctx.fill();
         ctx.stroke();
         ctx.closePath();
     }
 
     drawGranade(obj){
-        ctx.fillStyle = "olive";
-        ctx.strokeStyle = "green";
+        ctx.shadowColor = "lime";
+        ctx.strokeStyle = "lime";
         let center = this.getCenter(obj);
         ctx.beginPath();
         ctx.arc(center.x, center.y, .8, 0, 2*Math.PI);
-        ctx.fill();
         ctx.stroke();
         ctx.closePath();
     }
 
     drawWall(obj){
         ctx.strokeStyle =  "white";
+        ctx.shadowColor = "white";
         let center = this.getCenter(obj);
         this.drawBox(center.x, center.y, obj.width, obj.height);
     }
 
     drawBlood(obj){
-        ctx.fillStyle = 'rgba(255,0,0,.5)';
+        ctx.fillStyle = "rgba(200,100,0,.4)"
+        ctx.shadowColor = "red";
         let center = this.getCenter(obj);
         obj.splatter.forEach(sp => {
             ctx.beginPath();
             ctx.arc(center.x+1+sp[0], center.y+1+sp[1], sp[2], 0, 2*Math.PI);
-            ctx.fill();
             ctx.closePath();
+            ctx.fill();
         });
     }
 
     drawExplosion(obj) {
-        ctx.fillStyle = "rgba(200,100,0,.4)"
+        ctx.fillStyle = "rgba(200, 200, 10, .4)";
+        ctx.shadowColor = "rgba(200, 200, 10, .4)";;
         let center = new TwoVector(
             obj.position.x + this.offset.x,
             obj.position.y + this.offset.y

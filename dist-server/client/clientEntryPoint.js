@@ -25,11 +25,15 @@ var defaults = {
     bendingIncrements: 2
   }
 };
-var options = Object.assign(defaults, qsOptions); // create a client engine and a game engine
-
-var gameEngine = new _KombatGameEngine.default(options);
-var clientEngine = new _KombatClientEngine.default(gameEngine, options);
+var options = Object.assign(defaults, qsOptions);
 document.addEventListener('DOMContentLoaded', function (e) {
-  clientEngine.start();
+  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+    alert('mobile controllers not available');
+  } else {
+    // create a client engine and a game engine
+    var gameEngine = new _KombatGameEngine.default(options);
+    var clientEngine = new _KombatClientEngine.default(gameEngine, options);
+    clientEngine.start();
+  }
 });
 //# sourceMappingURL=clientEntryPoint.js.map

@@ -14006,12 +14006,16 @@ var defaults = {
     bendingIncrements: 2
   }
 };
-var options = Object.assign(defaults, qsOptions); // create a client engine and a game engine
-
-var gameEngine = new __WEBPACK_IMPORTED_MODULE_3__common_KombatGameEngine__["a" /* default */](options);
-var clientEngine = new __WEBPACK_IMPORTED_MODULE_2__client_KombatClientEngine__["a" /* default */](gameEngine, options);
+var options = Object.assign(defaults, qsOptions);
 document.addEventListener('DOMContentLoaded', function (e) {
-  clientEngine.start();
+  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+    alert('mobile controllers not available');
+  } else {
+    // create a client engine and a game engine
+    var gameEngine = new __WEBPACK_IMPORTED_MODULE_3__common_KombatGameEngine__["a" /* default */](options);
+    var clientEngine = new __WEBPACK_IMPORTED_MODULE_2__client_KombatClientEngine__["a" /* default */](gameEngine, options);
+    clientEngine.start();
+  }
 });
 
 /***/ }),
@@ -17607,25 +17611,25 @@ function (_GameEngine) {
     _this.on('collisionStart', function (e) {
       return _this.handleCollision(e);
     }); // game variables
+    // Object.assign(this, {
+    //     foodRadius: 0.1, 
+    //     headRadius: 0.25, 
+    //     bodyRadius: 0.1,
+    //     eyeDist: 0.08, 
+    //     eyeRadius: 0.03, 
+    //     eyeAngle: 0.5,
+    //     spaceWidth: 16, 
+    //     spaceHeight: 9,
+    //     moveDist: 0.06,
+    //     foodCount: 16, 
+    //     eatDistance: 0.3, 
+    //     startBodyLength: 10, 
+    //     aiCount: 3, 
+    //     directionStop: 100,
+    //     collideDistance: 1
+    // });
 
 
-    Object.assign(_assertThisInitialized(_this), {
-      foodRadius: 0.1,
-      headRadius: 0.25,
-      bodyRadius: 0.1,
-      eyeDist: 0.08,
-      eyeRadius: 0.03,
-      eyeAngle: 0.5,
-      spaceWidth: 16,
-      spaceHeight: 9,
-      moveDist: 0.06,
-      foodCount: 16,
-      eatDistance: 0.3,
-      startBodyLength: 10,
-      aiCount: 3,
-      directionStop: 100,
-      collideDistance: 1
-    });
     return _this;
   }
 

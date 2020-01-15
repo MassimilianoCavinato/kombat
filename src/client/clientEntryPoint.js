@@ -19,9 +19,13 @@ const defaults = {
 };
 let options = Object.assign(defaults, qsOptions);
 
-
-// create a client engine and a game engine
-const gameEngine = new KombatGameEngine(options);
-const clientEngine = new KombatClientEngine(gameEngine, options);
-
-document.addEventListener('DOMContentLoaded', function(e) { clientEngine.start(); });
+document.addEventListener('DOMContentLoaded', function(e) { 
+	if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+    	alert('mobile controllers not available');
+	}else{
+		// create a client engine and a game engine
+		const gameEngine = new KombatGameEngine(options);
+		const clientEngine = new KombatClientEngine(gameEngine, options);
+		clientEngine.start(); 
+	}
+});

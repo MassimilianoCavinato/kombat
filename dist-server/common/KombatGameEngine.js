@@ -68,25 +68,25 @@ function (_GameEngine) {
     _this.on('collisionStart', function (e) {
       return _this.handleCollision(e);
     }); // game variables
+    // Object.assign(this, {
+    //     foodRadius: 0.1, 
+    //     headRadius: 0.25, 
+    //     bodyRadius: 0.1,
+    //     eyeDist: 0.08, 
+    //     eyeRadius: 0.03, 
+    //     eyeAngle: 0.5,
+    //     spaceWidth: 16, 
+    //     spaceHeight: 9,
+    //     moveDist: 0.06,
+    //     foodCount: 16, 
+    //     eatDistance: 0.3, 
+    //     startBodyLength: 10, 
+    //     aiCount: 3, 
+    //     directionStop: 100,
+    //     collideDistance: 1
+    // });
 
 
-    Object.assign(_assertThisInitialized(_this), {
-      foodRadius: 0.1,
-      headRadius: 0.25,
-      bodyRadius: 0.1,
-      eyeDist: 0.08,
-      eyeRadius: 0.03,
-      eyeAngle: 0.5,
-      spaceWidth: 16,
-      spaceHeight: 9,
-      moveDist: 0.06,
-      foodCount: 16,
-      eatDistance: 0.3,
-      startBodyLength: 10,
-      aiCount: 3,
-      directionStop: 100,
-      collideDistance: 1
-    });
     return _this;
   }
 

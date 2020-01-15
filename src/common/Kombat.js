@@ -4,6 +4,7 @@ export default class Kombat extends  DynamicObject {
 
     static get netScheme() {
         return Object.assign({
+            name: { type: BaseTypes.TYPES.STRING },
             direction: { type: BaseTypes.TYPES.FLOAT32 },
             max_health: { type: BaseTypes.TYPES.UINT8 }, 
             health: { type: BaseTypes.TYPES.INT8 },

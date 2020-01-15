@@ -75,6 +75,7 @@ export default class KombatServerEngine extends ServerEngine {
             position: new TwoVector(10, 10),
         });
         kombat.playerId = socket.playerId;
+        kombat.name = 'Kombat '+socket.playerId;
         kombat.max_health = 10;
         kombat.health = 10;
         kombat.ammo_capacity = 21;

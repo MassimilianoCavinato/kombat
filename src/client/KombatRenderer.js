@@ -122,17 +122,26 @@ export default class KombatRenderer extends Renderer {
     }
 
     drawKombat(obj) {
-        ctx.fillStyle = "transparent";
-        ctx.strokeStyle = obj.playerId === this.gameEngine.playerId ? "dodgerblue" : "crimson";
+     
         let center = this.getCenter(obj);
         let radius = this.getCircumscribedRadiusLength(obj.width);
+        ctx.fillStyle = "transparent";
+        ctx.strokeStyle = obj.playerId === this.gameEngine.playerId ? "dodgerblue" : "crimson";
+        //base circle
         this.drawCircle(center.x, center.y, radius);
-        if(obj.ammo_loaded === -1){
-            this.drawCircle(center.x, center.y, radius+.4);
-        }
+        //kombat name
+        ctx.fillStyle = "white";
+        ctx.font = '1px Arial';
+        ctx.fillText(obj.name, center.x - (obj.name.length/4), center.y - 2);
+        //directional line
         ctx.moveTo(center.x,center.y);
         ctx.lineTo(center.x + radius * Math.cos(obj.direction), center.y + radius * Math.sin(obj.direction));
         ctx.stroke();
+        //ammo reloading circle
+        if(obj.ammo_loaded === -1){
+            this.drawCircle(center.x, center.y, radius+.4);
+        }
+      
     }
 
     drawBullet(obj){

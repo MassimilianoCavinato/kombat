@@ -13449,6 +13449,9 @@ function (_DynamicObject) {
     key: "netScheme",
     get: function get() {
       return Object.assign({
+        name: {
+          type: __WEBPACK_IMPORTED_MODULE_0_lance_gg__["BaseTypes"].TYPES.STRING
+        },
         direction: {
           type: __WEBPACK_IMPORTED_MODULE_0_lance_gg__["BaseTypes"].TYPES.FLOAT32
         },
@@ -17384,19 +17387,24 @@ function (_Renderer) {
   }, {
     key: "drawKombat",
     value: function drawKombat(obj) {
-      ctx.fillStyle = "transparent";
-      ctx.strokeStyle = obj.playerId === this.gameEngine.playerId ? "dodgerblue" : "crimson";
       var center = this.getCenter(obj);
       var radius = this.getCircumscribedRadiusLength(obj.width);
-      this.drawCircle(center.x, center.y, radius);
+      ctx.fillStyle = "transparent";
+      ctx.strokeStyle = obj.playerId === this.gameEngine.playerId ? "dodgerblue" : "crimson"; //base circle
+
+      this.drawCircle(center.x, center.y, radius); //kombat name
+
+      ctx.fillStyle = "white";
+      ctx.font = '1px Arial';
+      ctx.fillText(obj.name, center.x - obj.name.length / 4, center.y - 2); //directional line
+
+      ctx.moveTo(center.x, center.y);
+      ctx.lineTo(center.x + radius * Math.cos(obj.direction), center.y + radius * Math.sin(obj.direction));
+      ctx.stroke(); //ammo reloading circle
 
       if (obj.ammo_loaded === -1) {
         this.drawCircle(center.x, center.y, radius + .4);
       }
-
-      ctx.moveTo(center.x, center.y);
-      ctx.lineTo(center.x + radius * Math.cos(obj.direction), center.y + radius * Math.sin(obj.direction));
-      ctx.stroke();
     }
   }, {
     key: "drawBullet",

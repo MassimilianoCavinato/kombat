@@ -38,6 +38,9 @@ function (_DynamicObject) {
     key: "netScheme",
     get: function get() {
       return Object.assign({
+        name: {
+          type: _lanceGg.BaseTypes.TYPES.STRING
+        },
         direction: {
           type: _lanceGg.BaseTypes.TYPES.FLOAT32
         },

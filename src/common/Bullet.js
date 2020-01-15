@@ -32,18 +32,9 @@ export default class Bullet extends DynamicObject {
                 return true;
             }
         }
-        // else if(other.type === "Wall"){
-        //     return true;
-        // }
-        // else if(other.type === "Bullet"){
-        //     return false;
-        // }
-        // else if(other.type === "Blood"){
-        //     return false;
-        // }
-        // else if(other.type === "Granade"){
-        //     return false;
-        // }
+        else if(other.type === "Wall"){
+            return true;
+        }
         else{
             return false;
         }

@@ -79,21 +79,11 @@ function (_DynamicObject) {
         } else {
           return true;
         }
-      } // else if(other.type === "Wall"){
-      //     return true;
-      // }
-      // else if(other.type === "Bullet"){
-      //     return false;
-      // }
-      // else if(other.type === "Blood"){
-      //     return false;
-      // }
-      // else if(other.type === "Granade"){
-      //     return false;
-      // }
-      else {
-          return false;
-        }
+      } else if (other.type === "Wall") {
+        return true;
+      } else {
+        return false;
+      }
     }
   }, {
     key: "toString",

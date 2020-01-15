@@ -13609,21 +13609,11 @@ function (_DynamicObject) {
         } else {
           return true;
         }
-      } // else if(other.type === "Wall"){
-      //     return true;
-      // }
-      // else if(other.type === "Bullet"){
-      //     return false;
-      // }
-      // else if(other.type === "Blood"){
-      //     return false;
-      // }
-      // else if(other.type === "Granade"){
-      //     return false;
-      // }
-      else {
-          return false;
-        }
+      } else if (other.type === "Wall") {
+        return true;
+      } else {
+        return false;
+      }
     }
   }, {
     key: "toString",
@@ -17362,7 +17352,7 @@ function (_Renderer) {
 
 
       ctx.strokeStyle = "white";
-      ctx.fillStyle = "rgba(100, 100, 100, .5)";
+      ctx.fillStyle = "rgba(255, 255, 255, .9)";
       ctx.fillRect(20 / this.clientEngine.zoom, 544 / this.clientEngine.zoom, obj.throw_power * 100 / this.clientEngine.zoom, 18 / this.clientEngine.zoom);
       ctx.beginPath();
       ctx.rect(20 / this.clientEngine.zoom, 545 / this.clientEngine.zoom, 100 / this.clientEngine.zoom, 18 / this.clientEngine.zoom);

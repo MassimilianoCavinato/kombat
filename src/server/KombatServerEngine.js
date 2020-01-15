@@ -169,7 +169,13 @@ export default class KombatServerEngine extends ServerEngine {
                     Math.pow( k.position.x+k.width/2 - position.x , 2) +  Math.pow( k.position.y+k.height/2 - position.y,2)
                 );
                 if(d <= explosion.radius){
-                    k.health -= 4;
+                    k.health -= 3;
+                    if(d <= explosion.radius/2){
+                       k.health -= 3; 
+                    }
+                    if(d <= explosion.radius/4){
+                        k.health -= 3; 
+                    }
                     let blood = new Blood(this.gameEngine, null, { position: k.position.clone() });
                     if(k.health <= 0){
                         this.destroyObjectById(k.id);

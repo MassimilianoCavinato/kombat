@@ -215,7 +215,16 @@ function (_ServerEngine) {
           var d = Math.sqrt(Math.pow(k.position.x + k.width / 2 - position.x, 2) + Math.pow(k.position.y + k.height / 2 - position.y, 2));
 
           if (d <= explosion.radius) {
-            k.health -= 4;
+            k.health -= 3;
+
+            if (d <= explosion.radius / 2) {
+              k.health -= 3;
+            }
+
+            if (d <= explosion.radius / 4) {
+              k.health -= 3;
+            }
+
             var blood = new _Blood.default(_this3.gameEngine, null, {
               position: k.position.clone()
             });

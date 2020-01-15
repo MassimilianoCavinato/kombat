@@ -13,7 +13,6 @@ export default class KombatClientEngine extends ClientEngine {
         this.left = false;
         this.down = false;
         this.mouseIsDown = false;
-
         this.controls = new KeyboardControls(this);
         
         // restart game
@@ -33,7 +32,7 @@ export default class KombatClientEngine extends ClientEngine {
         setTimeout( () => {
             let instructions = document.getElementById('kombat-instructions');
             instructions.style.display = 'none';
-        }, 3000);
+        }, 5000);
         this.gameEngine.on('client__preStep', (step) => this.preStep(step));
         this.gameEngine.on('objectDestroyed', (obj) => {
             if (obj.playerId === gameEngine.playerId && obj.type === "Kombat") {
@@ -67,37 +66,18 @@ export default class KombatClientEngine extends ClientEngine {
             }
 
             debugContainer.innerHTML = `
-            PlayerPos:
-            <br/> 
-            X: ${player.position.x}
-            <br/> 
-            Y: ${player.position.y}
-            <br/>
-            ----------------------------
-            <br/>
-            MousePos: 
-            <br/> 
-            X: ${this.mouseX}
-            <br/> 
-            Y: ${this.mouseY}
-            <br/> 
-            ----------------------------
-            <br/>
+            Pos X: ${player.position.x}
+            <hr/> 
+            Pos Y: ${player.position.y}
+            <hr/>
             Angle: ${this.angle}
-            <br/>
-            ----------------------------
-            <br/>
+            <hr/>
             Is shooting: ${this.mouseIsDown ? "true" : "false"}
-            <br/>
-            ----------------------------
-            <br/>
+            <hr/>
             Ammo: ${player.ammo_loaded}
-            <br/>
-            ----------------------------
-            <br/>
-            Is reloading: ${player.ammo_loaded === 0 ? "true" : "false"}
-            <br/>
-            ----------------------------
+            <hr/>
+            Is reloading: ${player.ammo_loaded === -1 ? "true" : "false"}
+            <hr/>
         `
         }
     }

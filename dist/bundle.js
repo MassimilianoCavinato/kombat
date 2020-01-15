@@ -17129,7 +17129,7 @@ function (_ClientEngine) {
     setTimeout(function () {
       var instructions = document.getElementById('kombat-instructions');
       instructions.style.display = 'none';
-    }, 3000);
+    }, 5000);
 
     _this.gameEngine.on('client__preStep', function (step) {
       return _this.preStep(step);
@@ -17175,7 +17175,7 @@ function (_ClientEngine) {
           });
         }
 
-        debugContainer.innerHTML = "\n            PlayerPos:\n            <br/> \n            X: ".concat(player.position.x, "\n            <br/> \n            Y: ").concat(player.position.y, "\n            <br/>\n            ----------------------------\n            <br/>\n            MousePos: \n            <br/> \n            X: ").concat(this.mouseX, "\n            <br/> \n            Y: ").concat(this.mouseY, "\n            <br/> \n            ----------------------------\n            <br/>\n            Angle: ").concat(this.angle, "\n            <br/>\n            ----------------------------\n            <br/>\n            Is shooting: ").concat(this.mouseIsDown ? "true" : "false", "\n            <br/>\n            ----------------------------\n            <br/>\n            Ammo: ").concat(player.ammo_loaded, "\n            <br/>\n            ----------------------------\n            <br/>\n            Is reloading: ").concat(player.ammo_loaded === 0 ? "true" : "false", "\n            <br/>\n            ----------------------------\n        ");
+        debugContainer.innerHTML = "\n            Pos X: ".concat(player.position.x, "\n            <hr/> \n            Pos Y: ").concat(player.position.y, "\n            <hr/>\n            Angle: ").concat(this.angle, "\n            <hr/>\n            Is shooting: ").concat(this.mouseIsDown ? "true" : "false", "\n            <hr/>\n            Ammo: ").concat(player.ammo_loaded, "\n            <hr/>\n            Is reloading: ").concat(player.ammo_loaded === -1 ? "true" : "false", "\n            <hr/>\n        ");
       }
     }
   }, {

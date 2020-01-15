@@ -45,7 +45,7 @@ function (_DynamicObject) {
           type: _lanceGg.BaseTypes.TYPES.UINT8
         },
         health: {
-          type: _lanceGg.BaseTypes.TYPES.UINT8
+          type: _lanceGg.BaseTypes.TYPES.INT8
         },
         ammo_capacity: {
           type: _lanceGg.BaseTypes.TYPES.UINT8

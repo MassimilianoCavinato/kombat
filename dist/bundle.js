@@ -13456,7 +13456,7 @@ function (_DynamicObject) {
           type: __WEBPACK_IMPORTED_MODULE_0_lance_gg__["BaseTypes"].TYPES.UINT8
         },
         health: {
-          type: __WEBPACK_IMPORTED_MODULE_0_lance_gg__["BaseTypes"].TYPES.UINT8
+          type: __WEBPACK_IMPORTED_MODULE_0_lance_gg__["BaseTypes"].TYPES.INT8
         },
         ammo_capacity: {
           type: __WEBPACK_IMPORTED_MODULE_0_lance_gg__["BaseTypes"].TYPES.UINT8
@@ -17667,9 +17667,9 @@ function (_GameEngine) {
         position: kombat.position.clone()
       });
       this.addObjectToWorld(blood);
-      this.timer.add(120, this.destroyObjectById, this, [blood.id]);
+      this.timer.add(600, this.destroyObjectById, this, [blood.id]);
 
-      if (kombat.health === 0) {
+      if (kombat.health <= 0) {
         this.destroyObjectById(kombat.id);
       }
     }

@@ -195,9 +195,9 @@ function (_GameEngine) {
         position: kombat.position.clone()
       });
       this.addObjectToWorld(blood);
-      this.timer.add(120, this.destroyObjectById, this, [blood.id]);
+      this.timer.add(600, this.destroyObjectById, this, [blood.id]);
 
-      if (kombat.health === 0) {
+      if (kombat.health <= 0) {
         this.destroyObjectById(kombat.id);
       }
     }

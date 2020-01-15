@@ -4,6 +4,7 @@ import Bullet from '../common/Bullet';
 import Granade from '../common/Granade';
 import Wall from '../common/Wall';
 import Explosion2 from '../common/Explosion2';
+import Blood from '../common/Blood';
 
 export default class KombatServerEngine extends ServerEngine {
 
@@ -153,15 +154,30 @@ export default class KombatServerEngine extends ServerEngine {
     explode(granadeId) {
         let granade = this.gameEngine.world.queryObject({ id: granadeId, instanceType: Granade });
         if(granade){
-            
+            let position = granade.position.clone();
             let explosion = new Explosion2(this.gameEngine, null, { 
-                position: granade.position.clone()
+                position: position
             });
             this.destroyObjectById(granadeId);
             explosion.radius = 10;
             this.gameEngine.addObjectToWorld(explosion);
             this.gameEngine.timer.add(150, this.destroyObjectById, this, [explosion.id]);
             
+            let kombats = this.gameEngine.world.queryObjects({ instanceType: Kombat });
+            kombats.forEach(k=> {
+                let d = Math.sqrt(
+                    Math.pow( k.position.x+k.width/2 - position.x , 2) +  Math.pow( k.position.y+k.height/2 - position.y,2)
+                );
+                if(d <= explosion.radius){
+                    k.health -= 4;
+                    let blood = new Blood(this.gameEngine, null, { position: k.position.clone() });
+                    if(k.health <= 0){
+                        this.destroyObjectById(k.id);
+                    }
+                    this.gameEngine.addObjectToWorld(blood);
+                    this.gameEngine.timer.add(600, this.destroyObjectById, this, [blood.id]);
+                }
+            });
         }
     }
 }

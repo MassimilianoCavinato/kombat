@@ -17,6 +17,8 @@ var _Wall = _interopRequireDefault(require("../common/Wall"));
 
 var _Explosion = _interopRequireDefault(require("../common/Explosion2"));
 
+var _Blood = _interopRequireDefault(require("../common/Blood"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -190,19 +192,43 @@ function (_ServerEngine) {
   }, {
     key: "explode",
     value: function explode(granadeId) {
+      var _this3 = this;
+
       var granade = this.gameEngine.world.queryObject({
         id: granadeId,
         instanceType: _Granade.default
       });
 
       if (granade) {
+        var position = granade.position.clone();
         var explosion = new _Explosion.default(this.gameEngine, null, {
-          position: granade.position.clone()
+          position: position
         });
         this.destroyObjectById(granadeId);
         explosion.radius = 10;
         this.gameEngine.addObjectToWorld(explosion);
         this.gameEngine.timer.add(150, this.destroyObjectById, this, [explosion.id]);
+        var kombats = this.gameEngine.world.queryObjects({
+          instanceType: _Kombat.default
+        });
+        kombats.forEach(function (k) {
+          var d = Math.sqrt(Math.pow(k.position.x + k.width / 2 - position.x, 2) + Math.pow(k.position.y + k.height / 2 - position.y, 2));
+
+          if (d <= explosion.radius) {
+            k.health -= 4;
+            var blood = new _Blood.default(_this3.gameEngine, null, {
+              position: k.position.clone()
+            });
+
+            if (k.health <= 0) {
+              _this3.destroyObjectById(k.id);
+            }
+
+            _this3.gameEngine.addObjectToWorld(blood);
+
+            _this3.gameEngine.timer.add(600, _this3.destroyObjectById, _this3, [blood.id]);
+          }
+        });
       }
     }
   }]);

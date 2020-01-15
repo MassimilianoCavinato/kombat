@@ -134,8 +134,8 @@ export default class KombatGameEngine extends GameEngine {
         kombat.health--;
         let blood = new Blood(this, null, { position: kombat.position.clone() });
         this.addObjectToWorld(blood);
-        this.timer.add(120, this.destroyObjectById, this, [blood.id]);
-        if(kombat.health === 0){
+        this.timer.add(600, this.destroyObjectById, this, [blood.id]);
+        if(kombat.health <= 0){
             this.destroyObjectById(kombat.id);
         }
     }

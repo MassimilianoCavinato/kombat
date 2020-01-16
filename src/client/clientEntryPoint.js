@@ -18,14 +18,19 @@ const defaults = {
     }
 };
 let options = Object.assign(defaults, qsOptions);
+const gameEngine = new KombatGameEngine(options);
+const clientEngine = new KombatClientEngine(gameEngine, options);
 
 document.addEventListener('DOMContentLoaded', function(e) { 
+
 	if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
     	alert('mobile controllers not available');
-	}else{
-		// create a client engine and a game engine
-		const gameEngine = new KombatGameEngine(options);
-		const clientEngine = new KombatClientEngine(gameEngine, options);
-		clientEngine.start(); 
+	}
+    else{
+		let PB = document.getElementById('kombat-play-button');
+        PB.addEventListener('click', e => {
+            document.querySelector('#kombat-menu').style.display = "none";
+            clientEngine.start();
+        });
 	}
 });

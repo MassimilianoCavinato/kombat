@@ -52,37 +52,98 @@
             border: 1px solid white;
             border-radius: 4px;
           }
-          #kombat-instructions{
+          #kombat-menu{
+            font-family: verdana;
             position: absolute;
             left: 50%;
-            top: 10px;
+            top: 50%;
             background-color: rgba(0,0,0,.5);
-            transform: translate(-50%, 0%);
+            transform: translate(-50%, -50%);
             color: white;
             z-index: 102;
-            padding: 6px;
+            padding: 16px;
             border: 2px solid white;
             border-radius: 8px;
             font-size: 32px;
+          }
+          #kombat-menu>h1{
+            text-align: center;
+            margin: 0px;
+          }
+          #kombat-menu>table{
+            font-size: 16px;
+            color: white;
+            border-spacing: 20px;
+          }
+          #kombat-menu>#kombat-play-button{
+            width: 100%;
+            font-size: 42px;
+            font-weight: bold;
+            cursor: pointer;
+          }
+          #kombat-menu>#kombat-name{
+            width: 100%;
+            text-align: center;
+            font-size: 24px;
+            outline: none;
+            border: none;
+            padding: 12px 0px;
+          }
+          #kombat-menu>#kombat-play-button{
+            width: 100%;
+            font-size: 42px;
+            font-weight: bold;
+            cursor: pointer;
           }
         </style>
     </head>
     <body>
       <div id='debug'></div>
-      <div id='kombat-instructions'>
-        MOVE: W A S D <i>or</i> &#8592; &#8593; &#8594; &#8595; keys 
-        <br/>
-        AIM: mouse
-        <br/>
-        SHOOT: left click
-        <br/>
-        GRANADE: right click
+      <div id='kombat-menu'>
+        <h1>KOMBAT.IO</h1>
+        <table>
+          <tr>
+            <td>
+                MOVE
+            </td>
+            <td>
+              W A S D <i>or</i> &#8592; &#8593; &#8594; &#8595; keys
+            </td>
+          </tr>
+          <tr>
+            <td>
+              AIM
+            </td>
+            <td>
+              mouse move
+            </td>
+          </tr>
+          <tr>
+            <td>
+              SHOOT
+            </td>
+            <td>
+              left click
+            </td>
+          </tr>
+          <tr>
+            <td>
+              GRANADE
+            </td>
+            <td>
+              right click
+            </td>
+          </tr>
+        </table>
+        <hr/>
+        <input id='kombat-name' placeholder='player name'></input>
+        <hr/>
+        <button id='kombat-play-button'>PLAY</button>
         <hr/>
         <div style='text-align: center; font-size: 16px; padding-bottom: 8px;'>
           <i>Mobile controls not available. Coming in future update.</i>
         </div>
       </div>
-      <button id='try-again'>GAME OVER! Try again?</div>
       <script src="bundle.js" type="text/javascript"></script>
     </body>
 </html>

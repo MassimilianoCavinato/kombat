@@ -15,21 +15,24 @@ export default class KombatClientEngine extends ClientEngine {
         this.mouseIsDown = false;
         this.controls = new KeyboardControls(this);
         //LISTENERS
-        document.querySelector('#try-again').addEventListener('click', () => window.location.reload());
-        document.addEventListener('mouseenter', this.updateAngle.bind(this), false);
-        document.addEventListener('mousemove', this.updateAngle.bind(this), false);
-        document.addEventListener('mousedown', (e) => this.handleMouse(e) );
-        document.addEventListener('mouseup', (e) => this.handleMouse(e));
-        document.addEventListener('contextmenu', (e) => e.preventDefault());
-        document.addEventListener('keydown', (e) => this.handleKeyDown(e));
-        document.addEventListener('keyup', (e) => this.handleKeyUp(e));
+        
         this.gameEngine.on('client__preStep', () => this.preStep());
         this.gameEngine.on('objectDestroyed', (obj) => {
             if (obj.playerId === gameEngine.playerId && obj.type === "Kombat") {
-                document.querySelector('#try-again').style.display = "block";
+                document.querySelector('#kombat-menu').style.display = "block";
             }
         });
-        setTimeout( () => document.getElementById('kombat-instructions').style.display = 'none', 5000);
+        this.gameEngine.on('start', (e) => {
+            document.addEventListener('mouseenter', this.updateAngle.bind(this), false);
+            document.addEventListener('mousemove', this.updateAngle.bind(this), false);
+            document.addEventListener('mousedown', (e) => this.handleMouse(e) );
+            document.addEventListener('mouseup', (e) => this.handleMouse(e));
+            document.addEventListener('contextmenu', (e) => e.preventDefault());
+            document.addEventListener('keydown', (e) => this.handleKeyDown(e));
+            document.addEventListener('keyup', (e) => this.handleKeyUp(e));
+            let kombat_name = document.querySelector('#kombat-name').value;
+            setTimeout(() => this.sendInput('kombat_name', { kombat_name: kombat_name.toString().trim()}), 1000);
+        });
     }
 
     updateAngle(e) {

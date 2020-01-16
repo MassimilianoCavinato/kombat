@@ -26,14 +26,17 @@ var defaults = {
   }
 };
 var options = Object.assign(defaults, qsOptions);
+var gameEngine = new _KombatGameEngine.default(options);
+var clientEngine = new _KombatClientEngine.default(gameEngine, options);
 document.addEventListener('DOMContentLoaded', function (e) {
   if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
     alert('mobile controllers not available');
   } else {
-    // create a client engine and a game engine
-    var gameEngine = new _KombatGameEngine.default(options);
-    var clientEngine = new _KombatClientEngine.default(gameEngine, options);
-    clientEngine.start();
+    var PB = document.getElementById('kombat-play-button');
+    PB.addEventListener('click', function (e) {
+      document.querySelector('#kombat-menu').style.display = "none";
+      clientEngine.start();
+    });
   }
 });
 //# sourceMappingURL=clientEntryPoint.js.map

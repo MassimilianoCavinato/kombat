@@ -48,40 +48,42 @@ function (_ClientEngine) {
     _this.mouseIsDown = false;
     _this.controls = new _lanceGg.KeyboardControls(_assertThisInitialized(_this)); //LISTENERS
 
-    document.querySelector('#try-again').addEventListener('click', function () {
-      return window.location.reload();
-    });
-    document.addEventListener('mouseenter', _this.updateAngle.bind(_assertThisInitialized(_this)), false);
-    document.addEventListener('mousemove', _this.updateAngle.bind(_assertThisInitialized(_this)), false);
-    document.addEventListener('mousedown', function (e) {
-      return _this.handleMouse(e);
-    });
-    document.addEventListener('mouseup', function (e) {
-      return _this.handleMouse(e);
-    });
-    document.addEventListener('contextmenu', function (e) {
-      return e.preventDefault();
-    });
-    document.addEventListener('keydown', function (e) {
-      return _this.handleKeyDown(e);
-    });
-    document.addEventListener('keyup', function (e) {
-      return _this.handleKeyUp(e);
-    });
-
     _this.gameEngine.on('client__preStep', function () {
       return _this.preStep();
     });
 
     _this.gameEngine.on('objectDestroyed', function (obj) {
       if (obj.playerId === gameEngine.playerId && obj.type === "Kombat") {
-        document.querySelector('#try-again').style.display = "block";
+        document.querySelector('#kombat-menu').style.display = "block";
       }
     });
 
-    setTimeout(function () {
-      return document.getElementById('kombat-instructions').style.display = 'none';
-    }, 5000);
+    _this.gameEngine.on('start', function (e) {
+      document.addEventListener('mouseenter', _this.updateAngle.bind(_assertThisInitialized(_this)), false);
+      document.addEventListener('mousemove', _this.updateAngle.bind(_assertThisInitialized(_this)), false);
+      document.addEventListener('mousedown', function (e) {
+        return _this.handleMouse(e);
+      });
+      document.addEventListener('mouseup', function (e) {
+        return _this.handleMouse(e);
+      });
+      document.addEventListener('contextmenu', function (e) {
+        return e.preventDefault();
+      });
+      document.addEventListener('keydown', function (e) {
+        return _this.handleKeyDown(e);
+      });
+      document.addEventListener('keyup', function (e) {
+        return _this.handleKeyUp(e);
+      });
+      var kombat_name = document.querySelector('#kombat-name').value;
+      setTimeout(function () {
+        return _this.sendInput('kombat_name', {
+          kombat_name: kombat_name.toString().trim()
+        });
+      }, 1000);
+    });
+
     return _this;
   }
 

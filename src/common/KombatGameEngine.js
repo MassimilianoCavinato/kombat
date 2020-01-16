@@ -123,6 +123,10 @@ export default class KombatGameEngine extends GameEngine {
                 
                 player.direction =  inputData.options.angle;
             }
+            else if (inputData.input === 'kombat_name'){
+                player.name = inputData.options.kombat_name;
+                console.log(player);
+            }
         }
     }
 

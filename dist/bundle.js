@@ -14089,14 +14089,17 @@ var defaults = {
   }
 };
 var options = Object.assign(defaults, qsOptions);
+var gameEngine = new __WEBPACK_IMPORTED_MODULE_3__common_KombatGameEngine__["a" /* default */](options);
+var clientEngine = new __WEBPACK_IMPORTED_MODULE_2__client_KombatClientEngine__["a" /* default */](gameEngine, options);
 document.addEventListener('DOMContentLoaded', function (e) {
   if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
     alert('mobile controllers not available');
   } else {
-    // create a client engine and a game engine
-    var gameEngine = new __WEBPACK_IMPORTED_MODULE_3__common_KombatGameEngine__["a" /* default */](options);
-    var clientEngine = new __WEBPACK_IMPORTED_MODULE_2__client_KombatClientEngine__["a" /* default */](gameEngine, options);
-    clientEngine.start();
+    var PB = document.getElementById('kombat-play-button');
+    PB.addEventListener('click', function (e) {
+      document.querySelector('#kombat-menu').style.display = "none";
+      clientEngine.start();
+    });
   }
 });
 
@@ -17191,40 +17194,42 @@ function (_ClientEngine) {
     _this.mouseIsDown = false;
     _this.controls = new __WEBPACK_IMPORTED_MODULE_0_lance_gg__["KeyboardControls"](_assertThisInitialized(_this)); //LISTENERS
 
-    document.querySelector('#try-again').addEventListener('click', function () {
-      return window.location.reload();
-    });
-    document.addEventListener('mouseenter', _this.updateAngle.bind(_assertThisInitialized(_this)), false);
-    document.addEventListener('mousemove', _this.updateAngle.bind(_assertThisInitialized(_this)), false);
-    document.addEventListener('mousedown', function (e) {
-      return _this.handleMouse(e);
-    });
-    document.addEventListener('mouseup', function (e) {
-      return _this.handleMouse(e);
-    });
-    document.addEventListener('contextmenu', function (e) {
-      return e.preventDefault();
-    });
-    document.addEventListener('keydown', function (e) {
-      return _this.handleKeyDown(e);
-    });
-    document.addEventListener('keyup', function (e) {
-      return _this.handleKeyUp(e);
-    });
-
     _this.gameEngine.on('client__preStep', function () {
       return _this.preStep();
     });
 
     _this.gameEngine.on('objectDestroyed', function (obj) {
       if (obj.playerId === gameEngine.playerId && obj.type === "Kombat") {
-        document.querySelector('#try-again').style.display = "block";
+        document.querySelector('#kombat-menu').style.display = "block";
       }
     });
 
-    setTimeout(function () {
-      return document.getElementById('kombat-instructions').style.display = 'none';
-    }, 5000);
+    _this.gameEngine.on('start', function (e) {
+      document.addEventListener('mouseenter', _this.updateAngle.bind(_assertThisInitialized(_this)), false);
+      document.addEventListener('mousemove', _this.updateAngle.bind(_assertThisInitialized(_this)), false);
+      document.addEventListener('mousedown', function (e) {
+        return _this.handleMouse(e);
+      });
+      document.addEventListener('mouseup', function (e) {
+        return _this.handleMouse(e);
+      });
+      document.addEventListener('contextmenu', function (e) {
+        return e.preventDefault();
+      });
+      document.addEventListener('keydown', function (e) {
+        return _this.handleKeyDown(e);
+      });
+      document.addEventListener('keyup', function (e) {
+        return _this.handleKeyUp(e);
+      });
+      var kombat_name = document.querySelector('#kombat-name').value;
+      setTimeout(function () {
+        return _this.sendInput('kombat_name', {
+          kombat_name: kombat_name.toString().trim()
+        });
+      }, 1000);
+    });
+
     return _this;
   }
 
@@ -17834,6 +17839,9 @@ function (_GameEngine) {
           }
 
           player.direction = inputData.options.angle;
+        } else if (inputData.input === 'kombat_name') {
+          player.name = inputData.options.kombat_name;
+          console.log(player);
         }
       }
     }

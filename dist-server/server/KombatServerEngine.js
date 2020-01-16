@@ -132,6 +132,8 @@ function (_ServerEngine) {
       kombat.health = 10;
       kombat.ammo_capacity = 21;
       kombat.ammo_loaded = 21;
+      kombat.granase_capacity = 8;
+      kombat.granade_loaded = 6;
       kombat.throw_power = 0;
       kombat.throwing_granade = false;
       kombat.timer_shot = 0;
@@ -174,16 +176,19 @@ function (_ServerEngine) {
   }, {
     key: "granade",
     value: function granade(kombat) {
-      var speed = .4 * kombat.throw_power;
-      var granade = new _Granade.default(this.gameEngine, null, {
-        direction: kombat.direction,
-        position: new _lanceGg.TwoVector(kombat.position.x + kombat.width / 4, kombat.position.y + kombat.height / 4),
-        velocity: new _lanceGg.TwoVector(Math.cos(kombat.direction) * speed, Math.sin(kombat.direction) * speed)
-      });
-      kombat.throw_power = 0;
-      granade.playerId = kombat.playerId;
-      this.gameEngine.addObjectToWorld(granade);
-      this.gameEngine.timer.add(100, this.explode, this, [granade.id]);
+      if (kombat.granade_loaded > 0) {
+        kombat.granade_loaded--;
+        var speed = .4 * kombat.throw_power;
+        var granade = new _Granade.default(this.gameEngine, null, {
+          direction: kombat.direction,
+          position: new _lanceGg.TwoVector(kombat.position.x + kombat.width / 4, kombat.position.y + kombat.height / 4),
+          velocity: new _lanceGg.TwoVector(Math.cos(kombat.direction) * speed, Math.sin(kombat.direction) * speed)
+        });
+        kombat.throw_power = 0;
+        granade.playerId = kombat.playerId;
+        this.gameEngine.addObjectToWorld(granade);
+        this.gameEngine.timer.add(100, this.explode, this, [granade.id]);
+      }
     }
   }, {
     key: "destroyObjectById",

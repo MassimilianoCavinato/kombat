@@ -102,6 +102,16 @@ export default class KombatRenderer extends Renderer {
                 20 / this.clientEngine.zoom
             );
         }
+
+        //Granades
+        ctx.strokeStyle = "#ADFEAE";
+        for(let j=0; j<obj.granade_loaded; j++){
+            ctx.beginPath();
+            ctx.arc( (25 + j*12) / this.clientEngine.zoom,  535/ this.clientEngine.zoom, 5/this.clientEngine.zoom, 0, 2*Math.PI);
+            ctx.closePath();
+            ctx.stroke();
+        }
+
         //Throw Power
         ctx.strokeStyle = "white";
         ctx.fillStyle = "rgba(255, 255, 255, .9)";
@@ -137,8 +147,6 @@ export default class KombatRenderer extends Renderer {
             <hr/> 
             Pos Y: ${player.position.y}
             <hr/>
-            Angle: ${this.angle}
-            <hr/>
             Is shooting: ${this.mouseIsDown ? "true" : "false"}
             <hr/>
             Ammo: ${player.ammo_loaded}
@@ -156,7 +164,7 @@ export default class KombatRenderer extends Renderer {
             obj.position.y + this.offset.y + obj.height/2
         )
     }
-
+    
     getCircumscribedRadiusLength(edge){
         return (edge * Math.SQRT2) / 2;
     }

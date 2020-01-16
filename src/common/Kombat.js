@@ -14,8 +14,7 @@ export default class Kombat extends  DynamicObject {
             granade_loaded: { type: BaseTypes.TYPES.INT8 },
             throw_power: { type: BaseTypes.TYPES.FLOAT32 },
             throwing_granade: { type: BaseTypes.TYPES.INT8 },
-            
-            last_shot: { type: BaseTypes.TYPES.INT32 }, 
+            timer_shot: { type: BaseTypes.TYPES.INT32 }, 
             timer_deadzone: { type: BaseTypes.TYPES.INT32 }
         }, 
         super.netScheme);

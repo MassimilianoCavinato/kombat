@@ -13479,7 +13479,7 @@ function (_DynamicObject) {
         throwing_granade: {
           type: __WEBPACK_IMPORTED_MODULE_0_lance_gg__["BaseTypes"].TYPES.INT8
         },
-        last_shot: {
+        timer_shot: {
           type: __WEBPACK_IMPORTED_MODULE_0_lance_gg__["BaseTypes"].TYPES.INT32
         },
         timer_deadzone: {
@@ -17476,6 +17476,16 @@ function (_Renderer) {
       for (var i = 0; i < obj.ammo_loaded; i++) {
         ctx.fillRect((125 + i * 6) / this.clientEngine.zoom, 543 / this.clientEngine.zoom, 2 / this.clientEngine.zoom, 2 / this.clientEngine.zoom);
         ctx.fillRect((124 + i * 6) / this.clientEngine.zoom, 545 / this.clientEngine.zoom, 4 / this.clientEngine.zoom, 20 / this.clientEngine.zoom);
+      } //Granades
+
+
+      ctx.strokeStyle = "#ADFEAE";
+
+      for (var j = 0; j < obj.granade_loaded; j++) {
+        ctx.beginPath();
+        ctx.arc((25 + j * 12) / this.clientEngine.zoom, 535 / this.clientEngine.zoom, 5 / this.clientEngine.zoom, 0, 2 * Math.PI);
+        ctx.closePath();
+        ctx.stroke();
       } //Throw Power
 
 
@@ -17499,7 +17509,7 @@ function (_Renderer) {
     key: "updateDebugger",
     value: function updateDebugger(player, t, dt) {
       var debugContainer = document.getElementById('debug');
-      debugContainer.innerHTML = "\n            Pos X: ".concat(player.position.x, "\n            <hr/> \n            Pos Y: ").concat(player.position.y, "\n            <hr/>\n            Angle: ").concat(this.angle, "\n            <hr/>\n            Is shooting: ").concat(this.mouseIsDown ? "true" : "false", "\n            <hr/>\n            Ammo: ").concat(player.ammo_loaded, "\n            <hr/>\n            Is reloading: ").concat(player.ammo_loaded === -1 ? "true" : "false", "\n            <hr/>\n            t: ").concat(t, "\n            <hr/>\n            dt: ").concat(dt, "\n        ");
+      debugContainer.innerHTML = "\n            Pos X: ".concat(player.position.x, "\n            <hr/> \n            Pos Y: ").concat(player.position.y, "\n            <hr/>\n            Is shooting: ").concat(this.mouseIsDown ? "true" : "false", "\n            <hr/>\n            Ammo: ").concat(player.ammo_loaded, "\n            <hr/>\n            Is reloading: ").concat(player.ammo_loaded === -1 ? "true" : "false", "\n            <hr/>\n            t: ").concat(t, "\n            <hr/>\n            dt: ").concat(dt, "\n        ");
     }
   }, {
     key: "getCenter",
@@ -17778,8 +17788,10 @@ function (_GameEngine) {
             this.emit('shoot', player);
           }
         } else if (inputData.input === 'throw_power') {
-          player.throwing_granade = 1;
-          player.throw_power = .03;
+          if (player.granade_loaded > 0) {
+            player.throwing_granade = 1;
+            player.throw_power = .03;
+          }
         } else if (inputData.input === 'granade') {
           player.throwing_granade = 0;
           this.emit('granade', player);
@@ -17790,7 +17802,7 @@ function (_GameEngine) {
 
           if (player.throwing_granade === 1) {
             speed = 0.16;
-          } else if (step <= player.last_shot + 15) {
+          } else if (step <= player.timer_shot + 15) {
             speed = 0.21;
           } else {
             speed = 0.24;

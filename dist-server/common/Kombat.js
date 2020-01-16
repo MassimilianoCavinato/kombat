@@ -68,7 +68,7 @@ function (_DynamicObject) {
         throwing_granade: {
           type: _lanceGg.BaseTypes.TYPES.INT8
         },
-        last_shot: {
+        timer_shot: {
           type: _lanceGg.BaseTypes.TYPES.INT32
         },
         timer_deadzone: {

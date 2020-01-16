@@ -137,8 +137,10 @@ function (_GameEngine) {
             this.emit('shoot', player);
           }
         } else if (inputData.input === 'throw_power') {
-          player.throwing_granade = 1;
-          player.throw_power = .03;
+          if (player.granade_loaded > 0) {
+            player.throwing_granade = 1;
+            player.throw_power = .03;
+          }
         } else if (inputData.input === 'granade') {
           player.throwing_granade = 0;
           this.emit('granade', player);
@@ -149,7 +151,7 @@ function (_GameEngine) {
 
           if (player.throwing_granade === 1) {
             speed = 0.16;
-          } else if (step <= player.last_shot + 15) {
+          } else if (step <= player.timer_shot + 15) {
             speed = 0.21;
           } else {
             speed = 0.24;

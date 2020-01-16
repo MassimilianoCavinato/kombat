@@ -74,11 +74,12 @@ export default class KombatGameEngine extends GameEngine {
                 }
             }
             else if (inputData.input === 'throw_power'){
-                player.throwing_granade = 1;
-                player.throw_power = .03;
+                if(player.granade_loaded > 0){
+                    player.throwing_granade = 1;
+                    player.throw_power = .03;
+                }
             }
             else if (inputData.input === 'granade'){
-
                 player.throwing_granade = 0;
                 this.emit('granade', player);
             }
@@ -91,7 +92,7 @@ export default class KombatGameEngine extends GameEngine {
                 if( player.throwing_granade === 1 ){
                     speed = 0.16;
                 }
-                else if( step  <= player.last_shot + 15 ){
+                else if( step  <= player.timer_shot + 15 ){
                     speed = 0.21;
                 }
                 else{
@@ -169,7 +170,7 @@ export default class KombatGameEngine extends GameEngine {
             if(kombat.throw_power > 0){
                 kombat.throw_power += .015
                 if(kombat.throw_power  > 1){
-                    kombat.throw_power = 1
+                    kombat.throw_power = 1;
                 }
             }
         });

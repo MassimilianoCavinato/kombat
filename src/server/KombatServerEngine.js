@@ -52,7 +52,6 @@ export default class KombatServerEngine extends ServerEngine {
         });
         this.gameEngine.addObjectToWorld(wallWest);
 
-
         let walls = [
             [8,8,3,9],
             [32,18,8,3],
@@ -68,6 +67,7 @@ export default class KombatServerEngine extends ServerEngine {
                 width: w[2],
                 height: w[3],
             });
+
             this.gameEngine.addObjectToWorld(wall);
         });
 
@@ -90,9 +90,10 @@ export default class KombatServerEngine extends ServerEngine {
         kombat.health = 10;
         kombat.ammo_capacity = 21;
         kombat.ammo_loaded =  21;
+        kombat.granase_capacity = 8;
+        kombat.granade_loaded =  6;
         kombat.throw_power = 0;
         kombat.throwing_granade = false;
-
         kombat.timer_shot = 0;
         kombat.timer_deadzone = 0;
         this.gameEngine.addObjectToWorld(kombat);
@@ -133,22 +134,26 @@ export default class KombatServerEngine extends ServerEngine {
     }
 
     granade(kombat) {
-        let speed = .4 * kombat.throw_power;
-        let granade = new Granade(this.gameEngine, null, { 
-            direction: kombat.direction,
-            position: new TwoVector(
-                kombat.position.x + (kombat.width / 4),
-                kombat.position.y + (kombat.height / 4)
-            ),
-             velocity: new TwoVector(
-                Math.cos(kombat.direction) * speed ,
-                Math.sin(kombat.direction) * speed
-            )
-        });
-        kombat.throw_power = 0;
-        granade.playerId = kombat.playerId;
-        this.gameEngine.addObjectToWorld(granade);
-        this.gameEngine.timer.add(100, this.explode, this, [granade.id]);
+        if(kombat.granade_loaded > 0){
+            kombat.granade_loaded--;
+            let speed = .4 * kombat.throw_power;
+            let granade = new Granade(this.gameEngine, null, { 
+                direction: kombat.direction,
+                position: new TwoVector(
+                    kombat.position.x + (kombat.width / 4),
+                    kombat.position.y + (kombat.height / 4)
+                ),
+                velocity: new TwoVector(
+                    Math.cos(kombat.direction) * speed ,
+                    Math.sin(kombat.direction) * speed
+                )
+            });
+            kombat.throw_power = 0;
+        
+            granade.playerId = kombat.playerId;
+            this.gameEngine.addObjectToWorld(granade);
+            this.gameEngine.timer.add(100, this.explode, this, [granade.id]);
+        }
     }
 
     destroyObjectById(id) {

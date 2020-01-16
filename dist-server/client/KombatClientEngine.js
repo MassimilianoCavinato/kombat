@@ -48,6 +48,29 @@ function (_ClientEngine) {
     _this.mouseIsDown = false;
     _this.controls = new _lanceGg.KeyboardControls(_assertThisInitialized(_this)); //LISTENERS
 
+    var GAME_CANVAS = document.getElementById('kc');
+    GAME_CANVAS.addEventListener('mouseenter', function (e) {
+      return _this.updateAngle(e);
+    });
+    GAME_CANVAS.addEventListener('mousemove', function (e) {
+      return _this.updateAngle(e);
+    });
+    GAME_CANVAS.addEventListener('mousedown', function (e) {
+      return _this.handleMouse(e);
+    });
+    GAME_CANVAS.addEventListener('mouseup', function (e) {
+      return _this.handleMouse(e);
+    });
+    GAME_CANVAS.addEventListener('contextmenu', function (e) {
+      return e.preventDefault();
+    });
+    document.addEventListener('keydown', function (e) {
+      return _this.handleKeyDown(e);
+    });
+    document.addEventListener('keyup', function (e) {
+      return _this.handleKeyUp(e);
+    });
+
     _this.gameEngine.on('client__preStep', function () {
       return _this.preStep();
     });
@@ -59,23 +82,6 @@ function (_ClientEngine) {
     });
 
     _this.gameEngine.on('start', function (e) {
-      document.addEventListener('mouseenter', _this.updateAngle.bind(_assertThisInitialized(_this)), false);
-      document.addEventListener('mousemove', _this.updateAngle.bind(_assertThisInitialized(_this)), false);
-      document.addEventListener('mousedown', function (e) {
-        return _this.handleMouse(e);
-      });
-      document.addEventListener('mouseup', function (e) {
-        return _this.handleMouse(e);
-      });
-      document.addEventListener('contextmenu', function (e) {
-        return e.preventDefault();
-      });
-      document.addEventListener('keydown', function (e) {
-        return _this.handleKeyDown(e);
-      });
-      document.addEventListener('keyup', function (e) {
-        return _this.handleKeyUp(e);
-      });
       var kombat_name = document.querySelector('#kombat-name').value;
       setTimeout(function () {
         return _this.sendInput('kombat_name', {

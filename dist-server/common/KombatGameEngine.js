@@ -19,6 +19,8 @@ var _Blood = _interopRequireDefault(require("./Blood"));
 
 var _Explosion = _interopRequireDefault(require("./Explosion2"));
 
+var _DeadZone = _interopRequireDefault(require("./DeadZone"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -61,6 +63,10 @@ function (_GameEngine) {
       }
     });
 
+    _this.on('preStep', function (stepInfo) {
+      return _this.preStep(stepInfo);
+    });
+
     _this.on('postStep', function (stepInfo) {
       return _this.postStep(stepInfo);
     });
@@ -99,6 +105,7 @@ function (_GameEngine) {
       serializer.registerClass(_Wall.default);
       serializer.registerClass(_Blood.default);
       serializer.registerClass(_Explosion.default);
+      serializer.registerClass(_DeadZone.default);
     }
   }, {
     key: "start",
@@ -125,8 +132,8 @@ function (_GameEngine) {
         var step = inputData.step;
 
         if (inputData.input === 'shoot') {
-          if (step >= player.last_shot + 15) {
-            player.last_shot = step;
+          if (step >= player.timer_shot + 15) {
+            player.timer_shot = step;
             this.emit('shoot', player);
           }
         } else if (inputData.input === 'throw_power') {
@@ -219,8 +226,8 @@ function (_GameEngine) {
       }
     }
   }, {
-    key: "postStep",
-    value: function postStep(stepInfo) {
+    key: "preStep",
+    value: function preStep(stepInfo) {
       var kombats = this.world.queryObjects({
         instanceType: _Kombat.default
       });
@@ -234,6 +241,9 @@ function (_GameEngine) {
         }
       });
     }
+  }, {
+    key: "postStep",
+    value: function postStep(stepInfo) {}
   }]);
 
   return KombatGameEngine;

@@ -19,6 +19,8 @@ var _Explosion = _interopRequireDefault(require("../common/Explosion2"));
 
 var _Blood = _interopRequireDefault(require("../common/Blood"));
 
+var _DeadZone = _interopRequireDefault(require("../common/DeadZone"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -59,6 +61,11 @@ function (_ServerEngine) {
 
     _this.gameEngine.on('granade', _this.granade.bind(_assertThisInitialized(_this)));
 
+    _this.gameEngine.on('postStep', function (stepInfo) {
+      return _this.postStep(stepInfo);
+    });
+
+    _this.deadzoneTimer = 0;
     return _this;
   }
 
@@ -105,6 +112,11 @@ function (_ServerEngine) {
 
         _this2.gameEngine.addObjectToWorld(wall);
       });
+      var deadZone = new _DeadZone.default(this.gameEngine, null, {
+        position: new _lanceGg.TwoVector(30, 30)
+      });
+      deadZone.radius = 100;
+      this.gameEngine.addObjectToWorld(deadZone);
     }
   }, {
     key: "onPlayerConnected",
@@ -120,9 +132,10 @@ function (_ServerEngine) {
       kombat.health = 10;
       kombat.ammo_capacity = 21;
       kombat.ammo_loaded = 21;
-      kombat.last_shot = 0;
       kombat.throw_power = 0;
-      kombat.thrwing_granade = false;
+      kombat.throwing_granade = false;
+      kombat.timer_shot = 0;
+      kombat.timer_deadzone = 0;
       this.gameEngine.addObjectToWorld(kombat);
     }
   }, {
@@ -240,6 +253,48 @@ function (_ServerEngine) {
             _this3.gameEngine.timer.add(600, _this3.destroyObjectById, _this3, [blood.id]);
           }
         });
+      }
+    }
+  }, {
+    key: "postStep",
+    value: function postStep(stepInfo) {
+      var _this4 = this;
+
+      var deadZone = this.gameEngine.world.queryObject({
+        instanceType: _DeadZone.default
+      });
+
+      if (deadZone) {
+        if (deadZone.radius <= 0) {
+          deadZone.radius = 100;
+        } else {
+          if (stepInfo.step - this.deadzoneTimer > 60) {
+            this.deadzoneTimer = stepInfo.step;
+            var kombats = this.gameEngine.world.queryObjects({
+              instanceType: _Kombat.default
+            });
+            kombats.forEach(function (k) {
+              var distance = Math.sqrt(Math.pow(k.position.x + k.width / 2 - deadZone.x, 2) + Math.pow(k.position.y + k.height / 2 - deadZone.position.y, 2));
+
+              if (distance >= deadZone.radius) {
+                k.health--;
+                var blood = new _Blood.default(_this4.gameEngine, null, {
+                  position: k.position.clone()
+                });
+
+                if (k.health <= 0) {
+                  _this4.destroyObjectById(k.id);
+                }
+
+                _this4.gameEngine.addObjectToWorld(blood);
+
+                _this4.gameEngine.timer.add(600, _this4.destroyObjectById, _this4, [blood.id]);
+              }
+            });
+          }
+
+          deadZone.radius -= .02;
+        }
       }
     }
   }]);

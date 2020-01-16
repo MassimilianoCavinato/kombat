@@ -5,6 +5,7 @@ import Bullet from './Bullet';
 import Granade from './Granade';
 import Blood from './Blood';
 import Explosion2 from './Explosion2';
+import DeadZone from './DeadZone';
 
 export default class KombatGameEngine extends GameEngine {
 
@@ -16,7 +17,7 @@ export default class KombatGameEngine extends GameEngine {
                 autoResolve: true,
             }
         });
-     
+        this.on('preStep', (stepInfo) => this.preStep(stepInfo));
         this.on('postStep', (stepInfo) => this.postStep(stepInfo));
         this.on('collisionStart', (e) => this.handleCollision(e));
 
@@ -47,6 +48,7 @@ export default class KombatGameEngine extends GameEngine {
         serializer.registerClass(Wall);
         serializer.registerClass(Blood);
         serializer.registerClass(Explosion2);
+        serializer.registerClass(DeadZone);
     }
 
     start() {
@@ -66,8 +68,8 @@ export default class KombatGameEngine extends GameEngine {
         if (player) {
             let step = inputData.step;
             if (inputData.input === 'shoot'){
-                if(step  >= player.last_shot + 15){
-                    player.last_shot = step;
+                if(step  >= player.timer_shot + 15){
+                    player.timer_shot = step;
                     this.emit('shoot', player);
                 }
             }
@@ -161,7 +163,7 @@ export default class KombatGameEngine extends GameEngine {
         }   
     }
 
-    postStep(stepInfo){
+    preStep(stepInfo){
         let kombats = this.world.queryObjects({ instanceType : Kombat });
         kombats.forEach(kombat => {
             if(kombat.throw_power > 0){
@@ -171,5 +173,9 @@ export default class KombatGameEngine extends GameEngine {
                 }
             }
         });
+    }
+
+    postStep(stepInfo){
+        
     }
 }

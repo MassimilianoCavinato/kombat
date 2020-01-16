@@ -5,6 +5,7 @@ import Granade from '../common/Granade';
 import Wall from '../common/Wall';
 import Explosion2 from '../common/Explosion2';
 import Blood from '../common/Blood';
+import DeadZone from '../common/DeadZone';
 
 export default class KombatServerEngine extends ServerEngine {
 
@@ -12,6 +13,8 @@ export default class KombatServerEngine extends ServerEngine {
         super(io, gameEngine, inputOptions);
         this.gameEngine.on('shoot', this.shoot.bind(this));
         this.gameEngine.on('granade', this.granade.bind(this));
+        this.gameEngine.on('postStep', (stepInfo) => this.postStep(stepInfo));
+        this.deadzoneTimer = 0;
     }
 
     start() {
@@ -67,6 +70,13 @@ export default class KombatServerEngine extends ServerEngine {
             });
             this.gameEngine.addObjectToWorld(wall);
         });
+
+        let deadZone = new DeadZone(this.gameEngine, null, { 
+            position: new TwoVector(30, 30)
+        });
+        deadZone.radius = 100;
+        this.gameEngine.addObjectToWorld(deadZone);
+
     }
 
     onPlayerConnected(socket) {
@@ -80,9 +90,11 @@ export default class KombatServerEngine extends ServerEngine {
         kombat.health = 10;
         kombat.ammo_capacity = 21;
         kombat.ammo_loaded =  21;
-        kombat.last_shot = 0;
         kombat.throw_power = 0;
-        kombat.thrwing_granade = false;
+        kombat.throwing_granade = false;
+
+        kombat.timer_shot = 0;
+        kombat.timer_deadzone = 0;
         this.gameEngine.addObjectToWorld(kombat);
     }
 
@@ -185,6 +197,37 @@ export default class KombatServerEngine extends ServerEngine {
                     this.gameEngine.timer.add(600, this.destroyObjectById, this, [blood.id]);
                 }
             });
+        }
+    }
+
+    postStep(stepInfo){
+
+        let deadZone = this.gameEngine.world.queryObject({ instanceType : DeadZone });
+        if(deadZone){
+            if(deadZone.radius <= 0){
+                deadZone.radius = 100;
+            }
+            else{
+                if(stepInfo.step - this.deadzoneTimer > 60 ){
+                    this.deadzoneTimer = stepInfo.step;
+                    let kombats = this.gameEngine.world.queryObjects({ instanceType : Kombat });
+                    kombats.forEach(k => {
+                        let distance = Math.sqrt(
+                            Math.pow( k.position.x + k.width/2 - deadZone.x , 2) +  Math.pow( k.position.y + k.height/2 - deadZone.position.y,2)
+                        );
+                        if(distance >= deadZone.radius){
+                            k.health--;
+                            let blood = new Blood(this.gameEngine, null, { position: k.position.clone() });
+                            if(k.health <= 0){
+                                this.destroyObjectById(k.id);
+                            }
+                            this.gameEngine.addObjectToWorld(blood);
+                            this.gameEngine.timer.add(600, this.destroyObjectById, this, [blood.id]);
+                        }
+                    })
+                }
+                deadZone.radius -= .02;
+            }
         }
     }
 }

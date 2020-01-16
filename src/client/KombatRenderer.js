@@ -5,6 +5,7 @@ import Granade from '../common/Granade';
 import Wall from '../common/Wall';
 import Blood from '../common/Blood';
 import Explosion2 from '../common/Explosion2';
+import DeadZone from '../common/DeadZone';
 
 let ctx = null;
 let canvas = null;
@@ -22,27 +23,28 @@ export default class KombatRenderer extends Renderer {
         canvas.width = C_WIDTH;
         canvas.height = C_HEIGHT;
         document.body.appendChild(canvas);
-        clientEngine.zoom = 13;
+        clientEngine.zoom = 15;
         ctx = canvas.getContext('2d');
         ctx.lineWidth = 3 / clientEngine.zoom;
-        ctx.shadowOffsetX = 0;
-        ctx.shadowOffsetY = 0;
-        ctx.shadowBlur = 5; 
+        ctx.shadowOffsetX = 1;
+        ctx.shadowOffsetY = 1;
+        ctx.shadowBlur = 15; 
         this.offset = new TwoVector(0, 0);
     }
 
     setOffset(playerKombat){
-        let c = document.getElementById('kc');
         this.offset.x = (C_WIDTH/2)/this.clientEngine.zoom - playerKombat.position.x - (playerKombat.width / 2);
         this.offset.y = (C_HEIGHT/2)/this.clientEngine.zoom - playerKombat.position.y - (playerKombat.height / 2);
     }
 
     draw(t, dt) {
         super.draw(t, dt);
-        this.resetRender();
-        
+        ctx.clearRect(0, 0, C_WIDTH, C_HEIGHT);
+        ctx.save();
+        ctx.translate(0, 0);
+        ctx.scale(this.clientEngine.zoom, this.clientEngine.zoom);
+        ctx.lineWidth = 3 / this.clientEngine.zoom;
         let playerKombat = this.gameEngine.world.queryObject({ playerId: this.gameEngine.playerId,  instanceType: Kombat });
-        
         if(playerKombat){
             this.setOffset(playerKombat);
             //draw blood stains first // layer 0
@@ -54,19 +56,32 @@ export default class KombatRenderer extends Renderer {
                 else if (obj instanceof Granade) this.drawGranade(obj);
             });
             game.world.queryObjects({instanceType: Explosion2 }).forEach(obj => this.drawExplosion(obj));
+            this.drawDeadZone();
+            ctx.lineWidth = 3 / this.clientEngine.zoom;
             this.drawHUD(playerKombat);
             this.updateDebugger(playerKombat, t, dt);
         }
-
-
+       
         ctx.restore();
     }
 
-    resetRender(){
-        ctx.clearRect(0, 0, C_WIDTH, C_HEIGHT);
-        ctx.save();
-        ctx.translate(0, 0);
-        ctx.scale(this.clientEngine.zoom, this.clientEngine.zoom);  // Zoom in and flip y axis
+
+    drawDeadZone(){
+        let obj = this.gameEngine.world.queryObject({ instanceType: DeadZone });
+        if(obj.radius > 0){
+            let center = new TwoVector(
+                obj.position.x + this.offset.x,
+                obj.position.y + this.offset.y
+            );
+            ctx.shadowColor = "rgba(100,0,255,.4)";
+            ctx.fillStyle = "rgba(100,0,255,.4)";
+            ctx.beginPath();
+            ctx.arc(center.x, center.y, obj.radius, 0, 2 * Math.PI);
+            ctx.rect(800/this.clientEngine.zoom, 0, -800/this.clientEngine.zoom, 600/this.clientEngine.zoom, 2 * Math.PI);
+            ctx.closePath();
+            ctx.fill();
+        }
+       
     }
 
     drawHUD(obj){
@@ -201,7 +216,6 @@ export default class KombatRenderer extends Renderer {
         ctx.shadowColor = "yellow";
         ctx.strokeStyle = "yellow";
         let center = this.getCenter(obj);
-        let radius = this.getCircumscribedRadiusLength(obj.width);
         ctx.beginPath();
         ctx.arc(center.x, center.y, .5, 0, 2*Math.PI);
         ctx.stroke();

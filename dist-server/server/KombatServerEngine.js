@@ -45,6 +45,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
+var RANDOM_SPAWNS = [new _lanceGg.TwoVector(10, 10), new _lanceGg.TwoVector(40, 10), new _lanceGg.TwoVector(10, 40), new _lanceGg.TwoVector(40, 40)];
+
 var KombatServerEngine =
 /*#__PURE__*/
 function (_ServerEngine) {
@@ -123,8 +125,9 @@ function (_ServerEngine) {
     value: function onPlayerConnected(socket) {
       _get(_getPrototypeOf(KombatServerEngine.prototype), "onPlayerConnected", this).call(this, socket);
 
+      var position = RANDOM_SPAWNS[Math.floor(Math.random() * RANDOM_SPAWNS.length)].clone();
       var kombat = new _Kombat.default(this.gameEngine, null, {
-        position: new _lanceGg.TwoVector(10, 10)
+        position: position
       });
       kombat.playerId = socket.playerId;
       kombat.name = 'Kombat ' + socket.playerId;

@@ -6,6 +6,12 @@ import Wall from '../common/Wall';
 import Explosion2 from '../common/Explosion2';
 import Blood from '../common/Blood';
 import DeadZone from '../common/DeadZone';
+const RANDOM_SPAWNS = [
+    new TwoVector(10, 10),
+    new TwoVector(40, 10),
+    new TwoVector(10, 40),
+    new TwoVector(40, 40)
+];
 
 export default class KombatServerEngine extends ServerEngine {
 
@@ -81,9 +87,12 @@ export default class KombatServerEngine extends ServerEngine {
 
     onPlayerConnected(socket) {
         super.onPlayerConnected(socket);
+        let position = RANDOM_SPAWNS[Math.floor(Math.random()*RANDOM_SPAWNS.length)].clone();
         let kombat = new Kombat(this.gameEngine, null, { 
-            position: new TwoVector(10, 10),
+            position: position,
         });
+
+
         kombat.playerId = socket.playerId;
         kombat.name = 'Kombat '+socket.playerId;
         kombat.max_health = 100;

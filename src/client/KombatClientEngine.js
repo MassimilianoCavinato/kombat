@@ -16,7 +16,6 @@ export default class KombatClientEngine extends ClientEngine {
         this.controls = new KeyboardControls(this);
         //LISTENERS
         let GAME_CANVAS = document.getElementById('kc');
-
         GAME_CANVAS.addEventListener('mouseenter', (e) => this.updateAngle(e));
         GAME_CANVAS.addEventListener('mousemove', (e) => this.updateAngle(e));
         GAME_CANVAS.addEventListener('mousedown', (e) => this.handleMouse(e));
@@ -24,22 +23,20 @@ export default class KombatClientEngine extends ClientEngine {
         GAME_CANVAS.addEventListener('contextmenu', (e) => e.preventDefault());
         document.addEventListener('keydown', (e) => this.handleKeyDown(e));
         document.addEventListener('keyup', (e) => this.handleKeyUp(e));
-
         this.gameEngine.on('client__preStep', () => this.preStep());
         this.gameEngine.on('objectDestroyed', (obj) => {
             if (obj.playerId === gameEngine.playerId && obj.type === "Kombat") {
-                document.querySelector('#kombat-menu').style.display = "block";
+                window.location.reload();
             }
         });
         this.gameEngine.on('start', (e) => {
             
             let kombat_name = document.querySelector('#kombat-name').value;
-            setTimeout(() => this.sendInput('kombat_name', { kombat_name: kombat_name.toString().trim()}), 1000);
+            setTimeout(() => this.sendInput('kombat_name', { repeat: false, kombat_name: kombat_name.toString().trim()}), 2000);
         });
     }
 
     updateAngle(e) {
-        
         e.preventDefault();
         this.angle = Math.atan2(e.pageY - window.innerHeight/2, e.pageX - window.innerWidth/2);
     }

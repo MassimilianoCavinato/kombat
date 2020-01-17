@@ -184,7 +184,9 @@ function (_GameEngine) {
 
           player.direction = inputData.options.angle;
         } else if (inputData.input === 'kombat_name') {
-          player.name = inputData.options.kombat_name;
+          if (inputData.options.kombat_name.length > 0) {
+            player.name = inputData.options.kombat_name;
+          }
         }
       }
     }
@@ -211,7 +213,7 @@ function (_GameEngine) {
     key: "handleBulletHit",
     value: function handleBulletHit(kombat, bullet) {
       this.destroyObjectById(bullet.id);
-      kombat.health--;
+      kombat.health -= 3;
       var blood = new _Blood.default(this, null, {
         position: kombat.position.clone()
       });

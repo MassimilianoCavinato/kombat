@@ -64,11 +64,7 @@ function (_Renderer) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(KombatRenderer).call(this, gameEngine, clientEngine));
     game = gameEngine;
-    canvas = document.createElement('canvas');
-    canvas.setAttribute('id', 'kc');
-    canvas.width = C_WIDTH;
-    canvas.height = C_HEIGHT;
-    document.body.appendChild(canvas);
+    canvas = document.getElementById('kc');
     clientEngine.zoom = 15;
     ctx = canvas.getContext('2d');
     ctx.lineWidth = 3 / clientEngine.zoom;
@@ -125,8 +121,7 @@ function (_Renderer) {
         });
         this.drawDeadZone();
         ctx.lineWidth = 3 / this.clientEngine.zoom;
-        this.drawHUD(playerKombat);
-        this.updateDebugger(playerKombat, t, dt);
+        this.drawHUD(playerKombat); // this.updateDebugger(playerKombat, t, dt);
       }
 
       ctx.restore();

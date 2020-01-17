@@ -77,7 +77,7 @@ function (_ClientEngine) {
 
     _this.gameEngine.on('objectDestroyed', function (obj) {
       if (obj.playerId === gameEngine.playerId && obj.type === "Kombat") {
-        document.querySelector('#kombat-menu').style.display = "block";
+        window.location.reload();
       }
     });
 
@@ -85,9 +85,10 @@ function (_ClientEngine) {
       var kombat_name = document.querySelector('#kombat-name').value;
       setTimeout(function () {
         return _this.sendInput('kombat_name', {
+          repeat: false,
           kombat_name: kombat_name.toString().trim()
         });
-      }, 1000);
+      }, 2000);
     });
 
     return _this;

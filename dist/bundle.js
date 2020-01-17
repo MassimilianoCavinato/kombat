@@ -14083,20 +14083,37 @@ var defaults = {
   scheduler: 'render-schedule',
   syncOptions: {
     sync: 'interpolate',
-    localObjBending: .7,
-    remoteObjBending: .9,
+    localObjBending: 0.5,
+    remoteObjBending: 1,
     bendingIncrements: 2
   }
 };
 var options = Object.assign(defaults, qsOptions);
 var gameEngine = new __WEBPACK_IMPORTED_MODULE_3__common_KombatGameEngine__["a" /* default */](options);
-var clientEngine = new __WEBPACK_IMPORTED_MODULE_2__client_KombatClientEngine__["a" /* default */](gameEngine, options);
+;
+var clientEngine = null;
 document.addEventListener('DOMContentLoaded', function (e) {
   if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
     alert('mobile controllers not available');
   } else {
+    var NI = document.getElementById('kombat-name');
+    NI.addEventListener('click', function (e) {
+      NI.focus();
+    });
     var PB = document.getElementById('kombat-play-button');
     PB.addEventListener('click', function (e) {
+      var kc = document.getElementById('kc');
+
+      if (kc) {
+        kc.remove();
+      }
+
+      var canvas = document.createElement('canvas');
+      canvas.setAttribute('id', 'kc');
+      canvas.width = 800;
+      canvas.height = 600;
+      document.body.appendChild(canvas);
+      clientEngine = new __WEBPACK_IMPORTED_MODULE_2__client_KombatClientEngine__["a" /* default */](gameEngine, options);
       document.querySelector('#kombat-menu').style.display = "none";
       clientEngine.start();
     });
@@ -17223,7 +17240,7 @@ function (_ClientEngine) {
 
     _this.gameEngine.on('objectDestroyed', function (obj) {
       if (obj.playerId === gameEngine.playerId && obj.type === "Kombat") {
-        document.querySelector('#kombat-menu').style.display = "block";
+        window.location.reload();
       }
     });
 
@@ -17231,9 +17248,10 @@ function (_ClientEngine) {
       var kombat_name = document.querySelector('#kombat-name').value;
       setTimeout(function () {
         return _this.sendInput('kombat_name', {
+          repeat: false,
           kombat_name: kombat_name.toString().trim()
         });
-      }, 1000);
+      }, 2000);
     });
 
     return _this;
@@ -17392,11 +17410,7 @@ function (_Renderer) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(KombatRenderer).call(this, gameEngine, clientEngine));
     game = gameEngine;
-    canvas = document.createElement('canvas');
-    canvas.setAttribute('id', 'kc');
-    canvas.width = C_WIDTH;
-    canvas.height = C_HEIGHT;
-    document.body.appendChild(canvas);
+    canvas = document.getElementById('kc');
     clientEngine.zoom = 15;
     ctx = canvas.getContext('2d');
     ctx.lineWidth = 3 / clientEngine.zoom;
@@ -17453,8 +17467,7 @@ function (_Renderer) {
         });
         this.drawDeadZone();
         ctx.lineWidth = 3 / this.clientEngine.zoom;
-        this.drawHUD(playerKombat);
-        this.updateDebugger(playerKombat, t, dt);
+        this.drawHUD(playerKombat); // this.updateDebugger(playerKombat, t, dt);
       }
 
       ctx.restore();
@@ -17846,7 +17859,9 @@ function (_GameEngine) {
 
           player.direction = inputData.options.angle;
         } else if (inputData.input === 'kombat_name') {
-          player.name = inputData.options.kombat_name;
+          if (inputData.options.kombat_name.length > 0) {
+            player.name = inputData.options.kombat_name;
+          }
         }
       }
     }
@@ -17873,7 +17888,7 @@ function (_GameEngine) {
     key: "handleBulletHit",
     value: function handleBulletHit(kombat, bullet) {
       this.destroyObjectById(bullet.id);
-      kombat.health--;
+      kombat.health -= 3;
       var blood = new __WEBPACK_IMPORTED_MODULE_5__Blood__["a" /* default */](this, null, {
         position: kombat.position.clone()
       });

@@ -34,7 +34,8 @@ var gameEngine = new _KombatGameEngine.default({
 });
 var serverEngine = new _KombatServerEngine.default(io, gameEngine, {
   debug: {},
-  updateRate: 2
+  updateRate: 3,
+  fullSyncRate: 30
 }); // start the game
 
 serverEngine.start();

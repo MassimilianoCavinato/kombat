@@ -124,7 +124,9 @@ export default class KombatGameEngine extends GameEngine {
                 player.direction =  inputData.options.angle;
             }
             else if (inputData.input === 'kombat_name'){
-                player.name = inputData.options.kombat_name;
+                if(inputData.options.kombat_name.length > 0){
+                    player.name = inputData.options.kombat_name;
+                }
             }
         }
     }
@@ -152,7 +154,7 @@ export default class KombatGameEngine extends GameEngine {
 
     handleBulletHit(kombat, bullet){
         this.destroyObjectById(bullet.id);
-        kombat.health--;
+        kombat.health -= 3;
         let blood = new Blood(this, null, { position: kombat.position.clone() });
         this.addObjectToWorld(blood);
         this.timer.add(600, this.destroyObjectById, this, [blood.id]);

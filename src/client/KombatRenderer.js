@@ -18,11 +18,8 @@ export default class KombatRenderer extends Renderer {
     constructor(gameEngine, clientEngine) {
         super(gameEngine, clientEngine);
         game = gameEngine;
-        canvas = document.createElement('canvas');
-        canvas.setAttribute('id', 'kc');
-        canvas.width = C_WIDTH;
-        canvas.height = C_HEIGHT;
-        document.body.appendChild(canvas);
+        
+        canvas = document.getElementById('kc');
         clientEngine.zoom = 15;
         ctx = canvas.getContext('2d');
         ctx.lineWidth = 3 / clientEngine.zoom;
@@ -38,6 +35,7 @@ export default class KombatRenderer extends Renderer {
     }
 
     draw(t, dt) {
+    
         super.draw(t, dt);
         ctx.clearRect(0, 0, C_WIDTH, C_HEIGHT);
         ctx.save();
@@ -59,9 +57,8 @@ export default class KombatRenderer extends Renderer {
             this.drawDeadZone();
             ctx.lineWidth = 3 / this.clientEngine.zoom;
             this.drawHUD(playerKombat);
-            this.updateDebugger(playerKombat, t, dt);
+            // this.updateDebugger(playerKombat, t, dt);
         }
-       
         ctx.restore();
     }
 
@@ -81,7 +78,6 @@ export default class KombatRenderer extends Renderer {
             ctx.closePath();
             ctx.fill();
         }
-       
     }
 
     drawHUD(obj){
@@ -170,7 +166,7 @@ export default class KombatRenderer extends Renderer {
     }
 
     drawKombat(obj) {
-     
+        
         let center = this.getCenter(obj);
         let radius = this.getCircumscribedRadiusLength(obj.width);
         let color = obj.playerId === this.gameEngine.playerId ? "dodgerblue" : "crimson";
@@ -179,13 +175,17 @@ export default class KombatRenderer extends Renderer {
         //base circle
         this.drawCircle(center.x, center.y, radius);
         //kombat name
+   
         ctx.fillStyle = "white";
         ctx.font = '1px Arial';
         ctx.fillText(obj.name, center.x - (obj.name.length/4), center.y - 2);
+
+        
         //directional line
         ctx.moveTo(center.x,center.y);
         ctx.lineTo(center.x + radius * Math.cos(obj.direction), center.y + radius * Math.sin(obj.direction));
         ctx.stroke();
+
         //ammo reloading circle
         if(obj.ammo_loaded === -1){
             ctx.beginPath();

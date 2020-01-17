@@ -12,14 +12,15 @@ const defaults = {
     scheduler: 'render-schedule',
     syncOptions: {
         sync: 'interpolate',
-        localObjBending: .7,
-        remoteObjBending: .9,
+        localObjBending: 0.5,
+        remoteObjBending: 1,
         bendingIncrements: 2
     }
 };
 let options = Object.assign(defaults, qsOptions);
-const gameEngine = new KombatGameEngine(options);
-const clientEngine = new KombatClientEngine(gameEngine, options);
+
+let gameEngine = new KombatGameEngine(options);;
+let clientEngine = null;
 
 document.addEventListener('DOMContentLoaded', function(e) { 
 
@@ -27,8 +28,25 @@ document.addEventListener('DOMContentLoaded', function(e) {
     	alert('mobile controllers not available');
 	}
     else{
+        
+        let NI = document.getElementById('kombat-name');
+        NI.addEventListener('click', e =>{
+            NI.focus()
+        });
 		let PB = document.getElementById('kombat-play-button');
         PB.addEventListener('click', e => {
+            let kc = document.getElementById('kc');
+            if(kc){
+                kc.remove();
+            }
+            let canvas = document.createElement('canvas');
+            canvas.setAttribute('id', 'kc');
+            canvas.width = 800;
+            canvas.height = 600;
+            document.body.appendChild(canvas);
+
+           
+            clientEngine = new KombatClientEngine(gameEngine, options);
             document.querySelector('#kombat-menu').style.display = "none";
             clientEngine.start();
         });

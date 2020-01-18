@@ -16,13 +16,13 @@ var qsOptions = _queryString.default.parse(location.search); // default options,
 
 var defaults = {
   traceLevel: _lanceGg.Lib.Trace.TRACE_NONE,
-  delayInputCount: 5,
+  delayInputCount: 10,
   scheduler: 'render-schedule',
   syncOptions: {
     sync: 'extrapolate',
-    localObjBending: 0.5,
-    remoteObjBending: 1,
-    bendingIncrements: 2
+    localObjBending: 0.6,
+    remoteObjBending: 0.8,
+    bendingIncrements: 6
   }
 };
 var options = Object.assign(defaults, qsOptions);

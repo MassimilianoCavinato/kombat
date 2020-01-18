@@ -34,7 +34,6 @@ export default class KombatServerEngine extends ServerEngine {
 
     add_Map(map){
         map.forEach(w => {
-            console.log(w.x, w.y, w.width, w.height);
             let wall = new Wall(this.gameEngine, null, { 
                 position: new TwoVector(w.x, w.y), 
                 width: w.width,
@@ -84,7 +83,7 @@ export default class KombatServerEngine extends ServerEngine {
     shoot(kombat) {
         if(kombat.ammo_loaded > 0){
             kombat.ammo_loaded--;
-            let speed = 0.4;
+            let speed = 0.5;
             let liveTimer = 100; //gameloops
             let bullet = new Bullet(this.gameEngine, null, { 
                 direction: kombat.direction,

@@ -87,7 +87,6 @@ function (_ServerEngine) {
       var _this2 = this;
 
       map.forEach(function (w) {
-        console.log(w.x, w.y, w.width, w.height);
         var wall = new _Wall.default(_this2.gameEngine, null, {
           position: new _lanceGg.TwoVector(w.x, w.y),
           width: w.width,

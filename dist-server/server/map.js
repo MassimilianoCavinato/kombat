@@ -1,0 +1,444 @@
+"use strict";
+
+exports.map = [{
+  "height": 32,
+  "id": 2,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 224,
+  "x": 0,
+  "y": 128
+}, {
+  "height": 32,
+  "id": 3,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 208,
+  "x": 272,
+  "y": 128
+}, {
+  "height": 64,
+  "id": 4,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 48,
+  "x": 432,
+  "y": 0
+}, {
+  "height": 48,
+  "id": 5,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 32,
+  "x": 96,
+  "y": 80
+}, {
+  "height": 32,
+  "id": 6,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 224,
+  "x": 144,
+  "y": 240
+}, {
+  "height": 224,
+  "id": 7,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 48,
+  "x": 448,
+  "y": 224
+}, {
+  "height": 48,
+  "id": 9,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 112,
+  "x": 496,
+  "y": 368
+}, {
+  "height": 112,
+  "id": 10,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 32,
+  "x": 672,
+  "y": 112
+}, {
+  "height": 32,
+  "id": 11,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 144,
+  "x": 752,
+  "y": 192
+}, {
+  "height": 64,
+  "id": 12,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 32,
+  "x": 832,
+  "y": 64
+}, {
+  "height": 32,
+  "id": 13,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 128,
+  "x": 704,
+  "y": 320
+}, {
+  "height": 96,
+  "id": 15,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 32,
+  "x": 800,
+  "y": 352
+}, {
+  "height": 96,
+  "id": 17,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 32,
+  "x": 688,
+  "y": 464
+}, {
+  "height": 160,
+  "id": 18,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 48,
+  "x": 704,
+  "y": 640
+}, {
+  "height": 64,
+  "id": 19,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 80,
+  "x": 800,
+  "y": 560
+}, {
+  "height": 48,
+  "id": 21,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 32,
+  "x": 544,
+  "y": 480
+}, {
+  "height": 32,
+  "id": 22,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 32,
+  "x": 496,
+  "y": 560
+}, {
+  "height": 96,
+  "id": 24,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 128,
+  "x": 208,
+  "y": 416
+}, {
+  "height": 80,
+  "id": 25,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 240,
+  "x": 144,
+  "y": 560
+}, {
+  "height": 64,
+  "id": 26,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 48,
+  "x": 96,
+  "y": 336
+}, {
+  "height": 48,
+  "id": 27,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 96,
+  "x": 0,
+  "y": 464
+}, {
+  "height": 224,
+  "id": 30,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 32,
+  "x": 0,
+  "y": 576
+}, {
+  "height": 112,
+  "id": 33,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 64,
+  "x": 32,
+  "y": 688
+}, {
+  "height": 48,
+  "id": 34,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 80,
+  "x": 96,
+  "y": 752
+}, {
+  "height": 16,
+  "id": 35,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 80,
+  "x": 176,
+  "y": 784
+}, {
+  "height": 48,
+  "id": 36,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 144,
+  "x": 464,
+  "y": 704
+}, {
+  "height": 32,
+  "id": 37,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 80,
+  "x": 496,
+  "y": 672
+}, {
+  "height": 32,
+  "id": 38,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 48,
+  "x": 528,
+  "y": 640
+}, {
+  "height": 16,
+  "id": 39,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 32,
+  "x": 560,
+  "y": 624
+}, {
+  "height": 48,
+  "id": 40,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 16,
+  "x": 656,
+  "y": 176
+}, {
+  "height": 32,
+  "id": 44,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 32,
+  "x": 688,
+  "y": 96
+}, {
+  "height": 16,
+  "id": 46,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 48,
+  "x": 704,
+  "y": 80
+}, {
+  "height": 16,
+  "id": 47,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 48,
+  "x": 400,
+  "y": 336
+}, {
+  "height": 144,
+  "id": 49,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 16,
+  "x": 432,
+  "y": 304
+}, {
+  "height": 32,
+  "id": 51,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 64,
+  "x": 336,
+  "y": 480
+}, {
+  "height": 32,
+  "id": 52,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 32,
+  "x": 176,
+  "y": 432
+}, {
+  "height": 112,
+  "id": 54,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 80,
+  "x": 880,
+  "y": 688
+}, {
+  "height": 32,
+  "id": 55,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 64,
+  "x": 816,
+  "y": 768
+}, {
+  "height": 96,
+  "id": 56,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 32,
+  "x": 928,
+  "y": 336
+}, {
+  "height": 16,
+  "id": 57,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 112,
+  "x": 592,
+  "y": 0
+}, {
+  "height": 32,
+  "id": 58,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 96,
+  "x": 272,
+  "y": 640
+}, {
+  "height": 96,
+  "id": 59,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 64,
+  "x": 0,
+  "y": 160
+}, {
+  "height": 96,
+  "id": 69,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 32,
+  "x": 0,
+  "y": 256
+}, {
+  "height": 32,
+  "id": 70,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 64,
+  "x": 224,
+  "y": 0
+}];
+//# sourceMappingURL=map.js.map

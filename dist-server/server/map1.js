@@ -1,0 +1,284 @@
+"use strict";
+
+exports.map = [{
+  "height": 98,
+  "id": 1,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 2,
+  "x": 0,
+  "y": 2
+}, {
+  "height": 2,
+  "id": 3,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 98,
+  "x": 2,
+  "y": 98
+}, {
+  "height": 98,
+  "id": 5,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 2,
+  "x": 98,
+  "y": 0
+}, {
+  "height": 2,
+  "id": 6,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 98,
+  "x": 0,
+  "y": 0
+}, {
+  "height": 6,
+  "id": 7,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 13,
+  "x": 22,
+  "y": 24
+}, {
+  "height": 15,
+  "id": 8,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 9,
+  "x": 70,
+  "y": 47
+}, {
+  "height": 6,
+  "id": 9,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 8,
+  "x": 23,
+  "y": 54
+}, {
+  "height": 12,
+  "id": 10,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 8,
+  "x": 62,
+  "y": 22
+}, {
+  "height": 8,
+  "id": 11,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 14,
+  "x": 49,
+  "y": 76
+}, {
+  "height": 4,
+  "id": 13,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 18,
+  "x": 11,
+  "y": 72
+}, {
+  "height": 10,
+  "id": 14,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 4,
+  "x": 21,
+  "y": 82
+}, {
+  "height": 8,
+  "id": 15,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 2,
+  "x": 49,
+  "y": 39
+}, {
+  "height": 8,
+  "id": 16,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 2,
+  "x": 50,
+  "y": 55
+}, {
+  "height": 6,
+  "id": 17,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 3,
+  "x": 58,
+  "y": 65
+}, {
+  "height": 9,
+  "id": 19,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 10,
+  "x": 42,
+  "y": 2
+}, {
+  "height": 7,
+  "id": 21,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 7,
+  "x": 12,
+  "y": 7
+}, {
+  "height": 5,
+  "id": 22,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 3,
+  "x": 79,
+  "y": 7
+}, {
+  "height": 6,
+  "id": 23,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 4,
+  "x": 87,
+  "y": 15
+}, {
+  "height": 5,
+  "id": 24,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 12,
+  "x": 87,
+  "y": 35
+}, {
+  "height": 5,
+  "id": 25,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 22,
+  "x": 2,
+  "y": 38
+}, {
+  "height": 12,
+  "id": 26,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 5,
+  "x": 11,
+  "y": 43
+}, {
+  "height": 6,
+  "id": 27,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 7,
+  "x": 79,
+  "y": 78
+}, {
+  "height": 3,
+  "id": 28,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 7,
+  "x": 79,
+  "y": 53
+}, {
+  "height": 5,
+  "id": 29,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 3,
+  "x": 39,
+  "y": 93
+}, {
+  "height": 7,
+  "id": 30,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 5,
+  "x": 73,
+  "y": 91
+}, {
+  "height": 4,
+  "id": 31,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 4,
+  "x": 52,
+  "y": 2
+}, {
+  "height": 2,
+  "id": 32,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 2,
+  "x": 22,
+  "y": 17
+}, {
+  "height": 3,
+  "id": 33,
+  "name": "",
+  "rotation": 0,
+  "type": "",
+  "visible": true,
+  "width": 2,
+  "x": 48,
+  "y": 20
+}];
+//# sourceMappingURL=map1.js.map

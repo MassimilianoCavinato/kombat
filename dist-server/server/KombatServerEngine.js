@@ -21,6 +21,8 @@ var _Blood = _interopRequireDefault(require("../common/Blood"));
 
 var _DeadZone = _interopRequireDefault(require("../common/DeadZone"));
 
+var _map = require("./map1");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -74,46 +76,30 @@ function (_ServerEngine) {
   _createClass(KombatServerEngine, [{
     key: "start",
     value: function start() {
-      var _this2 = this;
-
       _get(_getPrototypeOf(KombatServerEngine.prototype), "start", this).call(this);
 
-      var sideA = 50;
-      var sideB = 3;
-      var wallNorth = new _Wall.default(this.gameEngine, null, {
-        position: new _lanceGg.TwoVector(0, 0),
-        width: sideA,
-        height: sideB
-      });
-      this.gameEngine.addObjectToWorld(wallNorth);
-      var wallEast = new _Wall.default(this.gameEngine, null, {
-        position: new _lanceGg.TwoVector(sideA, 0),
-        width: sideB,
-        height: sideA
-      });
-      this.gameEngine.addObjectToWorld(wallEast);
-      var wallSouth = new _Wall.default(this.gameEngine, null, {
-        position: new _lanceGg.TwoVector(sideB, sideA),
-        width: sideA,
-        height: sideB
-      });
-      this.gameEngine.addObjectToWorld(wallSouth);
-      var wallWest = new _Wall.default(this.gameEngine, null, {
-        position: new _lanceGg.TwoVector(0, sideB),
-        width: sideB,
-        height: sideA
-      });
-      this.gameEngine.addObjectToWorld(wallWest);
-      var walls = [[8, 8, 3, 9], [32, 18, 8, 3], [25, 25, 2, 2], [42, 36, 3, 9], [12, 32, 8, 3]];
-      walls.forEach(function (w) {
+      this.add_Map(_map.map);
+      this.add_DeadZone();
+    }
+  }, {
+    key: "add_Map",
+    value: function add_Map(map) {
+      var _this2 = this;
+
+      map.forEach(function (w) {
+        console.log(w.x, w.y, w.width, w.height);
         var wall = new _Wall.default(_this2.gameEngine, null, {
-          position: new _lanceGg.TwoVector(w[0], w[1]),
-          width: w[2],
-          height: w[3]
+          position: new _lanceGg.TwoVector(w.x, w.y),
+          width: w.width,
+          height: w.height
         });
 
         _this2.gameEngine.addObjectToWorld(wall);
       });
+    }
+  }, {
+    key: "add_DeadZone",
+    value: function add_DeadZone() {
       var deadZone = new _DeadZone.default(this.gameEngine, null, {
         position: new _lanceGg.TwoVector(30, 30)
       });

@@ -6,6 +6,8 @@ import Wall from '../common/Wall';
 import Explosion2 from '../common/Explosion2';
 import Blood from '../common/Blood';
 import DeadZone from '../common/DeadZone';
+import { map } from './map1';
+
 const RANDOM_SPAWNS = [
     new TwoVector(10, 10),
     new TwoVector(40, 10),
@@ -25,66 +27,31 @@ export default class KombatServerEngine extends ServerEngine {
 
     start() {
         super.start();
+        this.add_Map(map);
+        this.add_DeadZone();
+        
+    }
 
-        let sideA = 50;
-        let sideB = 3;
-
-        let wallNorth = new Wall(this.gameEngine, null, { 
-            position: new TwoVector(0,0), 
-            width: sideA,
-            height: sideB,
-        });
-        this.gameEngine.addObjectToWorld(wallNorth);
-
-        let wallEast = new Wall(this.gameEngine, null, { 
-            position: new TwoVector(sideA,0), 
-            width: sideB,
-            height: sideA,
-        });
-        this.gameEngine.addObjectToWorld(wallEast);
-
-        let wallSouth = new Wall(this.gameEngine, null, { 
-            position: new TwoVector(sideB,sideA), 
-            width: sideA,
-            height: sideB,
-        });
-        this.gameEngine.addObjectToWorld(wallSouth);
-
-
-        let wallWest = new Wall(this.gameEngine, null, { 
-            position: new TwoVector(0,sideB), 
-            width: sideB,
-            height: sideA,
-        });
-        this.gameEngine.addObjectToWorld(wallWest);
-
-        let walls = [
-            [8,8,3,9],
-            [32,18,8,3],
-            [25,25,2,2],
-            [42,36,3,9],
-            [12,32,8,3],
-        ];
-
-
-        walls.forEach(w => {
+    add_Map(map){
+        map.forEach(w => {
+            console.log(w.x, w.y, w.width, w.height);
             let wall = new Wall(this.gameEngine, null, { 
-                position: new TwoVector(w[0], w[1]), 
-                width: w[2],
-                height: w[3],
+                position: new TwoVector(w.x, w.y), 
+                width: w.width,
+                height: w.height,
             });
 
             this.gameEngine.addObjectToWorld(wall);
         });
+    }
 
+    add_DeadZone(){
         let deadZone = new DeadZone(this.gameEngine, null, { 
             position: new TwoVector(30, 30)
         });
         deadZone.radius = 100;
         this.gameEngine.addObjectToWorld(deadZone);
-
     }
-
     onPlayerConnected(socket) {
         super.onPlayerConnected(socket);
         let position = RANDOM_SPAWNS[Math.floor(Math.random()*RANDOM_SPAWNS.length)].clone();
@@ -139,7 +106,6 @@ export default class KombatServerEngine extends ServerEngine {
             kombat.ammo_loaded--;
             this.gameEngine.timer.add(240, this.reloadAmmo, this, [kombat.id]);
         }
-        
     }
 
     granade(kombat) {

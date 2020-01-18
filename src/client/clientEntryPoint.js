@@ -11,7 +11,7 @@ const defaults = {
     delayInputCount: 5,
     scheduler: 'render-schedule',
     syncOptions: {
-        sync: 'interpolate',
+        sync: 'extrapolate',
         localObjBending: 0.5,
         remoteObjBending: 1,
         bendingIncrements: 2

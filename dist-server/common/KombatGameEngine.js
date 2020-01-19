@@ -21,6 +21,8 @@ var _Explosion = _interopRequireDefault(require("./Explosion2"));
 
 var _DeadZone = _interopRequireDefault(require("./DeadZone"));
 
+var _Heal = _interopRequireDefault(require("./Heal2"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -106,6 +108,7 @@ function (_GameEngine) {
       serializer.registerClass(_Blood.default);
       serializer.registerClass(_Explosion.default);
       serializer.registerClass(_DeadZone.default);
+      serializer.registerClass(_Heal.default);
     }
   }, {
     key: "start",
@@ -149,6 +152,8 @@ function (_GameEngine) {
             player.ammo_loaded = 0;
             this.emit('shoot', player);
           }
+        } else if (inputData.input === "pickup") {
+          this.emit('pickup', player);
         } else if (inputData.input === 'step') {
           var speed;
           var x = 0;

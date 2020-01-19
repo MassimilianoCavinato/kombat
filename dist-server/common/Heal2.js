@@ -29,54 +29,37 @@ function _superPropBase(object, property) { while (!Object.prototype.hasOwnPrope
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
-var Explosion2 =
+var Heal2 =
 /*#__PURE__*/
 function (_DynamicObject) {
-  _inherits(Explosion2, _DynamicObject);
+  _inherits(Heal2, _DynamicObject);
 
-  _createClass(Explosion2, null, [{
+  _createClass(Heal2, null, [{
     key: "netScheme",
     get: function get() {
-      return Object.assign({
-        radius: {
-          type: _lanceGg.BaseTypes.TYPES.FLOAT32
-        }
-      }, _get(_getPrototypeOf(Explosion2), "netScheme", this));
+      return Object.assign({// add serializable properties here
+      }, _get(_getPrototypeOf(Heal2), "netScheme", this));
     }
   }]);
 
-  function Explosion2(gameEngine, options, props) {
+  function Heal2(gameEngine, options, props) {
     var _this;
 
-    _classCallCheck(this, Explosion2);
+    _classCallCheck(this, Heal2);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Explosion2).call(this, gameEngine, options, props));
-    _this.class = Explosion2;
-    _this.type = "Explosion2";
-    _this.isStatic = true;
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Heal2).call(this, gameEngine, options, props));
+    _this.class = Heal2;
+    _this.type = "Heal2";
     _this.width = 0;
-    _this.height = 0; // this.splatter = [
-    //     [Math.random()*5, Math.random()*5, 3+Math.random()*3],
-    //     [Math.random()*5, -Math.random()*5, 3+Math.random()*3],
-    //     [-Math.random()*5, Math.random()*5, 3+Math.random()*3],
-    //     [-Math.random()*5, -Math.random()*5, 3+Math.random()*3],
-    //     [Math.random()*5+2, Math.random()*5+2,, 3+Math.random()*3],
-    //     [Math.random()*5+2,, -Math.random()*5-2, 3+Math.random()*3],
-    //     [-Math.random()*5-2, Math.random()*5+2,, 3+Math.random()*3],
-    //     [-Math.random()*5-2, -Math.random()*5-2, 3+Math.random()*3],
-    //     [Math.random()*5+4, Math.random()*5+4, 3+Math.random()*3],
-    //     [Math.random()*5+4, -Math.random()*5-4, 3+Math.random()*3],
-    //     [-Math.random()*5-4, Math.random()*5+4, 3+Math.random()*3],
-    //     [-Math.random()*5-4, -Math.random()*5+4, 3+Math.random()*3],
-    // ]
-
+    _this.height = 0;
+    _this.isStatic = 1;
     return _this;
   }
 
-  _createClass(Explosion2, [{
+  _createClass(Heal2, [{
     key: "syncTo",
     value: function syncTo(other) {
-      _get(_getPrototypeOf(Explosion2.prototype), "syncTo", this).call(this, other);
+      _get(_getPrototypeOf(Heal2.prototype), "syncTo", this).call(this, other);
     }
   }, {
     key: "collidesWith",
@@ -85,8 +68,8 @@ function (_DynamicObject) {
     }
   }]);
 
-  return Explosion2;
+  return Heal2;
 }(_lanceGg.DynamicObject);
 
-exports.default = Explosion2;
-//# sourceMappingURL=Explosion2.js.map
+exports.default = Heal2;
+//# sourceMappingURL=Heal2.js.map

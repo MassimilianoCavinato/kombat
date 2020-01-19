@@ -135,6 +135,14 @@ function (_ClientEngine) {
           this.down = true;
         } else if (e.key === "d" || e.key === "ArrowRight") {
           this.right = true;
+        } else if (e.key === "r") {
+          this.sendInput('reload', {
+            repeat: false
+          });
+        } else if (e.key === "f") {
+          this.sendInput('pickup', {
+            repeat: false
+          });
         }
       }
     }
@@ -150,10 +158,6 @@ function (_ClientEngine) {
           this.down = false;
         } else if (e.key === "d" || e.key === "ArrowRight") {
           this.right = false;
-        } else if (e.key === "r" || e.key === "ArrowRight") {
-          this.sendInput('reload', {
-            repeat: false
-          });
         }
       }
     }

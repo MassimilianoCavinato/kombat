@@ -6,6 +6,7 @@ import Wall from '../common/Wall';
 import Explosion2 from '../common/Explosion2';
 import Blood from '../common/Blood';
 import DeadZone from '../common/DeadZone';
+import Heal2 from '../common/Heal2';
 import { map } from './map1';
 
 const RANDOM_SPAWNS = [
@@ -21,6 +22,7 @@ export default class KombatServerEngine extends ServerEngine {
         super(io, gameEngine, inputOptions);
         this.gameEngine.on('shoot', this.shoot.bind(this));
         this.gameEngine.on('granade', this.granade.bind(this));
+        this.gameEngine.on('pickup', this.pickup.bind(this));
         this.gameEngine.on('postStep', (stepInfo) => this.postStep(stepInfo));
         this.deadzoneTimer = 0;
     }
@@ -29,7 +31,11 @@ export default class KombatServerEngine extends ServerEngine {
         super.start();
         this.add_Map(map);
         this.add_DeadZone();
-        
+        let heal = new Heal2(this.gameEngine, null, { position: new TwoVector(
+            Math.floor(Math.random() * 90) + 10 ,
+            Math.floor(Math.random() * 90) + 10 
+        )});
+        this.gameEngine.addObjectToWorld(heal);
     }
 
     add_Map(map){
@@ -46,9 +52,12 @@ export default class KombatServerEngine extends ServerEngine {
 
     add_DeadZone(){
         let deadZone = new DeadZone(this.gameEngine, null, { 
-            position: new TwoVector(30, 30)
+            position: new TwoVector(
+                Math.floor(Math.random() * 90) + 10 , 
+                Math.floor(Math.random() * 90) + 10 
+            )
         });
-        deadZone.radius = 100;
+        deadZone.radius = 150;
         this.gameEngine.addObjectToWorld(deadZone);
     }
     onPlayerConnected(socket) {
@@ -130,6 +139,26 @@ export default class KombatServerEngine extends ServerEngine {
         }
     }
 
+    pickup(kombat){
+     
+        let heals = this.gameEngine.world.queryObjects({instanceType: Heal2 });
+        heals.every(h => {
+            let d = Math.sqrt(
+                Math.pow( kombat.position.x+kombat.width/2 - h.position.x , 2) +  
+                Math.pow( kombat.position.y+kombat.height/2 - h.position.y,2)
+            );
+           
+            if(d < .75){
+                kombat.health += 30;
+                if(kombat.health > kombat.max_health){
+                    kombat.health = kombat.max_health;
+                }
+                this.gameEngine.removeObjectFromWorld(h.id);
+                return false;
+            }
+        });
+    }
+
     destroyObjectById(id) {
         if (this.gameEngine.world.objects[id]) {
             this.gameEngine.removeObjectFromWorld(id);
@@ -184,7 +213,11 @@ export default class KombatServerEngine extends ServerEngine {
         let deadZone = this.gameEngine.world.queryObject({ instanceType : DeadZone });
         if(deadZone){
             if(deadZone.radius <= 0){
-                deadZone.radius = 100;
+                deadZone.position.x = Math.floor(Math.random() * 90) + 10
+                deadZone.position.y = Math.floor(Math.random() * 90) + 10 
+                deadZone.radius = 150;
+                let heal = new Heal2(this.gameEngine, null, { position: deadZone.position.clone()})
+                this.gameEngine.addObjectToWorld(heal);
             }
             else{
                 if(stepInfo.step - this.deadzoneTimer > 60 ){
@@ -205,7 +238,7 @@ export default class KombatServerEngine extends ServerEngine {
                         }
                     })
                 }
-                deadZone.radius -= .02;
+                deadZone.radius -= .05;
             }
         }
     }

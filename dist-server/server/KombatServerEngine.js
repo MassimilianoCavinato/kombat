@@ -21,6 +21,8 @@ var _Blood = _interopRequireDefault(require("../common/Blood"));
 
 var _DeadZone = _interopRequireDefault(require("../common/DeadZone"));
 
+var _Heal = _interopRequireDefault(require("../common/Heal2"));
+
 var _map = require("./map1");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -65,6 +67,8 @@ function (_ServerEngine) {
 
     _this.gameEngine.on('granade', _this.granade.bind(_assertThisInitialized(_this)));
 
+    _this.gameEngine.on('pickup', _this.pickup.bind(_assertThisInitialized(_this)));
+
     _this.gameEngine.on('postStep', function (stepInfo) {
       return _this.postStep(stepInfo);
     });
@@ -80,6 +84,10 @@ function (_ServerEngine) {
 
       this.add_Map(_map.map);
       this.add_DeadZone();
+      var heal = new _Heal.default(this.gameEngine, null, {
+        position: new _lanceGg.TwoVector(Math.floor(Math.random() * 90) + 10, Math.floor(Math.random() * 90) + 10)
+      });
+      this.gameEngine.addObjectToWorld(heal);
     }
   }, {
     key: "add_Map",
@@ -100,9 +108,9 @@ function (_ServerEngine) {
     key: "add_DeadZone",
     value: function add_DeadZone() {
       var deadZone = new _DeadZone.default(this.gameEngine, null, {
-        position: new _lanceGg.TwoVector(30, 30)
+        position: new _lanceGg.TwoVector(Math.floor(Math.random() * 90) + 10, Math.floor(Math.random() * 90) + 10)
       });
-      deadZone.radius = 100;
+      deadZone.radius = 150;
       this.gameEngine.addObjectToWorld(deadZone);
     }
   }, {
@@ -179,6 +187,30 @@ function (_ServerEngine) {
       }
     }
   }, {
+    key: "pickup",
+    value: function pickup(kombat) {
+      var _this3 = this;
+
+      var heals = this.gameEngine.world.queryObjects({
+        instanceType: _Heal.default
+      });
+      heals.every(function (h) {
+        var d = Math.sqrt(Math.pow(kombat.position.x + kombat.width / 2 - h.position.x, 2) + Math.pow(kombat.position.y + kombat.height / 2 - h.position.y, 2));
+
+        if (d < .75) {
+          kombat.health += 30;
+
+          if (kombat.health > kombat.max_health) {
+            kombat.health = kombat.max_health;
+          }
+
+          _this3.gameEngine.removeObjectFromWorld(h.id);
+
+          return false;
+        }
+      });
+    }
+  }, {
     key: "destroyObjectById",
     value: function destroyObjectById(id) {
       if (this.gameEngine.world.objects[id]) {
@@ -200,7 +232,7 @@ function (_ServerEngine) {
   }, {
     key: "explode",
     value: function explode(granadeId) {
-      var _this3 = this;
+      var _this4 = this;
 
       var granade = this.gameEngine.world.queryObject({
         id: granadeId,
@@ -233,17 +265,17 @@ function (_ServerEngine) {
               k.health -= 3;
             }
 
-            var blood = new _Blood.default(_this3.gameEngine, null, {
+            var blood = new _Blood.default(_this4.gameEngine, null, {
               position: k.position.clone()
             });
 
             if (k.health <= 0) {
-              _this3.destroyObjectById(k.id);
+              _this4.destroyObjectById(k.id);
             }
 
-            _this3.gameEngine.addObjectToWorld(blood);
+            _this4.gameEngine.addObjectToWorld(blood);
 
-            _this3.gameEngine.timer.add(600, _this3.destroyObjectById, _this3, [blood.id]);
+            _this4.gameEngine.timer.add(600, _this4.destroyObjectById, _this4, [blood.id]);
           }
         });
       }
@@ -251,7 +283,7 @@ function (_ServerEngine) {
   }, {
     key: "postStep",
     value: function postStep(stepInfo) {
-      var _this4 = this;
+      var _this5 = this;
 
       var deadZone = this.gameEngine.world.queryObject({
         instanceType: _DeadZone.default
@@ -259,7 +291,13 @@ function (_ServerEngine) {
 
       if (deadZone) {
         if (deadZone.radius <= 0) {
-          deadZone.radius = 100;
+          deadZone.position.x = Math.floor(Math.random() * 90) + 10;
+          deadZone.position.y = Math.floor(Math.random() * 90) + 10;
+          deadZone.radius = 150;
+          var heal = new _Heal.default(this.gameEngine, null, {
+            position: deadZone.position.clone()
+          });
+          this.gameEngine.addObjectToWorld(heal);
         } else {
           if (stepInfo.step - this.deadzoneTimer > 60) {
             this.deadzoneTimer = stepInfo.step;
@@ -271,22 +309,22 @@ function (_ServerEngine) {
 
               if (distance >= deadZone.radius) {
                 k.health--;
-                var blood = new _Blood.default(_this4.gameEngine, null, {
+                var blood = new _Blood.default(_this5.gameEngine, null, {
                   position: k.position.clone()
                 });
 
                 if (k.health <= 0) {
-                  _this4.destroyObjectById(k.id);
+                  _this5.destroyObjectById(k.id);
                 }
 
-                _this4.gameEngine.addObjectToWorld(blood);
+                _this5.gameEngine.addObjectToWorld(blood);
 
-                _this4.gameEngine.timer.add(600, _this4.destroyObjectById, _this4, [blood.id]);
+                _this5.gameEngine.timer.add(600, _this5.destroyObjectById, _this5, [blood.id]);
               }
             });
           }
 
-          deadZone.radius -= .02;
+          deadZone.radius -= .05;
         }
       }
     }

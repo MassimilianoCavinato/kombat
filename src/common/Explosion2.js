@@ -13,6 +13,8 @@ export default class Explosion2 extends  DynamicObject {
         this.class = Explosion2;
         this.type = "Explosion2";
         this.isStatic = true;
+        this.width = 0;
+        this.height = 0;
         // this.splatter = [
         //     [Math.random()*5, Math.random()*5, 3+Math.random()*3],
         //     [Math.random()*5, -Math.random()*5, 3+Math.random()*3],

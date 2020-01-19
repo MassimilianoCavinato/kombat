@@ -6,6 +6,7 @@ import Granade from './Granade';
 import Blood from './Blood';
 import Explosion2 from './Explosion2';
 import DeadZone from './DeadZone';
+import Heal2 from './Heal2';
 
 export default class KombatGameEngine extends GameEngine {
 
@@ -49,6 +50,7 @@ export default class KombatGameEngine extends GameEngine {
         serializer.registerClass(Blood);
         serializer.registerClass(Explosion2);
         serializer.registerClass(DeadZone);
+        serializer.registerClass(Heal2);
     }
 
     start() {
@@ -88,6 +90,9 @@ export default class KombatGameEngine extends GameEngine {
                     player.ammo_loaded = 0;
                     this.emit('shoot', player);
                 }
+            }
+            else if (inputData.input === "pickup"){
+                this.emit('pickup', player);
             }
             else if(inputData.input === 'step') {
 

@@ -19,6 +19,8 @@ var _Blood = _interopRequireDefault(require("../common/Blood"));
 
 var _Explosion = _interopRequireDefault(require("../common/Explosion2"));
 
+var _Heal = _interopRequireDefault(require("../common/Heal2"));
+
 var _DeadZone = _interopRequireDefault(require("../common/DeadZone"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -112,7 +114,7 @@ function (_Renderer) {
           return _this2.drawWall(obj);
         });
         game.world.forEachObject(function (id, obj) {
-          if (obj instanceof _Kombat.default) _this2.drawKombat(obj);else if (obj instanceof _Bullet.default) _this2.drawBullet(obj);else if (obj instanceof _Granade.default) _this2.drawGranade(obj);
+          if (obj instanceof _Kombat.default) _this2.drawKombat(obj);else if (obj instanceof _Bullet.default) _this2.drawBullet(obj);else if (obj instanceof _Granade.default) _this2.drawGranade(obj);else if (obj instanceof _Heal.default) _this2.drawHeal(obj);
         });
         game.world.queryObjects({
           instanceType: _Explosion.default
@@ -135,7 +137,7 @@ function (_Renderer) {
 
       if (obj.radius > 0) {
         var center = new _lanceGg.TwoVector(obj.position.x + this.offset.x, obj.position.y + this.offset.y);
-        ctx.shadowColor = "rgba(100,0,255,.4)";
+        ctx.shadowColor = "rgba(100,0,200,.2)";
         ctx.fillStyle = "rgba(100,0,255,.4)";
         ctx.beginPath();
         ctx.arc(center.x, center.y, obj.radius, 0, 2 * Math.PI);
@@ -277,6 +279,31 @@ function (_Renderer) {
       ctx.arc(center.x, center.y, .8, 0, 2 * Math.PI);
       ctx.stroke();
       ctx.closePath();
+    }
+  }, {
+    key: "drawHeal",
+    value: function drawHeal(obj) {
+      ctx.strokeStyle = "white";
+      ctx.shadowColor = "white";
+      var center = this.getCenter(obj);
+      var a = .75;
+      var b = .2;
+      ctx.beginPath();
+      ctx.arc(center.x, center.y, 1.2, 0, 2 * Math.PI);
+      ctx.closePath();
+      ctx.stroke(); // ctx.beginPath();
+      // ctx.rect(center.x - a, center.y - b, 2*a, .2*b);
+      // ctx.closePath();
+      // ctx.stroke();
+      // ctx.beginPath();
+      // ctx.rect(center.x - b, center.y - a, 2*b, 2*a);
+      // ctx.closePath();
+      // ctx.stroke();
+
+      ctx.fillStyle = "red";
+      ctx.shadowColor = "red";
+      ctx.fillRect(center.x - a, center.y - b, 2 * a, 2 * b);
+      ctx.fillRect(center.x - b, center.y - a, 2 * b, 2 * a);
     }
   }, {
     key: "drawWall",

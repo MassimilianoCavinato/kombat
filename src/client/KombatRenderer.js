@@ -5,6 +5,7 @@ import Granade from '../common/Granade';
 import Wall from '../common/Wall';
 import Blood from '../common/Blood';
 import Explosion2 from '../common/Explosion2';
+import Heal2 from '../common/Heal2';
 import DeadZone from '../common/DeadZone';
 
 let ctx = null;
@@ -52,6 +53,7 @@ export default class KombatRenderer extends Renderer {
                 if (obj instanceof Kombat) this.drawKombat(obj);
                 else if (obj instanceof Bullet) this.drawBullet(obj);
                 else if (obj instanceof Granade) this.drawGranade(obj);
+                else if (obj instanceof Heal2) this.drawHeal(obj);
             });
             game.world.queryObjects({instanceType: Explosion2 }).forEach(obj => this.drawExplosion(obj));
             this.drawDeadZone();
@@ -70,7 +72,7 @@ export default class KombatRenderer extends Renderer {
                 obj.position.x + this.offset.x,
                 obj.position.y + this.offset.y
             );
-            ctx.shadowColor = "rgba(100,0,255,.4)";
+            ctx.shadowColor = "rgba(100,0,200,.2)";
             ctx.fillStyle = "rgba(100,0,255,.4)";
             ctx.beginPath();
             ctx.arc(center.x, center.y, obj.radius, 0, 2 * Math.PI);
@@ -247,6 +249,32 @@ export default class KombatRenderer extends Renderer {
         ctx.arc(center.x, center.y, .8, 0, 2*Math.PI);
         ctx.stroke();
         ctx.closePath();
+    }
+
+    drawHeal(obj){
+        ctx.strokeStyle = "white";
+        ctx.shadowColor = "white";
+        let center = this.getCenter(obj);
+        let a =  .75;
+        let b = .2
+        ctx.beginPath();
+        ctx.arc(center.x, center.y, 1.2, 0, 2*Math.PI);
+        ctx.closePath();
+        ctx.stroke();
+        // ctx.beginPath();
+        // ctx.rect(center.x - a, center.y - b, 2*a, .2*b);
+        // ctx.closePath();
+        // ctx.stroke();
+        // ctx.beginPath();
+        // ctx.rect(center.x - b, center.y - a, 2*b, 2*a);
+        // ctx.closePath();
+        // ctx.stroke();
+
+        ctx.fillStyle = "red";
+        ctx.shadowColor = "red";
+        ctx.fillRect(center.x - a, center.y - b, 2*a, 2*b);
+        ctx.fillRect(center.x - b, center.y - a, 2*b, 2*a);
+      
     }
 
     drawWall(obj){

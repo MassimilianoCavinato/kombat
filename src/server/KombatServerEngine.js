@@ -142,13 +142,13 @@ export default class KombatServerEngine extends ServerEngine {
     pickup(kombat){
      
         let heals = this.gameEngine.world.queryObjects({instanceType: Heal2 });
-        heals.every(h => {
-            let d = Math.sqrt(
+        for(let i=0; i<heals.length; i++){
+             let d = Math.sqrt(
                 Math.pow( kombat.position.x+kombat.width/2 - h.position.x , 2) +  
                 Math.pow( kombat.position.y+kombat.height/2 - h.position.y,2)
             );
            
-            if(d < .75){
+            if(d < 1){
                 kombat.health += 30;
                 if(kombat.health > kombat.max_health){
                     kombat.health = kombat.max_health;
@@ -156,7 +156,7 @@ export default class KombatServerEngine extends ServerEngine {
                 this.gameEngine.removeObjectFromWorld(h.id);
                 return false;
             }
-        });
+        }
     }
 
     destroyObjectById(id) {
@@ -238,7 +238,7 @@ export default class KombatServerEngine extends ServerEngine {
                         }
                     })
                 }
-                deadZone.radius -= .05;
+                deadZone.radius -= .04;
             }
         }
     }

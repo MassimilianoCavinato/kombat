@@ -84,10 +84,11 @@ function (_ServerEngine) {
 
       this.add_Map(_map.map);
       this.add_DeadZone();
-      var heal = new _Heal.default(this.gameEngine, null, {
-        position: new _lanceGg.TwoVector(Math.floor(Math.random() * 90) + 10, Math.floor(Math.random() * 90) + 10)
-      });
-      this.gameEngine.addObjectToWorld(heal);
+    }
+  }, {
+    key: "get_randomVectorInBound",
+    value: function get_randomVectorInBound(w, h) {
+      return new _lanceGg.TwoVector(Math.floor(Math.random() * w - 16) + 8, Math.floor(Math.random() * h - 16) + 8);
     }
   }, {
     key: "add_Map",
@@ -108,19 +109,23 @@ function (_ServerEngine) {
     key: "add_DeadZone",
     value: function add_DeadZone() {
       var deadZone = new _DeadZone.default(this.gameEngine, null, {
-        position: new _lanceGg.TwoVector(Math.floor(Math.random() * 90) + 10, Math.floor(Math.random() * 90) + 10)
+        position: this.get_randomVectorInBound(100, 100)
       });
       deadZone.radius = 150;
-      this.gameEngine.addObjectToWorld(deadZone);
+      this.gameEngine.addObjectToWorld(deadZone); //add heal
+
+      var heal = new _Heal.default(this.gameEngine, null, {
+        position: this.get_randomVectorInBound(100, 100)
+      });
+      this.gameEngine.addObjectToWorld(heal);
     }
   }, {
     key: "onPlayerConnected",
     value: function onPlayerConnected(socket) {
       _get(_getPrototypeOf(KombatServerEngine.prototype), "onPlayerConnected", this).call(this, socket);
 
-      var position = RANDOM_SPAWNS[Math.floor(Math.random() * RANDOM_SPAWNS.length)].clone();
       var kombat = new _Kombat.default(this.gameEngine, null, {
-        position: position
+        position: this.get_randomVectorInBound(100, 100)
       });
       kombat.playerId = socket.playerId;
       kombat.name = 'Kombat ' + socket.playerId;
@@ -134,7 +139,7 @@ function (_ServerEngine) {
       kombat.throwing_granade = false;
       kombat.timer_shot = 0;
       kombat.timer_deadzone = 0;
-      kombat.shoot_side = 'l';
+      kombat._shoot_side = 'l';
       this.gameEngine.addObjectToWorld(kombat);
     }
   }, {

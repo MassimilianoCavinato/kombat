@@ -31,11 +31,13 @@ export default class KombatServerEngine extends ServerEngine {
         super.start();
         this.add_Map(map);
         this.add_DeadZone();
-        let heal = new Heal2(this.gameEngine, null, { position: new TwoVector(
-            Math.floor(Math.random() * 90) + 10 ,
-            Math.floor(Math.random() * 90) + 10 
-        )});
-        this.gameEngine.addObjectToWorld(heal);
+    }
+
+    get_randomVectorInBound(w, h){
+        return new TwoVector(
+            Math.floor(Math.random() * w - 16) + 8 , 
+            Math.floor(Math.random() * h - 16) + 8 
+        )
     }
 
     add_Map(map){
@@ -51,22 +53,19 @@ export default class KombatServerEngine extends ServerEngine {
     }
 
     add_DeadZone(){
-        let deadZone = new DeadZone(this.gameEngine, null, { 
-            position: new TwoVector(
-                Math.floor(Math.random() * 90) + 10 , 
-                Math.floor(Math.random() * 90) + 10 
-            )
-        });
+        let deadZone = new DeadZone(this.gameEngine, null, { position: this.get_randomVectorInBound(100, 100)});
         deadZone.radius = 150;
         this.gameEngine.addObjectToWorld(deadZone);
+
+        //add heal
+        let heal = new Heal2(this.gameEngine, null, { position: this.get_randomVectorInBound(100, 100)});
+        this.gameEngine.addObjectToWorld(heal);
     }
+
     onPlayerConnected(socket) {
         super.onPlayerConnected(socket);
-        let position = RANDOM_SPAWNS[Math.floor(Math.random()*RANDOM_SPAWNS.length)].clone();
-        let kombat = new Kombat(this.gameEngine, null, { 
-            position: position,
-        });
 
+        let kombat = new Kombat(this.gameEngine, null, { position: this.get_randomVectorInBound(100, 100)});
 
         kombat.playerId = socket.playerId;
         kombat.name = 'Kombat '+socket.playerId;
@@ -80,7 +79,7 @@ export default class KombatServerEngine extends ServerEngine {
         kombat.throwing_granade = false;
         kombat.timer_shot = 0;
         kombat.timer_deadzone = 0;
-        kombat.shoot_side = 'l';
+        kombat._shoot_side = 'l';
         this.gameEngine.addObjectToWorld(kombat);
     }
 

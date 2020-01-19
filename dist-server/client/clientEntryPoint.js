@@ -26,34 +26,14 @@ var defaults = {
   }
 };
 var options = Object.assign(defaults, qsOptions);
-var gameEngine = new _KombatGameEngine.default(options);
-;
-var clientEngine = null;
 document.addEventListener('DOMContentLoaded', function (e) {
+  var gameEngine = new _KombatGameEngine.default(options);
+  var clientEngine = new _KombatClientEngine.default(gameEngine, options);
+
   if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
     alert('mobile controllers not available');
   } else {
-    var NI = document.getElementById('kombat-name');
-    NI.addEventListener('click', function (e) {
-      NI.focus();
-    });
-    var PB = document.getElementById('kombat-play-button');
-    PB.addEventListener('click', function (e) {
-      var kc = document.getElementById('kc');
-
-      if (kc) {
-        kc.remove();
-      }
-
-      var canvas = document.createElement('canvas');
-      canvas.setAttribute('id', 'kc');
-      canvas.width = 800;
-      canvas.height = 600;
-      document.body.appendChild(canvas);
-      clientEngine = new _KombatClientEngine.default(gameEngine, options);
-      document.querySelector('#kombat-menu').style.display = "none";
-      clientEngine.start();
-    });
+    clientEngine.start();
   }
 });
 //# sourceMappingURL=clientEntryPoint.js.map

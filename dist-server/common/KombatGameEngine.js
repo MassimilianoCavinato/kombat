@@ -193,10 +193,13 @@ function (_GameEngine) {
           }
 
           player.direction = inputData.options.angle;
-        } else if (inputData.input === 'kombat_name') {
-          if (inputData.options.kombat_name.length > 0) {
-            player.name = inputData.options.kombat_name;
-          }
+        }
+      } else {
+        if (inputData.input === 'play') {
+          this.emit('play', {
+            playerId: inputData.options.playerId,
+            name: inputData.options.name
+          });
         }
       }
     }

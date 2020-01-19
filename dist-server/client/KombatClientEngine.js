@@ -9,6 +9,8 @@ var _lanceGg = require("lance-gg");
 
 var _KombatRenderer = _interopRequireDefault(require("../client/KombatRenderer"));
 
+var _Kombat = _interopRequireDefault(require("../common/Kombat"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -46,9 +48,18 @@ function (_ClientEngine) {
     _this.left = false;
     _this.down = false;
     _this.mouseIsDown = false;
-    _this.controls = new _lanceGg.KeyboardControls(_assertThisInitialized(_this)); //LISTENERS
+    _this.controls = new _lanceGg.KeyboardControls(_assertThisInitialized(_this));
+    _this.is_started = false; //LISTENERS
 
+    document.addEventListener('keydown', function (e) {
+      return _this.handleKeyDown(e);
+    });
+    document.addEventListener('keyup', function (e) {
+      return _this.handleKeyUp(e);
+    });
     var GAME_CANVAS = document.getElementById('kc');
+    GAME_CANVAS.width = 800;
+    GAME_CANVAS.height = 600;
     GAME_CANVAS.addEventListener('mouseenter', function (e) {
       return _this.updateAngle(e);
     });
@@ -64,11 +75,19 @@ function (_ClientEngine) {
     GAME_CANVAS.addEventListener('contextmenu', function (e) {
       return e.preventDefault();
     });
-    document.addEventListener('keydown', function (e) {
-      return _this.handleKeyDown(e);
+    var NI = document.getElementById('kombat-name');
+    var PB = document.getElementById('kombat-play-button');
+    NI.addEventListener('click', function (e) {
+      NI.focus();
     });
-    document.addEventListener('keyup', function (e) {
-      return _this.handleKeyUp(e);
+    PB.addEventListener('click', function (e) {
+      _this.sendInput('play', {
+        repeat: false,
+        playerId: _this.gameEngine.playerId,
+        name: document.querySelector('#kombat-name').value
+      });
+
+      document.querySelector('#kombat-menu').style.display = "none";
     });
 
     _this.gameEngine.on('client__preStep', function () {
@@ -77,18 +96,8 @@ function (_ClientEngine) {
 
     _this.gameEngine.on('objectDestroyed', function (obj) {
       if (obj.playerId === gameEngine.playerId && obj.type === "Kombat") {
-        window.location.reload();
+        document.querySelector('#kombat-menu').style.display = "block";
       }
-    });
-
-    _this.gameEngine.on('start', function (e) {
-      var kombat_name = document.querySelector('#kombat-name').value;
-      setTimeout(function () {
-        return _this.sendInput('kombat_name', {
-          repeat: false,
-          kombat_name: kombat_name.toString().trim()
-        });
-      }, 2000);
     });
 
     return _this;

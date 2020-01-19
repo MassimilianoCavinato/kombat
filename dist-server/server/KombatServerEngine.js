@@ -63,6 +63,8 @@ function (_ServerEngine) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(KombatServerEngine).call(this, io, gameEngine, inputOptions));
 
+    _this.gameEngine.on('play', _this.play.bind(_assertThisInitialized(_this)));
+
     _this.gameEngine.on('shoot', _this.shoot.bind(_assertThisInitialized(_this)));
 
     _this.gameEngine.on('granade', _this.granade.bind(_assertThisInitialized(_this)));
@@ -86,9 +88,30 @@ function (_ServerEngine) {
       this.add_DeadZone();
     }
   }, {
+    key: "play",
+    value: function play(obj) {
+      var kombat = new _Kombat.default(this.gameEngine, null, {
+        position: this.get_randomVectorInBound(100, 100)
+      });
+      kombat.playerId = obj.playerId;
+      kombat.name = obj.name.trim().length < 1 ? 'Kombat ' + obj.playerId : obj.name;
+      kombat.max_health = 100;
+      kombat.health = 100;
+      kombat.ammo_capacity = 64;
+      kombat.ammo_loaded = 64;
+      kombat.granade_capacity = 48;
+      kombat.granade_loaded = 48;
+      kombat.throw_power = 0;
+      kombat.throwing_granade = false;
+      kombat.timer_shot = 0;
+      kombat.timer_deadzone = 0;
+      kombat._shoot_side = 'l';
+      this.gameEngine.addObjectToWorld(kombat);
+    }
+  }, {
     key: "get_randomVectorInBound",
     value: function get_randomVectorInBound(w, h) {
-      return new _lanceGg.TwoVector(Math.floor(Math.random() * w - 16) + 8, Math.floor(Math.random() * h - 16) + 8);
+      return new _lanceGg.TwoVector(Math.floor(Math.random() * (w - 16)) + 8, Math.floor(Math.random() * (h - 16)) + 8);
     }
   }, {
     key: "add_Map",
@@ -108,11 +131,23 @@ function (_ServerEngine) {
   }, {
     key: "add_DeadZone",
     value: function add_DeadZone() {
+      var _this3 = this;
+
       var deadZone = new _DeadZone.default(this.gameEngine, null, {
         position: this.get_randomVectorInBound(100, 100)
       });
       deadZone.radius = 150;
-      this.gameEngine.addObjectToWorld(deadZone); //add heal
+      this.gameEngine.addObjectToWorld(deadZone);
+      var heals = this.gameEngine.world.queryObjects({
+        instanceType: _Heal.default
+      });
+
+      if (heals.length === 10) {
+        heals.forEach(function (h) {
+          return _this3.destroyObjectById(h.id);
+        });
+      } //add heal
+
 
       var heal = new _Heal.default(this.gameEngine, null, {
         position: this.get_randomVectorInBound(100, 100)
@@ -123,24 +158,6 @@ function (_ServerEngine) {
     key: "onPlayerConnected",
     value: function onPlayerConnected(socket) {
       _get(_getPrototypeOf(KombatServerEngine.prototype), "onPlayerConnected", this).call(this, socket);
-
-      var kombat = new _Kombat.default(this.gameEngine, null, {
-        position: this.get_randomVectorInBound(100, 100)
-      });
-      kombat.playerId = socket.playerId;
-      kombat.name = 'Kombat ' + socket.playerId;
-      kombat.max_health = 100;
-      kombat.health = 100;
-      kombat.ammo_capacity = 64;
-      kombat.ammo_loaded = 64;
-      kombat.granade_capacity = 48;
-      kombat.granade_loaded = 48;
-      kombat.throw_power = 0;
-      kombat.throwing_granade = false;
-      kombat.timer_shot = 0;
-      kombat.timer_deadzone = 0;
-      kombat._shoot_side = 'l';
-      this.gameEngine.addObjectToWorld(kombat);
     }
   }, {
     key: "onPlayerDisconnected",
@@ -250,7 +267,7 @@ function (_ServerEngine) {
   }, {
     key: "explode",
     value: function explode(granadeId) {
-      var _this3 = this;
+      var _this4 = this;
 
       var granade = this.gameEngine.world.queryObject({
         id: granadeId,
@@ -283,17 +300,17 @@ function (_ServerEngine) {
               k.health -= 3;
             }
 
-            var blood = new _Blood.default(_this3.gameEngine, null, {
+            var blood = new _Blood.default(_this4.gameEngine, null, {
               position: k.position.clone()
             });
 
             if (k.health <= 0) {
-              _this3.destroyObjectById(k.id);
+              _this4.destroyObjectById(k.id);
             }
 
-            _this3.gameEngine.addObjectToWorld(blood);
+            _this4.gameEngine.addObjectToWorld(blood);
 
-            _this3.gameEngine.timer.add(600, _this3.destroyObjectById, _this3, [blood.id]);
+            _this4.gameEngine.timer.add(600, _this4.destroyObjectById, _this4, [blood.id]);
           }
         });
       }
@@ -301,7 +318,7 @@ function (_ServerEngine) {
   }, {
     key: "postStep",
     value: function postStep(stepInfo) {
-      var _this4 = this;
+      var _this5 = this;
 
       var deadZone = this.gameEngine.world.queryObject({
         instanceType: _DeadZone.default
@@ -337,17 +354,17 @@ function (_ServerEngine) {
 
               if (distance >= deadZone.radius) {
                 k.health -= damage;
-                var blood = new _Blood.default(_this4.gameEngine, null, {
+                var blood = new _Blood.default(_this5.gameEngine, null, {
                   position: k.position.clone()
                 });
 
                 if (k.health <= 0) {
-                  _this4.destroyObjectById(k.id);
+                  _this5.destroyObjectById(k.id);
                 }
 
-                _this4.gameEngine.addObjectToWorld(blood);
+                _this5.gameEngine.addObjectToWorld(blood);
 
-                _this4.gameEngine.timer.add(600, _this4.destroyObjectById, _this4, [blood.id]);
+                _this5.gameEngine.timer.add(600, _this5.destroyObjectById, _this5, [blood.id]);
               }
             });
           }

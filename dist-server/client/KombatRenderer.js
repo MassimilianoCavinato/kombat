@@ -94,37 +94,64 @@ function (_Renderer) {
       ctx.save();
       ctx.translate(0, 0);
       ctx.scale(this.clientEngine.zoom, this.clientEngine.zoom);
-      ctx.lineWidth = 3 / this.clientEngine.zoom;
+      ctx.lineWidth = 3 / this.clientEngine.zoom; //draw blood stains first // layer 0
+
       var playerKombat = this.gameEngine.world.queryObject({
         playerId: this.gameEngine.playerId,
         instanceType: _Kombat.default
       });
+      game.world.queryObjects({
+        instanceType: _Blood.default
+      }).forEach(function (obj) {
+        return _this2.drawBlood(obj);
+      });
+      game.world.queryObjects({
+        instanceType: _Wall.default
+      }).forEach(function (obj) {
+        return _this2.drawWall(obj);
+      });
 
       if (playerKombat) {
-        this.setOffset(playerKombat); //draw blood stains first // layer 0
-
-        game.world.queryObjects({
-          instanceType: _Blood.default
-        }).forEach(function (obj) {
-          return _this2.drawBlood(obj);
+        this.setOffset(playerKombat);
+      } else {
+        this.setOffset({
+          position: {
+            x: 50,
+            y: 50
+          },
+          width: 2,
+          height: 2
         });
-        game.world.queryObjects({
-          instanceType: _Wall.default
-        }).forEach(function (obj) {
-          return _this2.drawWall(obj);
-        });
-        game.world.forEachObject(function (id, obj) {
-          if (obj instanceof _Kombat.default) _this2.drawKombat(obj);else if (obj instanceof _Bullet.default) _this2.drawBullet(obj);else if (obj instanceof _Granade.default) _this2.drawGranade(obj);else if (obj instanceof _Heal.default) _this2.drawHeal(obj);
-        });
-        game.world.queryObjects({
-          instanceType: _Explosion.default
-        }).forEach(function (obj) {
-          return _this2.drawExplosion(obj);
-        });
-        this.drawDeadZone();
-        ctx.lineWidth = 3 / this.clientEngine.zoom;
-        this.drawHUD(playerKombat); // this.updateDebugger(playerKombat, t, dt);
       }
+
+      game.world.forEachObject(function (id, obj) {
+        if (obj instanceof _Kombat.default) _this2.drawKombat(obj);else if (obj instanceof _Bullet.default) _this2.drawBullet(obj);else if (obj instanceof _Granade.default) _this2.drawGranade(obj);else if (obj instanceof _Heal.default) _this2.drawHeal(obj);
+      });
+      game.world.queryObjects({
+        instanceType: _Explosion.default
+      }).forEach(function (obj) {
+        return _this2.drawExplosion(obj);
+      });
+      this.drawDeadZone();
+
+      if (playerKombat) {
+        this.drawHUD(playerKombat);
+      } //     // this.updateDebugger(playerKombat, t, dt);
+      // }
+      // else{
+      //     //draw blood stains first // layer 0
+      //     game.world.queryObjects({instanceType: Blood }).forEach(obj => this.drawBlood(obj));
+      //     game.world.queryObjects({instanceType: Wall }).forEach(obj => this.drawWall(obj));
+      //     game.world.forEachObject((id, obj) => {
+      //         if (obj instanceof Kombat) this.drawKombat(obj);
+      //         else if (obj instanceof Bullet) this.drawBullet(obj);
+      //         else if (obj instanceof Granade) this.drawGranade(obj);
+      //         else if (obj instanceof Heal2) this.drawHeal(obj);
+      //     });
+      //     game.world.queryObjects({instanceType: Explosion2 }).forEach(obj => this.drawExplosion(obj));
+      //     ctx.lineWidth = 3 / this.clientEngine.zoom;
+      // }
+
 
       ctx.restore();
     }
@@ -134,18 +161,21 @@ function (_Renderer) {
       var obj = this.gameEngine.world.queryObject({
         instanceType: _DeadZone.default
       });
-      ctx.shadowColor = "rgba(100,0,200,.2)";
-      ctx.fillStyle = "rgba(100,0,255,.4)";
 
-      if (obj.radius > 0) {
-        var center = new _lanceGg.TwoVector(obj.position.x + this.offset.x, obj.position.y + this.offset.y);
-        ctx.beginPath();
-        ctx.arc(center.x, center.y, obj.radius, 0, 2 * Math.PI);
-        ctx.rect(800 / this.clientEngine.zoom, 0, -800 / this.clientEngine.zoom, 600 / this.clientEngine.zoom);
-        ctx.closePath();
-        ctx.fill();
-      } else {
-        ctx.fillRect(0, 0, 800 / this.clientEngine.zoom, 600 / this.clientEngine.zoom);
+      if (obj) {
+        ctx.shadowColor = "rgba(100,0,200,.2)";
+        ctx.fillStyle = "rgba(100,0,255,.4)";
+
+        if (obj.radius > 0) {
+          var center = new _lanceGg.TwoVector(obj.position.x + this.offset.x, obj.position.y + this.offset.y);
+          ctx.beginPath();
+          ctx.arc(center.x, center.y, obj.radius, 0, 2 * Math.PI);
+          ctx.rect(800 / this.clientEngine.zoom, 0, -800 / this.clientEngine.zoom, 600 / this.clientEngine.zoom);
+          ctx.closePath();
+          ctx.fill();
+        } else {
+          ctx.fillRect(0, 0, 800 / this.clientEngine.zoom, 600 / this.clientEngine.zoom);
+        }
       }
     }
   }, {

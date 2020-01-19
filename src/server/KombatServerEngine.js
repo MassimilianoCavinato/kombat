@@ -20,6 +20,7 @@ export default class KombatServerEngine extends ServerEngine {
 
     constructor(io, gameEngine, inputOptions) {
         super(io, gameEngine, inputOptions);
+        this.gameEngine.on('play', this.play.bind(this));
         this.gameEngine.on('shoot', this.shoot.bind(this));
         this.gameEngine.on('granade', this.granade.bind(this));
         this.gameEngine.on('pickup', this.pickup.bind(this));
@@ -33,10 +34,29 @@ export default class KombatServerEngine extends ServerEngine {
         this.add_DeadZone();
     }
 
+    play(obj){
+        let kombat = new Kombat(this.gameEngine, null, { position: this.get_randomVectorInBound(100, 100)});
+        kombat.playerId = obj.playerId;
+        kombat.name = obj.name.trim().length < 1 ? 'Kombat '+ obj.playerId : obj.name;
+        kombat.max_health = 100;
+        kombat.health = 100;
+        kombat.ammo_capacity = 64;
+        kombat.ammo_loaded =  64;
+        kombat.granade_capacity = 48;
+        kombat.granade_loaded =  48;
+        kombat.throw_power = 0;
+        kombat.throwing_granade = false;
+        kombat.timer_shot = 0;
+        kombat.timer_deadzone = 0;
+        kombat._shoot_side = 'l';
+        this.gameEngine.addObjectToWorld(kombat);
+
+    }
+
     get_randomVectorInBound(w, h){
         return new TwoVector(
-            Math.floor(Math.random() * w - 16) + 8 , 
-            Math.floor(Math.random() * h - 16) + 8 
+            Math.floor(Math.random() * (w - 16)) + 8 , 
+            Math.floor(Math.random() * (h - 16)) + 8 
         )
     }
 
@@ -56,7 +76,10 @@ export default class KombatServerEngine extends ServerEngine {
         let deadZone = new DeadZone(this.gameEngine, null, { position: this.get_randomVectorInBound(100, 100)});
         deadZone.radius = 150;
         this.gameEngine.addObjectToWorld(deadZone);
-
+        let heals = this.gameEngine.world.queryObjects({ instanceType: Heal2 });
+        if(heals.length === 10){
+            heals.forEach(h => this.destroyObjectById(h.id));
+        }
         //add heal
         let heal = new Heal2(this.gameEngine, null, { position: this.get_randomVectorInBound(100, 100)});
         this.gameEngine.addObjectToWorld(heal);
@@ -64,23 +87,6 @@ export default class KombatServerEngine extends ServerEngine {
 
     onPlayerConnected(socket) {
         super.onPlayerConnected(socket);
-
-        let kombat = new Kombat(this.gameEngine, null, { position: this.get_randomVectorInBound(100, 100)});
-
-        kombat.playerId = socket.playerId;
-        kombat.name = 'Kombat '+socket.playerId;
-        kombat.max_health = 100;
-        kombat.health = 100;
-        kombat.ammo_capacity = 64;
-        kombat.ammo_loaded =  64;
-        kombat.granade_capacity = 48;
-        kombat.granade_loaded =  48;
-        kombat.throw_power = 0;
-        kombat.throwing_granade = false;
-        kombat.timer_shot = 0;
-        kombat.timer_deadzone = 0;
-        kombat._shoot_side = 'l';
-        this.gameEngine.addObjectToWorld(kombat);
     }
 
     onPlayerDisconnected(socketId, playerId) {

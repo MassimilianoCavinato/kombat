@@ -1,5 +1,6 @@
 import { ClientEngine, KeyboardControls } from 'lance-gg';
 import KombatRenderer from '../client/KombatRenderer';
+import Kombat from '../common/Kombat';
 
 export default class KombatClientEngine extends ClientEngine {
 
@@ -14,25 +15,38 @@ export default class KombatClientEngine extends ClientEngine {
         this.down = false;
         this.mouseIsDown = false;
         this.controls = new KeyboardControls(this);
+        this.is_started = false;
         //LISTENERS
+        document.addEventListener('keydown', (e) => this.handleKeyDown(e));
+        document.addEventListener('keyup', (e) => this.handleKeyUp(e));
+
         let GAME_CANVAS = document.getElementById('kc');
+        GAME_CANVAS.width = 800;
+        GAME_CANVAS.height = 600;
         GAME_CANVAS.addEventListener('mouseenter', (e) => this.updateAngle(e));
         GAME_CANVAS.addEventListener('mousemove', (e) => this.updateAngle(e));
         GAME_CANVAS.addEventListener('mousedown', (e) => this.handleMouse(e));
         GAME_CANVAS.addEventListener('mouseup', (e) => this.handleMouse(e));
         GAME_CANVAS.addEventListener('contextmenu', (e) => e.preventDefault());
-        document.addEventListener('keydown', (e) => this.handleKeyDown(e));
-        document.addEventListener('keyup', (e) => this.handleKeyUp(e));
+        let NI = document.getElementById('kombat-name')
+        let PB = document.getElementById('kombat-play-button');
+        NI.addEventListener('click', e =>{
+            NI.focus()
+        });
+        PB.addEventListener('click', e => {
+            this.sendInput('play', { 
+                repeat: false,
+                playerId: this.gameEngine.playerId,
+                name: document.querySelector('#kombat-name').value 
+            });
+            document.querySelector('#kombat-menu').style.display = "none";
+
+        });
         this.gameEngine.on('client__preStep', () => this.preStep());
         this.gameEngine.on('objectDestroyed', (obj) => {
             if (obj.playerId === gameEngine.playerId && obj.type === "Kombat") {
-                window.location.reload();
+                document.querySelector('#kombat-menu').style.display = "block";
             }
-        });
-        this.gameEngine.on('start', (e) => {
-            
-            let kombat_name = document.querySelector('#kombat-name').value;
-            setTimeout(() => this.sendInput('kombat_name', { repeat: false, kombat_name: kombat_name.toString().trim()}), 2000);
         });
     }
 
@@ -42,7 +56,6 @@ export default class KombatClientEngine extends ClientEngine {
     }
     
     preStep() {
-        
         let player = this.gameEngine.world.queryObject({ playerId: this.gameEngine.playerId });
         
         if(player !== null){

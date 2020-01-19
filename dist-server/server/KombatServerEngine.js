@@ -106,6 +106,7 @@ function (_ServerEngine) {
       kombat.timer_shot = 0;
       kombat.timer_deadzone = 0;
       kombat._shoot_side = 'l';
+      kombat.scope = 15;
       this.gameEngine.addObjectToWorld(kombat);
     }
   }, {

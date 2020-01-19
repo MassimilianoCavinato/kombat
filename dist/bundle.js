@@ -10263,6 +10263,9 @@ function (_DynamicObject) {
         granade_loaded: {
           type: __WEBPACK_IMPORTED_MODULE_0_lance_gg__["BaseTypes"].TYPES.INT8
         },
+        scope: {
+          type: __WEBPACK_IMPORTED_MODULE_0_lance_gg__["BaseTypes"].TYPES.INT8
+        },
         throw_power: {
           type: __WEBPACK_IMPORTED_MODULE_0_lance_gg__["BaseTypes"].TYPES.FLOAT32
         },
@@ -17270,7 +17273,7 @@ function (_ClientEngine) {
     _this.down = false;
     _this.mouseIsDown = false;
     _this.controls = new __WEBPACK_IMPORTED_MODULE_0_lance_gg__["KeyboardControls"](_assertThisInitialized(_this));
-    _this.is_started = false; //LISTENERS
+    _this.zoom = 10; //LISTENERS
 
     document.addEventListener('keydown', function (e) {
       return _this.handleKeyDown(e);
@@ -17488,9 +17491,7 @@ function (_Renderer) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(KombatRenderer).call(this, gameEngine, clientEngine));
     game = gameEngine;
     canvas = document.getElementById('kc');
-    clientEngine.zoom = 15;
     ctx = canvas.getContext('2d');
-    ctx.lineWidth = 3 / clientEngine.zoom;
     ctx.shadowOffsetX = 1;
     ctx.shadowOffsetY = 1;
     ctx.shadowBlur = 15;
@@ -17501,8 +17502,8 @@ function (_Renderer) {
   _createClass(KombatRenderer, [{
     key: "setOffset",
     value: function setOffset(playerKombat) {
-      this.offset.x = C_WIDTH / 2 / this.clientEngine.zoom - playerKombat.position.x - playerKombat.width / 2;
-      this.offset.y = C_HEIGHT / 2 / this.clientEngine.zoom - playerKombat.position.y - playerKombat.height / 2;
+      this.offset.x = C_WIDTH / 2 / playerKombat.scope - playerKombat.position.x - playerKombat.width / 2;
+      this.offset.y = C_HEIGHT / 2 / playerKombat.scope - playerKombat.position.y - playerKombat.height / 2;
     }
   }, {
     key: "draw",
@@ -17513,14 +17514,24 @@ function (_Renderer) {
 
       ctx.clearRect(0, 0, C_WIDTH, C_HEIGHT);
       ctx.save();
-      ctx.translate(0, 0);
-      ctx.scale(this.clientEngine.zoom, this.clientEngine.zoom);
-      ctx.lineWidth = 3 / this.clientEngine.zoom; //draw blood stains first // layer 0
+      ctx.translate(0, 0); //draw blood stains first // layer 0
 
       var playerKombat = this.gameEngine.world.queryObject({
         playerId: this.gameEngine.playerId,
         instanceType: __WEBPACK_IMPORTED_MODULE_1__common_Kombat__["a" /* default */]
       });
+
+      if (playerKombat) {
+        ctx.lineWidth = 3 / playerKombat.scope;
+        ctx.scale(playerKombat.scope, playerKombat.scope);
+        this.setOffset(playerKombat);
+      } else {
+        ctx.lineWidth = 3 / this.clientEngine.zoom;
+        ctx.scale(this.clientEngine.zoom, this.clientEngine.zoom);
+        this.offset.x = 10;
+        this.offset.y = 10;
+      }
+
       game.world.queryObjects({
         instanceType: __WEBPACK_IMPORTED_MODULE_5__common_Blood__["a" /* default */]
       }).forEach(function (obj) {
@@ -17531,20 +17542,6 @@ function (_Renderer) {
       }).forEach(function (obj) {
         return _this2.drawWall(obj);
       });
-
-      if (playerKombat) {
-        this.setOffset(playerKombat);
-      } else {
-        this.setOffset({
-          position: {
-            x: 50,
-            y: 50
-          },
-          width: 2,
-          height: 2
-        });
-      }
-
       game.world.forEachObject(function (id, obj) {
         if (obj instanceof __WEBPACK_IMPORTED_MODULE_1__common_Kombat__["a" /* default */]) _this2.drawKombat(obj);else if (obj instanceof __WEBPACK_IMPORTED_MODULE_2__common_Bullet__["a" /* default */]) _this2.drawBullet(obj);else if (obj instanceof __WEBPACK_IMPORTED_MODULE_3__common_Granade__["a" /* default */]) _this2.drawGranade(obj);else if (obj instanceof __WEBPACK_IMPORTED_MODULE_7__common_Heal2__["a" /* default */]) _this2.drawHeal(obj);
       });

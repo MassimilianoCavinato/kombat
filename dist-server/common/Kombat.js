@@ -62,6 +62,9 @@ function (_DynamicObject) {
         granade_loaded: {
           type: _lanceGg.BaseTypes.TYPES.INT8
         },
+        scope: {
+          type: _lanceGg.BaseTypes.TYPES.INT8
+        },
         throw_power: {
           type: _lanceGg.BaseTypes.TYPES.FLOAT32
         },

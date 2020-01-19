@@ -19,11 +19,9 @@ export default class KombatRenderer extends Renderer {
     constructor(gameEngine, clientEngine) {
         super(gameEngine, clientEngine);
         game = gameEngine;
-        
         canvas = document.getElementById('kc');
-        clientEngine.zoom = 15;
         ctx = canvas.getContext('2d');
-        ctx.lineWidth = 3 / clientEngine.zoom;
+        
         ctx.shadowOffsetX = 1;
         ctx.shadowOffsetY = 1;
         ctx.shadowBlur = 15; 
@@ -31,8 +29,8 @@ export default class KombatRenderer extends Renderer {
     }
 
     setOffset(playerKombat){
-        this.offset.x = (C_WIDTH/2)/this.clientEngine.zoom - playerKombat.position.x - (playerKombat.width / 2);
-        this.offset.y = (C_HEIGHT/2)/this.clientEngine.zoom - playerKombat.position.y - (playerKombat.height / 2);
+        this.offset.x = (C_WIDTH/2)/playerKombat.scope - playerKombat.position.x - (playerKombat.width / 2);
+        this.offset.y = (C_HEIGHT/2)/playerKombat.scope - playerKombat.position.y - (playerKombat.height / 2);
     }
 
     draw(t, dt) {
@@ -41,21 +39,22 @@ export default class KombatRenderer extends Renderer {
         ctx.clearRect(0, 0, C_WIDTH, C_HEIGHT);
         ctx.save();
         ctx.translate(0, 0);
-        ctx.scale(this.clientEngine.zoom, this.clientEngine.zoom);
-        ctx.lineWidth = 3 / this.clientEngine.zoom;
 
         //draw blood stains first // layer 0
         let playerKombat = this.gameEngine.world.queryObject({ playerId: this.gameEngine.playerId,  instanceType: Kombat });
-        game.world.queryObjects({instanceType: Blood }).forEach(obj => this.drawBlood(obj));
-        game.world.queryObjects({instanceType: Wall }).forEach(obj => this.drawWall(obj));
-        
         if(playerKombat){
+            ctx.lineWidth = 3 / playerKombat.scope;
+            ctx.scale(playerKombat.scope, playerKombat.scope);
             this.setOffset(playerKombat);
         }
         else{
-            this.setOffset({ position: { x: 50, y: 50 }, width: 2, height: 2 });
-        }  
-
+            ctx.lineWidth = 3 / this.clientEngine.zoom;
+            ctx.scale(this.clientEngine.zoom, this.clientEngine.zoom);
+            this.offset.x = 0;
+            this.offset.y = 0;
+        } 
+        game.world.queryObjects({instanceType: Blood }).forEach(obj => this.drawBlood(obj));
+        game.world.queryObjects({instanceType: Wall }).forEach(obj => this.drawWall(obj));
         game.world.forEachObject((id, obj) => {
             if (obj instanceof Kombat) this.drawKombat(obj);
             else if (obj instanceof Bullet) this.drawBullet(obj);
@@ -65,6 +64,7 @@ export default class KombatRenderer extends Renderer {
 
         game.world.queryObjects({instanceType: Explosion2 }).forEach(obj => this.drawExplosion(obj));
         this.drawDeadZone();
+
         if(playerKombat){
             this.drawHUD(playerKombat);
         }

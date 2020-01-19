@@ -49,7 +49,7 @@ function (_ClientEngine) {
     _this.down = false;
     _this.mouseIsDown = false;
     _this.controls = new _lanceGg.KeyboardControls(_assertThisInitialized(_this));
-    _this.is_started = false; //LISTENERS
+    _this.zoom = 10; //LISTENERS
 
     document.addEventListener('keydown', function (e) {
       return _this.handleKeyDown(e);

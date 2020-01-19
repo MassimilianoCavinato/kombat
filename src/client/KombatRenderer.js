@@ -67,18 +67,26 @@ export default class KombatRenderer extends Renderer {
 
     drawDeadZone(){
         let obj = this.gameEngine.world.queryObject({ instanceType: DeadZone });
+        ctx.shadowColor = "rgba(100,0,200,.2)";
+        ctx.fillStyle = "rgba(100,0,255,.4)";
         if(obj.radius > 0){
             let center = new TwoVector(
                 obj.position.x + this.offset.x,
                 obj.position.y + this.offset.y
             );
-            ctx.shadowColor = "rgba(100,0,200,.2)";
-            ctx.fillStyle = "rgba(100,0,255,.4)";
             ctx.beginPath();
             ctx.arc(center.x, center.y, obj.radius, 0, 2 * Math.PI);
-            ctx.rect(800/this.clientEngine.zoom, 0, -800/this.clientEngine.zoom, 600/this.clientEngine.zoom, 2 * Math.PI);
+            ctx.rect(
+                800/this.clientEngine.zoom, 
+                0, 
+                -800/this.clientEngine.zoom, 
+                600/this.clientEngine.zoom
+            );
             ctx.closePath();
             ctx.fill();
+        }
+        else{
+            ctx.fillRect(0,0, 800/this.clientEngine.zoom, 600/this.clientEngine.zoom);
         }
     }
 

@@ -143,12 +143,13 @@ export default class KombatServerEngine extends ServerEngine {
      
         let heals = this.gameEngine.world.queryObjects({instanceType: Heal2 });
         for(let i=0; i<heals.length; i++){
+            let h = heals[i];
              let d = Math.sqrt(
                 Math.pow( kombat.position.x+kombat.width/2 - h.position.x , 2) +  
                 Math.pow( kombat.position.y+kombat.height/2 - h.position.y,2)
             );
            
-            if(d < 1){
+            if(d < 1.5){
                 kombat.health += 30;
                 if(kombat.health > kombat.max_health){
                     kombat.health = kombat.max_health;
@@ -212,7 +213,9 @@ export default class KombatServerEngine extends ServerEngine {
 
         let deadZone = this.gameEngine.world.queryObject({ instanceType : DeadZone });
         if(deadZone){
-            if(deadZone.radius <= 0){
+
+            if(deadZone.radius < -10){
+
                 deadZone.position.x = Math.floor(Math.random() * 90) + 10
                 deadZone.position.y = Math.floor(Math.random() * 90) + 10 
                 deadZone.radius = 150;
@@ -220,15 +223,26 @@ export default class KombatServerEngine extends ServerEngine {
                 this.gameEngine.addObjectToWorld(heal);
             }
             else{
+
                 if(stepInfo.step - this.deadzoneTimer > 60 ){
                     this.deadzoneTimer = stepInfo.step;
                     let kombats = this.gameEngine.world.queryObjects({ instanceType : Kombat });
+                    let damage = 2;
+                    if(deadZone.radius < 50){
+                        damage += 2;
+                    }
+                    else if(deadZone.radius < 30){
+                        damage += 4;
+                    }
+                    else if(deadZone.radius < 10){
+                        damage += 6;
+                    }
                     kombats.forEach(k => {
                         let distance = Math.sqrt(
                             Math.pow( k.position.x + k.width/2 - deadZone.x , 2) +  Math.pow( k.position.y + k.height/2 - deadZone.position.y,2)
                         );
                         if(distance >= deadZone.radius){
-                            k.health--;
+                            k.health -= damage;
                             let blood = new Blood(this.gameEngine, null, { position: k.position.clone() });
                             if(k.health <= 0){
                                 this.destroyObjectById(k.id);

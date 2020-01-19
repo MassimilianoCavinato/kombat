@@ -189,26 +189,25 @@ function (_ServerEngine) {
   }, {
     key: "pickup",
     value: function pickup(kombat) {
-      var _this3 = this;
-
       var heals = this.gameEngine.world.queryObjects({
         instanceType: _Heal.default
       });
-      heals.every(function (h) {
+
+      for (var i = 0; i < heals.length; i++) {
+        var h = heals[i];
         var d = Math.sqrt(Math.pow(kombat.position.x + kombat.width / 2 - h.position.x, 2) + Math.pow(kombat.position.y + kombat.height / 2 - h.position.y, 2));
 
-        if (d < .75) {
+        if (d < 1.5) {
           kombat.health += 30;
 
           if (kombat.health > kombat.max_health) {
             kombat.health = kombat.max_health;
           }
 
-          _this3.gameEngine.removeObjectFromWorld(h.id);
-
+          this.gameEngine.removeObjectFromWorld(h.id);
           return false;
         }
-      });
+      }
     }
   }, {
     key: "destroyObjectById",
@@ -232,7 +231,7 @@ function (_ServerEngine) {
   }, {
     key: "explode",
     value: function explode(granadeId) {
-      var _this4 = this;
+      var _this3 = this;
 
       var granade = this.gameEngine.world.queryObject({
         id: granadeId,
@@ -265,17 +264,17 @@ function (_ServerEngine) {
               k.health -= 3;
             }
 
-            var blood = new _Blood.default(_this4.gameEngine, null, {
+            var blood = new _Blood.default(_this3.gameEngine, null, {
               position: k.position.clone()
             });
 
             if (k.health <= 0) {
-              _this4.destroyObjectById(k.id);
+              _this3.destroyObjectById(k.id);
             }
 
-            _this4.gameEngine.addObjectToWorld(blood);
+            _this3.gameEngine.addObjectToWorld(blood);
 
-            _this4.gameEngine.timer.add(600, _this4.destroyObjectById, _this4, [blood.id]);
+            _this3.gameEngine.timer.add(600, _this3.destroyObjectById, _this3, [blood.id]);
           }
         });
       }
@@ -283,14 +282,14 @@ function (_ServerEngine) {
   }, {
     key: "postStep",
     value: function postStep(stepInfo) {
-      var _this5 = this;
+      var _this4 = this;
 
       var deadZone = this.gameEngine.world.queryObject({
         instanceType: _DeadZone.default
       });
 
       if (deadZone) {
-        if (deadZone.radius <= 0) {
+        if (deadZone.radius < -10) {
           deadZone.position.x = Math.floor(Math.random() * 90) + 10;
           deadZone.position.y = Math.floor(Math.random() * 90) + 10;
           deadZone.radius = 150;
@@ -304,27 +303,37 @@ function (_ServerEngine) {
             var kombats = this.gameEngine.world.queryObjects({
               instanceType: _Kombat.default
             });
+            var damage = 2;
+
+            if (deadZone.radius < 50) {
+              damage += 2;
+            } else if (deadZone.radius < 30) {
+              damage += 4;
+            } else if (deadZone.radius < 10) {
+              damage += 6;
+            }
+
             kombats.forEach(function (k) {
               var distance = Math.sqrt(Math.pow(k.position.x + k.width / 2 - deadZone.x, 2) + Math.pow(k.position.y + k.height / 2 - deadZone.position.y, 2));
 
               if (distance >= deadZone.radius) {
-                k.health--;
-                var blood = new _Blood.default(_this5.gameEngine, null, {
+                k.health -= damage;
+                var blood = new _Blood.default(_this4.gameEngine, null, {
                   position: k.position.clone()
                 });
 
                 if (k.health <= 0) {
-                  _this5.destroyObjectById(k.id);
+                  _this4.destroyObjectById(k.id);
                 }
 
-                _this5.gameEngine.addObjectToWorld(blood);
+                _this4.gameEngine.addObjectToWorld(blood);
 
-                _this5.gameEngine.timer.add(600, _this5.destroyObjectById, _this5, [blood.id]);
+                _this4.gameEngine.timer.add(600, _this4.destroyObjectById, _this4, [blood.id]);
               }
             });
           }
 
-          deadZone.radius -= .05;
+          deadZone.radius -= .04;
         }
       }
     }

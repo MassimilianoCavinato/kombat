@@ -12,9 +12,9 @@ const defaults = {
     scheduler: 'render-schedule',
     syncOptions: {
         sync: 'extrapolate',
-        localObjBending: 0.6,
-        remoteObjBending: 0.8,
-        bendingIncrements: 6
+        localObjBending: 0.8,
+        remoteObjBending: 0.6,
+        bendingIncrements: 5
     }
 };
 let options = Object.assign(defaults, qsOptions);

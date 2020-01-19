@@ -161,17 +161,19 @@ function (_Renderer) {
     key: "drawHUD",
     value: function drawHUD(obj) {
       //Bullets and reloading
+      ctx.scale(1, 1);
+
       if (obj.ammo_loaded === -1) {
         ctx.fillStyle = "white";
         ctx.font = "1.8px 'Share Tech'";
-        ctx.fillText("RELOADING . . .", 125 / this.clientEngine.zoom, 564 / this.clientEngine.zoom);
+        ctx.fillText("RELOADING . . .", 125, 564 / obj.scope);
       } else {
         ctx.shadowColor = 'white';
         ctx.fillStyle = "orange";
 
         for (var i = 0; i < obj.ammo_loaded; i++) {
-          ctx.fillRect((125 + i * 6) / this.clientEngine.zoom, 543 / this.clientEngine.zoom, 2 / this.clientEngine.zoom, 2 / this.clientEngine.zoom);
-          ctx.fillRect((124 + i * 6) / this.clientEngine.zoom, 545 / this.clientEngine.zoom, 4 / this.clientEngine.zoom, 20 / this.clientEngine.zoom);
+          ctx.fillRect((125 + i * 6) / obj.scope, 543 / obj.scope, 2 / obj.scope, 2 / obj.scope);
+          ctx.fillRect((124 + i * 6) / obj.scope, 545 / obj.scope, 4 / obj.scope, 20 / obj.scope);
         }
       } //Granades
 
@@ -180,7 +182,7 @@ function (_Renderer) {
 
       for (var j = 0; j < obj.granade_loaded; j++) {
         ctx.beginPath();
-        ctx.arc((25 + j * 12) / this.clientEngine.zoom, 535 / this.clientEngine.zoom, 5 / this.clientEngine.zoom, 0, 2 * Math.PI);
+        ctx.arc((25 + j * 12) / obj.scope, 535 / obj.scope, 5 / obj.scope, 0, 2 * Math.PI);
         ctx.closePath();
         ctx.stroke();
       } //Throw Power
@@ -188,17 +190,17 @@ function (_Renderer) {
 
       ctx.strokeStyle = "white";
       ctx.fillStyle = "rgba(255, 255, 255, .9)";
-      ctx.fillRect(20 / this.clientEngine.zoom, 544 / this.clientEngine.zoom, obj.throw_power * 100 / this.clientEngine.zoom, 18 / this.clientEngine.zoom);
+      ctx.fillRect(20 / obj.scope, 544 / obj.scope, obj.throw_power * 100 / obj.scope, 18 / obj.scope);
       ctx.beginPath();
-      ctx.rect(20 / this.clientEngine.zoom, 545 / this.clientEngine.zoom, 100 / this.clientEngine.zoom, 18 / this.clientEngine.zoom);
+      ctx.rect(20 / obj.scope, 545 / obj.scope, 100 / obj.scope, 18 / obj.scope);
       ctx.closePath();
       ctx.stroke(); //Life
 
       ctx.strokeStyle = "white";
       ctx.fillStyle = "rgba(255, 0, 0, .5)";
-      ctx.fillRect(20 / this.clientEngine.zoom, 570 / this.clientEngine.zoom, obj.health * (760 / obj.max_health) / this.clientEngine.zoom, 18 / this.clientEngine.zoom);
+      ctx.fillRect(20 / obj.scope, 570 / obj.scope, obj.health * (760 / obj.max_health) / obj.scope, 18 / obj.scope);
       ctx.beginPath();
-      ctx.rect(20 / this.clientEngine.zoom, 570 / this.clientEngine.zoom, 760 / this.clientEngine.zoom, 16 / this.clientEngine.zoom);
+      ctx.rect(20 / obj.scope, 570 / obj.scope, 760 / obj.scope, 16 / obj.scope);
       ctx.closePath();
       ctx.stroke();
     }

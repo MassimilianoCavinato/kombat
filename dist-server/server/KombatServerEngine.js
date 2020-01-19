@@ -99,8 +99,8 @@ function (_ServerEngine) {
       kombat.health = 100;
       kombat.ammo_capacity = 64;
       kombat.ammo_loaded = 64;
-      kombat.granade_capacity = 48;
-      kombat.granade_loaded = 48;
+      kombat.granade_capacity = 32;
+      kombat.granade_loaded = 32;
       kombat.throw_power = 0;
       kombat.throwing_granade = false;
       kombat.timer_shot = 0;

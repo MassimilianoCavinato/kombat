@@ -92,6 +92,9 @@ export default class KombatClientEngine extends ClientEngine {
             else if(e.key === "d" || e.key === "ArrowRight"){
                 this.right = false;
             }
+             else if(e.key === "r" || e.key === "ArrowRight"){
+               this.sendInput('reload', { repeat: false });
+            }
         }
     }
 

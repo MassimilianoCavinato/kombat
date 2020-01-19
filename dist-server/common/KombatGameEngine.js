@@ -132,7 +132,7 @@ function (_GameEngine) {
         var step = inputData.step;
 
         if (inputData.input === 'shoot') {
-          if (step >= player.timer_shot + 15) {
+          if (step >= player.timer_shot + 12) {
             player.timer_shot = step;
             this.emit('shoot', player);
           }
@@ -144,6 +144,11 @@ function (_GameEngine) {
         } else if (inputData.input === 'granade') {
           player.throwing_granade = 0;
           this.emit('granade', player);
+        } else if (inputData.input === "reload") {
+          if (player.ammo_loaded < player.ammo_capacity && player.ammo_loaded >= 0) {
+            player.ammo_loaded = 0;
+            this.emit('shoot', player);
+          }
         } else if (inputData.input === 'step') {
           var speed;
           var x = 0;

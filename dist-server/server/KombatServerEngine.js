@@ -144,7 +144,7 @@ function (_ServerEngine) {
     value: function shoot(kombat) {
       if (kombat.ammo_loaded > 0) {
         kombat.ammo_loaded--;
-        var speed = 0.4;
+        var speed = 0.5;
         var liveTimer = 100; //gameloops
 
         var bullet = new _Bullet.default(this.gameEngine, null, {

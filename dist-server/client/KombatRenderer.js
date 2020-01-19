@@ -147,13 +147,19 @@ function (_Renderer) {
   }, {
     key: "drawHUD",
     value: function drawHUD(obj) {
-      //Bullets
-      ctx.shadowColor = 'white';
-      ctx.fillStyle = "orange";
+      //Bullets and reloading
+      if (obj.ammo_loaded === -1) {
+        ctx.fillStyle = "white";
+        ctx.font = '1.8px Arial';
+        ctx.fillText("RELOADING . . .", 125 / this.clientEngine.zoom, 564 / this.clientEngine.zoom);
+      } else {
+        ctx.shadowColor = 'white';
+        ctx.fillStyle = "orange";
 
-      for (var i = 0; i < obj.ammo_loaded; i++) {
-        ctx.fillRect((125 + i * 6) / this.clientEngine.zoom, 543 / this.clientEngine.zoom, 2 / this.clientEngine.zoom, 2 / this.clientEngine.zoom);
-        ctx.fillRect((124 + i * 6) / this.clientEngine.zoom, 545 / this.clientEngine.zoom, 4 / this.clientEngine.zoom, 20 / this.clientEngine.zoom);
+        for (var i = 0; i < obj.ammo_loaded; i++) {
+          ctx.fillRect((125 + i * 6) / this.clientEngine.zoom, 543 / this.clientEngine.zoom, 2 / this.clientEngine.zoom, 2 / this.clientEngine.zoom);
+          ctx.fillRect((124 + i * 6) / this.clientEngine.zoom, 545 / this.clientEngine.zoom, 4 / this.clientEngine.zoom, 20 / this.clientEngine.zoom);
+        }
       } //Granades
 
 

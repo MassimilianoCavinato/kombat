@@ -134,6 +134,7 @@ function (_ServerEngine) {
       kombat.throwing_granade = false;
       kombat.timer_shot = 0;
       kombat.timer_deadzone = 0;
+      kombat.shoot_side = 'l';
       this.gameEngine.addObjectToWorld(kombat);
     }
   }, {
@@ -153,14 +154,27 @@ function (_ServerEngine) {
       if (kombat.ammo_loaded > 0) {
         kombat.ammo_loaded--;
         var speed = 0.5;
+        var kombatPos = kombat.position.clone();
+        var kombatDir = kombat.direction;
+        kombatPos.add(new _lanceGg.TwoVector(.5, .5));
+        var position;
+
+        if (kombat.shoot_side === 'l') {
+          position = new _lanceGg.TwoVector(kombatPos.x + 1 * Math.cos(kombatDir - 1.5), kombatPos.y + 1 * Math.sin(kombatDir - 1.5));
+          kombat.shoot_side = "r";
+        } else {
+          position = new _lanceGg.TwoVector(kombatPos.x + 1 * Math.cos(kombatDir + 1.5), kombatPos.y + 1 * Math.sin(kombatDir + 1.5));
+          kombat.shoot_side = "l";
+        }
+
         var liveTimer = 100; //gameloops
 
         var bullet = new _Bullet.default(this.gameEngine, null, {
-          direction: kombat.direction,
+          direction: kombatDir,
           playerId: kombat.playerId,
           ownerId: kombat.id,
-          position: new _lanceGg.TwoVector(kombat.position.x + kombat.width / 4, kombat.position.y + kombat.height / 4),
-          velocity: new _lanceGg.TwoVector(Math.cos(kombat.direction) * speed, Math.sin(kombat.direction) * speed)
+          position: position,
+          velocity: new _lanceGg.TwoVector(Math.cos(kombatDir) * speed, Math.sin(kombatDir) * speed)
         });
         this.gameEngine.addObjectToWorld(bullet);
         this.gameEngine.timer.add(liveTimer, this.destroyObjectById, this, [bullet.id]);

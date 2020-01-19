@@ -80,6 +80,7 @@ export default class KombatServerEngine extends ServerEngine {
         kombat.throwing_granade = false;
         kombat.timer_shot = 0;
         kombat.timer_deadzone = 0;
+        kombat.shoot_side = 'l';
         this.gameEngine.addObjectToWorld(kombat);
     }
 
@@ -93,18 +94,36 @@ export default class KombatServerEngine extends ServerEngine {
         if(kombat.ammo_loaded > 0){
             kombat.ammo_loaded--;
             let speed = 0.5;
+            let kombatPos = kombat.position.clone();
+            let kombatDir = kombat.direction;
+
+            kombatPos.add(new TwoVector(.5, .5));
+            let position;
+          
+            if(kombat.shoot_side === 'l'){
+                position = new TwoVector(
+                    kombatPos.x + 1 * Math.cos(kombatDir-1.5),
+                    kombatPos.y + 1 * Math.sin(kombatDir-1.5)
+                )
+                kombat.shoot_side = "r";
+            }
+            else{
+                position = new TwoVector(
+                    kombatPos.x  + 1 *  Math.cos(kombatDir+1.5),
+                    kombatPos.y  + 1 *  Math.sin(kombatDir+1.5)
+                )
+                kombat.shoot_side = "l";
+            }
+          
             let liveTimer = 100; //gameloops
             let bullet = new Bullet(this.gameEngine, null, { 
-                direction: kombat.direction,
+                direction: kombatDir,
                 playerId: kombat.playerId,
                 ownerId: kombat.id,
-                position: new TwoVector(
-                    kombat.position.x + (kombat.width / 4),
-                    kombat.position.y + (kombat.height / 4)
-                ),
+                position: position,
                 velocity: new TwoVector(
-                    Math.cos(kombat.direction) * speed ,
-                    Math.sin(kombat.direction) * speed
+                    Math.cos(kombatDir) * speed ,
+                    Math.sin(kombatDir) * speed
                 )
             });
             this.gameEngine.addObjectToWorld(bullet);

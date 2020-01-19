@@ -17273,7 +17273,7 @@ function (_ClientEngine) {
     _this.down = false;
     _this.mouseIsDown = false;
     _this.controls = new __WEBPACK_IMPORTED_MODULE_0_lance_gg__["KeyboardControls"](_assertThisInitialized(_this));
-    _this.zoom = 10; //LISTENERS
+    _this.zoom = 8; //LISTENERS
 
     document.addEventListener('keydown', function (e) {
       return _this.handleKeyDown(e);
@@ -17528,8 +17528,8 @@ function (_Renderer) {
       } else {
         ctx.lineWidth = 3 / this.clientEngine.zoom;
         ctx.scale(this.clientEngine.zoom, this.clientEngine.zoom);
-        this.offset.x = 10;
-        this.offset.y = 10;
+        this.offset.x = 0;
+        this.offset.y = 0;
       }
 
       game.world.queryObjects({

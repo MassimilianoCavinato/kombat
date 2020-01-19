@@ -104,8 +104,8 @@ function (_Renderer) {
       } else {
         ctx.lineWidth = 3 / this.clientEngine.zoom;
         ctx.scale(this.clientEngine.zoom, this.clientEngine.zoom);
-        this.offset.x = 10;
-        this.offset.y = 10;
+        this.offset.x = 0;
+        this.offset.y = 0;
       }
 
       game.world.queryObjects({

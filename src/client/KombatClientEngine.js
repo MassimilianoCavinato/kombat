@@ -15,7 +15,7 @@ export default class KombatClientEngine extends ClientEngine {
         this.down = false;
         this.mouseIsDown = false;
         this.controls = new KeyboardControls(this);
-        this.zoom = 10;
+        this.zoom = 8;
         //LISTENERS
         document.addEventListener('keydown', (e) => this.handleKeyDown(e));
         document.addEventListener('keyup', (e) => this.handleKeyUp(e));

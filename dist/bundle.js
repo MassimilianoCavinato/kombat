@@ -17931,7 +17931,7 @@ function (_GameEngine) {
         var step = inputData.step;
 
         if (inputData.input === 'shoot') {
-          if (step >= player.timer_shot + 12) {
+          if (step >= player.timer_shot + 10) {
             player.timer_shot = step;
             this.emit('shoot', player);
           }

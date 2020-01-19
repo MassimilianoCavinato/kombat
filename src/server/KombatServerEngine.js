@@ -72,10 +72,10 @@ export default class KombatServerEngine extends ServerEngine {
         kombat.name = 'Kombat '+socket.playerId;
         kombat.max_health = 100;
         kombat.health = 100;
-        kombat.ammo_capacity = 21;
-        kombat.ammo_loaded =  21;
-        kombat.granade_capacity = 6;
-        kombat.granade_loaded =  50;
+        kombat.ammo_capacity = 64;
+        kombat.ammo_loaded =  64;
+        kombat.granade_capacity = 48;
+        kombat.granade_loaded =  48;
         kombat.throw_power = 0;
         kombat.throwing_granade = false;
         kombat.timer_shot = 0;

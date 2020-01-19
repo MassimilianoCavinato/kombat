@@ -17557,22 +17557,7 @@ function (_Renderer) {
 
       if (playerKombat) {
         this.drawHUD(playerKombat);
-      } //     // this.updateDebugger(playerKombat, t, dt);
-      // }
-      // else{
-      //     //draw blood stains first // layer 0
-      //     game.world.queryObjects({instanceType: Blood }).forEach(obj => this.drawBlood(obj));
-      //     game.world.queryObjects({instanceType: Wall }).forEach(obj => this.drawWall(obj));
-      //     game.world.forEachObject((id, obj) => {
-      //         if (obj instanceof Kombat) this.drawKombat(obj);
-      //         else if (obj instanceof Bullet) this.drawBullet(obj);
-      //         else if (obj instanceof Granade) this.drawGranade(obj);
-      //         else if (obj instanceof Heal2) this.drawHeal(obj);
-      //     });
-      //     game.world.queryObjects({instanceType: Explosion2 }).forEach(obj => this.drawExplosion(obj));
-      //     ctx.lineWidth = 3 / this.clientEngine.zoom;
-      // }
-
+      }
 
       ctx.restore();
     }
@@ -17605,7 +17590,7 @@ function (_Renderer) {
       //Bullets and reloading
       if (obj.ammo_loaded === -1) {
         ctx.fillStyle = "white";
-        ctx.font = '1.8px Arial';
+        ctx.font = "1.8px 'Share Tech'";
         ctx.fillText("RELOADING . . .", 125 / this.clientEngine.zoom, 564 / this.clientEngine.zoom);
       } else {
         ctx.shadowColor = 'white';

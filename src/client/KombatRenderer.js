@@ -105,7 +105,7 @@ export default class KombatRenderer extends Renderer {
         
         if(obj.ammo_loaded === -1){
             ctx.fillStyle = "white";
-            ctx.font = '1.8px Arial';
+            ctx.font = "1.8px 'Share Tech'";
             ctx.fillText("RELOADING . . .", 125/this.clientEngine.zoom, 564/this.clientEngine.zoom);
         }
         else{

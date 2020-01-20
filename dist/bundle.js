@@ -14160,7 +14160,7 @@ var qsOptions = __WEBPACK_IMPORTED_MODULE_0_query_string___default.a.parse(locat
 
 var defaults = {
   traceLevel: __WEBPACK_IMPORTED_MODULE_1_lance_gg__["Lib"].Trace.TRACE_NONE,
-  delayInputCount: 10,
+  delayInputCount: 3,
   scheduler: 'render-schedule',
   syncOptions: {
     sync: 'extrapolate',

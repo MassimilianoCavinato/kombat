@@ -16,7 +16,7 @@ var qsOptions = _queryString.default.parse(location.search); // default options,
 
 var defaults = {
   traceLevel: _lanceGg.Lib.Trace.TRACE_NONE,
-  delayInputCount: 3,
+  delayInputCount: 2,
   scheduler: 'render-schedule',
   syncOptions: {
     sync: 'extrapolate',

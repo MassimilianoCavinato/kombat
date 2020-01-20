@@ -79,7 +79,7 @@ function (_ServerEngine) {
       return _this.pickup(e);
     });
 
-    _this.gameEngine.on('hit', function (e) {
+    _this.gameEngine.on('bullethit', function (e) {
       return _this.handleBulletHit(e);
     });
 
@@ -359,42 +359,40 @@ function (_ServerEngine) {
           deadZone.position.x = Math.floor(Math.random() * 90) + 10;
           deadZone.position.y = Math.floor(Math.random() * 90) + 10;
           this.add_DeadZone();
-        }
-      }
+        } else if (stepInfo.step - this.deadzoneTimer > 60) {
+          this.deadzoneTimer = stepInfo.step;
+          var kombats = this.gameEngine.world.queryObjects({
+            instanceType: _Kombat.default
+          });
+          var damage = 2;
 
-      if (stepInfo.step - this.deadzoneTimer > 60) {
-        this.deadzoneTimer = stepInfo.step;
-        var kombats = this.gameEngine.world.queryObjects({
-          instanceType: _Kombat.default
-        });
-        var damage = 2;
-
-        if (deadZone.radius < 50) {
-          damage += 2;
-        } else if (deadZone.radius < 30) {
-          damage += 4;
-        } else if (deadZone.radius < 10) {
-          damage += 6;
-        }
-
-        kombats.forEach(function (k) {
-          var distance = Math.sqrt(Math.pow(k.position.x + k.width / 2 - deadZone.x, 2) + Math.pow(k.position.y + k.height / 2 - deadZone.position.y, 2));
-
-          if (distance >= deadZone.radius) {
-            k.health -= damage;
-            var blood = new _Blood.default(_this5.gameEngine, null, {
-              position: k.position.clone()
-            });
-
-            if (k.health <= 0) {
-              _this5.destroyObjectById(k.id);
-            }
-
-            _this5.gameEngine.addObjectToWorld(blood);
-
-            _this5.gameEngine.timer.add(600, _this5.destroyObjectById, _this5, [blood.id]);
+          if (deadZone.radius < 50) {
+            damage += 2;
+          } else if (deadZone.radius < 30) {
+            damage += 4;
+          } else if (deadZone.radius < 10) {
+            damage += 6;
           }
-        });
+
+          kombats.forEach(function (k) {
+            var distance = Math.sqrt(Math.pow(k.position.x + k.width / 2 - deadZone.x, 2) + Math.pow(k.position.y + k.height / 2 - deadZone.position.y, 2));
+
+            if (distance >= deadZone.radius) {
+              k.health -= damage;
+              var blood = new _Blood.default(_this5.gameEngine, null, {
+                position: k.position.clone()
+              });
+
+              if (k.health <= 0) {
+                _this5.destroyObjectById(k.id);
+              }
+
+              _this5.gameEngine.addObjectToWorld(blood);
+
+              _this5.gameEngine.timer.add(600, _this5.destroyObjectById, _this5, [blood.id]);
+            }
+          });
+        }
       }
     }
   }]);

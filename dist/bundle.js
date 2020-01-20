@@ -14160,7 +14160,7 @@ var qsOptions = __WEBPACK_IMPORTED_MODULE_0_query_string___default.a.parse(locat
 
 var defaults = {
   traceLevel: __WEBPACK_IMPORTED_MODULE_1_lance_gg__["Lib"].Trace.TRACE_NONE,
-  delayInputCount: 3,
+  delayInputCount: 2,
   scheduler: 'render-schedule',
   syncOptions: {
     sync: 'extrapolate',
@@ -18007,14 +18007,14 @@ function (_GameEngine) {
     value: function handleCollision(e) {
       if (e.o1 instanceof __WEBPACK_IMPORTED_MODULE_1__Kombat__["a" /* default */]) {
         if (e.o2 instanceof __WEBPACK_IMPORTED_MODULE_3__Bullet__["a" /* default */]) {
-          this.emit('hit', e.o1);
+          this.emit('bullethit', e.o1);
           this.destroyObjectById(e.o2.id);
         }
       } else if (e.o1 instanceof __WEBPACK_IMPORTED_MODULE_3__Bullet__["a" /* default */]) {
         this.destroyObjectById(e.o1.id);
 
         if (e.o2 instanceof __WEBPACK_IMPORTED_MODULE_1__Kombat__["a" /* default */]) {
-          this.emit('hit', e.o2);
+          this.emit('bullethit', e.o2);
         }
       } else if (e.o1 instanceof __WEBPACK_IMPORTED_MODULE_2__Wall__["a" /* default */]) {
         if (e.o2 instanceof __WEBPACK_IMPORTED_MODULE_3__Bullet__["a" /* default */]) {

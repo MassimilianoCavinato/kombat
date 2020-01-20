@@ -145,14 +145,14 @@ export default class KombatGameEngine extends GameEngine {
     handleCollision(e){
         if(e.o1 instanceof Kombat){
             if(e.o2 instanceof Bullet){
-                this.emit('hit', e.o1);
+                this.emit('bullethit', e.o1);
                 this.destroyObjectById(e.o2.id);
             }
         }
         else if(e.o1 instanceof Bullet){
             this.destroyObjectById(e.o1.id);
             if(e.o2 instanceof Kombat){
-                this.emit('hit', e.o2);
+                this.emit('bullethit', e.o2);
             }
         }
         else if(e.o1 instanceof Wall){
@@ -185,5 +185,6 @@ export default class KombatGameEngine extends GameEngine {
         if(deadZone){
             deadZone.radius -= .03;
         }
+
     }
 }

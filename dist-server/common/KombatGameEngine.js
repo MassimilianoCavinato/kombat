@@ -208,14 +208,14 @@ function (_GameEngine) {
     value: function handleCollision(e) {
       if (e.o1 instanceof _Kombat.default) {
         if (e.o2 instanceof _Bullet.default) {
-          this.emit('hit', e.o1);
+          this.emit('bullethit', e.o1);
           this.destroyObjectById(e.o2.id);
         }
       } else if (e.o1 instanceof _Bullet.default) {
         this.destroyObjectById(e.o1.id);
 
         if (e.o2 instanceof _Kombat.default) {
-          this.emit('hit', e.o2);
+          this.emit('bullethit', e.o2);
         }
       } else if (e.o1 instanceof _Wall.default) {
         if (e.o2 instanceof _Bullet.default) {

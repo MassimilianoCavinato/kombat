@@ -24,7 +24,7 @@ export default class KombatServerEngine extends ServerEngine {
         this.gameEngine.on('shoot',     e => this.shoot(e));
         this.gameEngine.on('granade',   e => this.granade(e));
         this.gameEngine.on('pickup',    e => this.pickup(e));
-        this.gameEngine.on('hit',       e => this.handleBulletHit(e));
+        this.gameEngine.on('bullethit', e => this.handleBulletHit(e));
         this.gameEngine.on('postStep', (stepInfo) => this.postStep(stepInfo));
         this.deadzoneTimer = 0;
     }
@@ -256,35 +256,34 @@ export default class KombatServerEngine extends ServerEngine {
                 deadZone.position.y = Math.floor(Math.random() * 90) + 10 
                 this.add_DeadZone();
             }
-        }
-         
-        if(stepInfo.step - this.deadzoneTimer > 60 ){
-            this.deadzoneTimer = stepInfo.step;
-            let kombats = this.gameEngine.world.queryObjects({ instanceType : Kombat });
-            let damage = 2;
-            if(deadZone.radius < 50){
-                damage += 2;
-            }
-            else if(deadZone.radius < 30){
-                damage += 4;
-            }
-            else if(deadZone.radius < 10){
-                damage += 6;
-            }
-            kombats.forEach(k => {
-                let distance = Math.sqrt(
-                    Math.pow( k.position.x + k.width/2 - deadZone.x , 2) +  Math.pow( k.position.y + k.height/2 - deadZone.position.y,2)
-                );
-                if(distance >= deadZone.radius){
-                    k.health -= damage;
-                    let blood = new Blood(this.gameEngine, null, { position: k.position.clone() });
-                    if(k.health <= 0){
-                        this.destroyObjectById(k.id);
-                    }
-                    this.gameEngine.addObjectToWorld(blood);
-                    this.gameEngine.timer.add(600, this.destroyObjectById, this, [blood.id]);
+            else if(stepInfo.step - this.deadzoneTimer > 60 ){
+                this.deadzoneTimer = stepInfo.step;
+                let kombats = this.gameEngine.world.queryObjects({ instanceType : Kombat });
+                let damage = 2;
+                if(deadZone.radius < 50){
+                    damage += 2;
                 }
-            })
+                else if(deadZone.radius < 30){
+                    damage += 4;
+                }
+                else if(deadZone.radius < 10){
+                    damage += 6;
+                }
+                kombats.forEach(k => {
+                    let distance = Math.sqrt(
+                        Math.pow( k.position.x + k.width/2 - deadZone.x , 2) +  Math.pow( k.position.y + k.height/2 - deadZone.position.y,2)
+                    );
+                    if(distance >= deadZone.radius){
+                        k.health -= damage;
+                        let blood = new Blood(this.gameEngine, null, { position: k.position.clone() });
+                        if(k.health <= 0){
+                            this.destroyObjectById(k.id);
+                        }
+                        this.gameEngine.addObjectToWorld(blood);
+                        this.gameEngine.timer.add(600, this.destroyObjectById, this, [blood.id]);
+                    }
+                })
+            }
         }
     }
 }

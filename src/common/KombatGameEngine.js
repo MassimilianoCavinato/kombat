@@ -148,6 +148,9 @@ export default class KombatGameEngine extends GameEngine {
                 this.emit('bullethit', e.o1);
                 this.destroyObjectById(e.o2.id);
             }
+            else if(e.o2 instanceof Granade){
+                this.checkBouce(e.o2, e.o1);
+            }
         }
         else if(e.o1 instanceof Bullet){
             this.destroyObjectById(e.o1.id);
@@ -159,6 +162,17 @@ export default class KombatGameEngine extends GameEngine {
             if(e.o2 instanceof Bullet){
                 this.destroyObjectById(e.o2.id);
             }
+            else if(e.o2 instanceof Granade){
+                this.checkBounce(e.o2, e.o1);
+            }
+        }
+        else if(e.o1 instanceof Granade){
+            if(e.o2 instanceof Wall){
+                this.checkBounce(e.o1, e.o2);
+            }
+            else if(e.o2 instanceof Kombat){
+                this.checkBounce(e.o1, e.o2);
+            }
         }
     }
 
@@ -166,6 +180,33 @@ export default class KombatGameEngine extends GameEngine {
         if (this.world.objects[id]) {
             this.removeObjectFromWorld(id);
         }   
+    }
+
+
+    checkBounce(a,b){
+
+        let collision_side;
+    
+        if(a.position.x + a.width <= b.position.x){ 
+            //hitting from left;
+            a.velocity.x = -Math.abs(a.velocity.y * .75);
+            a.velocity.y *= .75;
+        }
+        else if(a.position.x >= b.position.x + b.width){
+            //hitting from right
+            a.velocity.x = Math.abs(a.velocity.y * .75);
+            a.velocity.y *= .75;
+        }
+        else if(a.position.y < b.position.y){
+            //hitting from top
+            a.velocity.y = -Math.abs(a.velocity.x * .75);
+            a.velocity.x *= .75;
+        }
+        else if(a.position.y > b.position.y){
+            //hitting from bottom
+            a.velocity.y = Math.abs(a.velocity.x * .75);
+            a.velocity.x *= .75;
+        }
     }
 
     preStep(stepInfo){
@@ -184,6 +225,7 @@ export default class KombatGameEngine extends GameEngine {
         let deadZone = this.world.queryObject({ instanceType : DeadZone });
         if(deadZone){
             deadZone.radius -= .03;
+
         }
 
     }

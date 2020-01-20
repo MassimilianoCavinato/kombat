@@ -21,7 +21,7 @@ var defaults = {
   syncOptions: {
     sync: 'extrapolate',
     localObjBending: 0.9,
-    remoteObjBending: 0.4,
+    remoteObjBending: 0.3,
     bendingIncrements: 1
   }
 };

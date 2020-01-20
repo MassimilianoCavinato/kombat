@@ -14165,7 +14165,7 @@ var defaults = {
   syncOptions: {
     sync: 'extrapolate',
     localObjBending: 0.9,
-    remoteObjBending: 0.4,
+    remoteObjBending: 0.3,
     bendingIncrements: 1
   }
 };
@@ -18009,6 +18009,8 @@ function (_GameEngine) {
         if (e.o2 instanceof __WEBPACK_IMPORTED_MODULE_3__Bullet__["a" /* default */]) {
           this.emit('bullethit', e.o1);
           this.destroyObjectById(e.o2.id);
+        } else if (e.o2 instanceof __WEBPACK_IMPORTED_MODULE_4__Granade__["a" /* default */]) {
+          this.checkBouce(e.o2, e.o1);
         }
       } else if (e.o1 instanceof __WEBPACK_IMPORTED_MODULE_3__Bullet__["a" /* default */]) {
         this.destroyObjectById(e.o1.id);
@@ -18019,6 +18021,14 @@ function (_GameEngine) {
       } else if (e.o1 instanceof __WEBPACK_IMPORTED_MODULE_2__Wall__["a" /* default */]) {
         if (e.o2 instanceof __WEBPACK_IMPORTED_MODULE_3__Bullet__["a" /* default */]) {
           this.destroyObjectById(e.o2.id);
+        } else if (e.o2 instanceof __WEBPACK_IMPORTED_MODULE_4__Granade__["a" /* default */]) {
+          this.checkBounce(e.o2, e.o1);
+        }
+      } else if (e.o1 instanceof __WEBPACK_IMPORTED_MODULE_4__Granade__["a" /* default */]) {
+        if (e.o2 instanceof __WEBPACK_IMPORTED_MODULE_2__Wall__["a" /* default */]) {
+          this.checkBounce(e.o1, e.o2);
+        } else if (e.o2 instanceof __WEBPACK_IMPORTED_MODULE_1__Kombat__["a" /* default */]) {
+          this.checkBounce(e.o1, e.o2);
         }
       }
     }
@@ -18027,6 +18037,29 @@ function (_GameEngine) {
     value: function destroyObjectById(id) {
       if (this.world.objects[id]) {
         this.removeObjectFromWorld(id);
+      }
+    }
+  }, {
+    key: "checkBounce",
+    value: function checkBounce(a, b) {
+      var collision_side;
+
+      if (a.position.x + a.width <= b.position.x) {
+        //hitting from left;
+        a.velocity.x = -Math.abs(a.velocity.y * .75);
+        a.velocity.y *= .75;
+      } else if (a.position.x >= b.position.x + b.width) {
+        //hitting from right
+        a.velocity.x = Math.abs(a.velocity.y * .75);
+        a.velocity.y *= .75;
+      } else if (a.position.y < b.position.y) {
+        //hitting from top
+        a.velocity.y = -Math.abs(a.velocity.x * .75);
+        a.velocity.x *= .75;
+      } else if (a.position.y > b.position.y) {
+        //hitting from bottom
+        a.velocity.y = Math.abs(a.velocity.x * .75);
+        a.velocity.x *= .75;
       }
     }
   }, {

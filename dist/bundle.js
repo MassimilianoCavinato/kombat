@@ -14160,13 +14160,13 @@ var qsOptions = __WEBPACK_IMPORTED_MODULE_0_query_string___default.a.parse(locat
 
 var defaults = {
   traceLevel: __WEBPACK_IMPORTED_MODULE_1_lance_gg__["Lib"].Trace.TRACE_NONE,
-  delayInputCount: 2,
+  delayInputCount: 3,
   scheduler: 'render-schedule',
   syncOptions: {
     sync: 'extrapolate',
-    localObjBending: 0.9,
-    remoteObjBending: 0.3,
-    bendingIncrements: 1
+    localObjBending: 0.5,
+    remoteObjBending: 0.8,
+    bendingIncrements: 3
   }
 };
 var options = Object.assign(defaults, qsOptions);

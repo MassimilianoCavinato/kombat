@@ -63,13 +63,25 @@ function (_ServerEngine) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(KombatServerEngine).call(this, io, gameEngine, inputOptions));
 
-    _this.gameEngine.on('play', _this.play.bind(_assertThisInitialized(_this)));
+    _this.gameEngine.on('play', function (e) {
+      return _this.play(e);
+    });
 
-    _this.gameEngine.on('shoot', _this.shoot.bind(_assertThisInitialized(_this)));
+    _this.gameEngine.on('shoot', function (e) {
+      return _this.shoot(e);
+    });
 
-    _this.gameEngine.on('granade', _this.granade.bind(_assertThisInitialized(_this)));
+    _this.gameEngine.on('granade', function (e) {
+      return _this.granade(e);
+    });
 
-    _this.gameEngine.on('pickup', _this.pickup.bind(_assertThisInitialized(_this)));
+    _this.gameEngine.on('pickup', function (e) {
+      return _this.pickup(e);
+    });
+
+    _this.gameEngine.on('hit', function (e) {
+      return _this.handleBulletHit(e);
+    });
 
     _this.gameEngine.on('postStep', function (stepInfo) {
       return _this.postStep(stepInfo);
@@ -108,6 +120,15 @@ function (_ServerEngine) {
       kombat._shoot_side = 'l';
       kombat.scope = 15;
       this.gameEngine.addObjectToWorld(kombat);
+    }
+  }, {
+    key: "handleBulletHit",
+    value: function handleBulletHit(kombat) {
+      kombat.health -= 3;
+
+      if (kombat.health <= 0) {
+        this.destroyObjectById(kombat.id);
+      }
     }
   }, {
     key: "get_randomVectorInBound",
@@ -338,44 +359,42 @@ function (_ServerEngine) {
           deadZone.position.x = Math.floor(Math.random() * 90) + 10;
           deadZone.position.y = Math.floor(Math.random() * 90) + 10;
           this.add_DeadZone();
-        } else {
-          if (stepInfo.step - this.deadzoneTimer > 60) {
-            this.deadzoneTimer = stepInfo.step;
-            var kombats = this.gameEngine.world.queryObjects({
-              instanceType: _Kombat.default
-            });
-            var damage = 2;
+        }
+      }
 
-            if (deadZone.radius < 50) {
-              damage += 2;
-            } else if (deadZone.radius < 30) {
-              damage += 4;
-            } else if (deadZone.radius < 10) {
-              damage += 6;
+      if (stepInfo.step - this.deadzoneTimer > 60) {
+        this.deadzoneTimer = stepInfo.step;
+        var kombats = this.gameEngine.world.queryObjects({
+          instanceType: _Kombat.default
+        });
+        var damage = 2;
+
+        if (deadZone.radius < 50) {
+          damage += 2;
+        } else if (deadZone.radius < 30) {
+          damage += 4;
+        } else if (deadZone.radius < 10) {
+          damage += 6;
+        }
+
+        kombats.forEach(function (k) {
+          var distance = Math.sqrt(Math.pow(k.position.x + k.width / 2 - deadZone.x, 2) + Math.pow(k.position.y + k.height / 2 - deadZone.position.y, 2));
+
+          if (distance >= deadZone.radius) {
+            k.health -= damage;
+            var blood = new _Blood.default(_this5.gameEngine, null, {
+              position: k.position.clone()
+            });
+
+            if (k.health <= 0) {
+              _this5.destroyObjectById(k.id);
             }
 
-            kombats.forEach(function (k) {
-              var distance = Math.sqrt(Math.pow(k.position.x + k.width / 2 - deadZone.x, 2) + Math.pow(k.position.y + k.height / 2 - deadZone.position.y, 2));
+            _this5.gameEngine.addObjectToWorld(blood);
 
-              if (distance >= deadZone.radius) {
-                k.health -= damage;
-                var blood = new _Blood.default(_this5.gameEngine, null, {
-                  position: k.position.clone()
-                });
-
-                if (k.health <= 0) {
-                  _this5.destroyObjectById(k.id);
-                }
-
-                _this5.gameEngine.addObjectToWorld(blood);
-
-                _this5.gameEngine.timer.add(600, _this5.destroyObjectById, _this5, [blood.id]);
-              }
-            });
+            _this5.gameEngine.timer.add(600, _this5.destroyObjectById, _this5, [blood.id]);
           }
-
-          deadZone.radius -= .03;
-        }
+        });
       }
     }
   }]);

@@ -145,32 +145,20 @@ export default class KombatGameEngine extends GameEngine {
     handleCollision(e){
         if(e.o1 instanceof Kombat){
             if(e.o2 instanceof Bullet){
-                this.handleBulletHit(e.o1, e.o2)
+                this.emit('hit', e.o1);
+                this.destroyObjectById(e.o2.id);
             }
         }
         else if(e.o1 instanceof Bullet){
+            this.destroyObjectById(e.o1.id);
             if(e.o2 instanceof Kombat){
-                this.handleBulletHit(e.o2, e.o1)
-            }
-            else if( e.o2 instanceof Wall){
-                this.destroyObjectById(e.o1.id);
+                this.emit('hit', e.o2);
             }
         }
         else if(e.o1 instanceof Wall){
             if(e.o2 instanceof Bullet){
                 this.destroyObjectById(e.o2.id);
             }
-        }
-    }
-
-    handleBulletHit(kombat, bullet){
-        this.destroyObjectById(bullet.id);
-        kombat.health -= 3;
-        let blood = new Blood(this, null, { position: kombat.position.clone() });
-        this.addObjectToWorld(blood);
-        this.timer.add(600, this.destroyObjectById, this, [blood.id]);
-        if(kombat.health <= 0){
-            this.destroyObjectById(kombat.id);
         }
     }
 
@@ -193,6 +181,9 @@ export default class KombatGameEngine extends GameEngine {
     }
 
     postStep(stepInfo){
-        
+        let deadZone = this.world.queryObject({ instanceType : DeadZone });
+        if(deadZone){
+            deadZone.radius -= .03;
+        }
     }
 }

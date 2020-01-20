@@ -208,33 +208,19 @@ function (_GameEngine) {
     value: function handleCollision(e) {
       if (e.o1 instanceof _Kombat.default) {
         if (e.o2 instanceof _Bullet.default) {
-          this.handleBulletHit(e.o1, e.o2);
+          this.emit('hit', e.o1);
+          this.destroyObjectById(e.o2.id);
         }
       } else if (e.o1 instanceof _Bullet.default) {
+        this.destroyObjectById(e.o1.id);
+
         if (e.o2 instanceof _Kombat.default) {
-          this.handleBulletHit(e.o2, e.o1);
-        } else if (e.o2 instanceof _Wall.default) {
-          this.destroyObjectById(e.o1.id);
+          this.emit('hit', e.o2);
         }
       } else if (e.o1 instanceof _Wall.default) {
         if (e.o2 instanceof _Bullet.default) {
           this.destroyObjectById(e.o2.id);
         }
-      }
-    }
-  }, {
-    key: "handleBulletHit",
-    value: function handleBulletHit(kombat, bullet) {
-      this.destroyObjectById(bullet.id);
-      kombat.health -= 3;
-      var blood = new _Blood.default(this, null, {
-        position: kombat.position.clone()
-      });
-      this.addObjectToWorld(blood);
-      this.timer.add(600, this.destroyObjectById, this, [blood.id]);
-
-      if (kombat.health <= 0) {
-        this.destroyObjectById(kombat.id);
       }
     }
   }, {
@@ -262,7 +248,15 @@ function (_GameEngine) {
     }
   }, {
     key: "postStep",
-    value: function postStep(stepInfo) {}
+    value: function postStep(stepInfo) {
+      var deadZone = this.world.queryObject({
+        instanceType: _DeadZone.default
+      });
+
+      if (deadZone) {
+        deadZone.radius -= .03;
+      }
+    }
   }]);
 
   return KombatGameEngine;

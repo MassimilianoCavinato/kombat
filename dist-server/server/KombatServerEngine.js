@@ -134,6 +134,14 @@ function (_ServerEngine) {
     value: function add_DeadZone() {
       var _this3 = this;
 
+      var prev_deadZone = this.gameEngine.world.queryObject({
+        instanceType: _DeadZone.default
+      });
+
+      if (prev_deadZone) {
+        this.destroyObjectById(prev_deadZone.id);
+      }
+
       var deadZone = new _DeadZone.default(this.gameEngine, null, {
         position: this.get_randomVectorInBound(100, 100)
       });
@@ -143,7 +151,7 @@ function (_ServerEngine) {
         instanceType: _Heal.default
       });
 
-      if (heals.length === 10) {
+      if (heals.length >= 10) {
         heals.forEach(function (h) {
           return _this3.destroyObjectById(h.id);
         });
@@ -329,11 +337,7 @@ function (_ServerEngine) {
         if (deadZone.radius < -10) {
           deadZone.position.x = Math.floor(Math.random() * 90) + 10;
           deadZone.position.y = Math.floor(Math.random() * 90) + 10;
-          deadZone.radius = 150;
-          var heal = new _Heal.default(this.gameEngine, null, {
-            position: deadZone.position.clone()
-          });
-          this.gameEngine.addObjectToWorld(heal);
+          this.add_DeadZone();
         } else {
           if (stepInfo.step - this.deadzoneTimer > 60) {
             this.deadzoneTimer = stepInfo.step;
@@ -370,7 +374,7 @@ function (_ServerEngine) {
             });
           }
 
-          deadZone.radius -= .04;
+          deadZone.radius -= .03;
         }
       }
     }

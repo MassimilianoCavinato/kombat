@@ -74,11 +74,16 @@ export default class KombatServerEngine extends ServerEngine {
     }
 
     add_DeadZone(){
+        let prev_deadZone = this.gameEngine.world.queryObject({ instanceType : DeadZone });
+        if(prev_deadZone){
+            this.destroyObjectById(prev_deadZone.id);
+        }
         let deadZone = new DeadZone(this.gameEngine, null, { position: this.get_randomVectorInBound(100, 100)});
         deadZone.radius = 150;
         this.gameEngine.addObjectToWorld(deadZone);
+
         let heals = this.gameEngine.world.queryObjects({ instanceType: Heal2 });
-        if(heals.length === 10){
+        if(heals.length >= 10){
             heals.forEach(h => this.destroyObjectById(h.id));
         }
         //add heal
@@ -243,9 +248,7 @@ export default class KombatServerEngine extends ServerEngine {
 
                 deadZone.position.x = Math.floor(Math.random() * 90) + 10
                 deadZone.position.y = Math.floor(Math.random() * 90) + 10 
-                deadZone.radius = 150;
-                let heal = new Heal2(this.gameEngine, null, { position: deadZone.position.clone()})
-                this.gameEngine.addObjectToWorld(heal);
+                this.add_DeadZone();
             }
             else{
 
@@ -277,7 +280,7 @@ export default class KombatServerEngine extends ServerEngine {
                         }
                     })
                 }
-                deadZone.radius -= .04;
+                deadZone.radius -= .03;
             }
         }
     }

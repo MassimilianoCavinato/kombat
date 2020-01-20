@@ -17,6 +17,7 @@ const defaults = {
         bendingIncrements: 5
     }
 };
+
 let options = Object.assign(defaults, qsOptions);
 
 document.addEventListener('DOMContentLoaded', function(e) { 

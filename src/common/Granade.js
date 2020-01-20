@@ -5,7 +5,8 @@ export default class Granade extends DynamicObject {
     static get netScheme() {
         return Object.assign({
                 direction: { type: BaseTypes.TYPES.FLOAT32 },
-                ownerId: {  type: BaseTypes.TYPES.INT8 }
+                ownerId: {  type: BaseTypes.TYPES.INT8 },
+                bounces: {  type: BaseTypes.TYPES.INT8 },
             }, 
             super.netScheme
         );

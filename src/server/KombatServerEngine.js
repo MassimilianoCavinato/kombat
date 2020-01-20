@@ -158,20 +158,23 @@ export default class KombatServerEngine extends ServerEngine {
         if(kombat.granade_loaded > 0){
             kombat.granade_loaded--;
             let speed = .4 * kombat.throw_power;
+            let velocity = new TwoVector(
+                Math.cos(kombat.direction) * speed ,
+                Math.sin(kombat.direction) * speed
+            )
             let granade = new Granade(this.gameEngine, null, { 
                 direction: kombat.direction,
                 position: new TwoVector(
                     kombat.position.x + (kombat.width / 4),
                     kombat.position.y + (kombat.height / 4)
                 ),
-                velocity: new TwoVector(
-                    Math.cos(kombat.direction) * speed ,
-                    Math.sin(kombat.direction) * speed
-                )
+                velocity: velocity
             });
             kombat.throw_power = 0;
         
             granade.playerId = kombat.playerId;
+            granade.prevVelocity = velocity.clone();
+            
             this.gameEngine.addObjectToWorld(granade);
             this.gameEngine.timer.add(100, this.explode, this, [granade.id]);
         }

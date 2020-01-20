@@ -241,13 +241,15 @@ function (_ServerEngine) {
       if (kombat.granade_loaded > 0) {
         kombat.granade_loaded--;
         var speed = .4 * kombat.throw_power;
+        var velocity = new _lanceGg.TwoVector(Math.cos(kombat.direction) * speed, Math.sin(kombat.direction) * speed);
         var granade = new _Granade.default(this.gameEngine, null, {
           direction: kombat.direction,
           position: new _lanceGg.TwoVector(kombat.position.x + kombat.width / 4, kombat.position.y + kombat.height / 4),
-          velocity: new _lanceGg.TwoVector(Math.cos(kombat.direction) * speed, Math.sin(kombat.direction) * speed)
+          velocity: velocity
         });
         kombat.throw_power = 0;
         granade.playerId = kombat.playerId;
+        granade.prevVelocity = velocity.clone();
         this.gameEngine.addObjectToWorld(granade);
         this.gameEngine.timer.add(100, this.explode, this, [granade.id]);
       }

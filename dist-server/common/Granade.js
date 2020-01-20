@@ -43,6 +43,9 @@ function (_DynamicObject) {
         },
         ownerId: {
           type: _lanceGg.BaseTypes.TYPES.INT8
+        },
+        bounces: {
+          type: _lanceGg.BaseTypes.TYPES.INT8
         }
       }, _get(_getPrototypeOf(Granade), "netScheme", this));
     }

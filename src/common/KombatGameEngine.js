@@ -187,25 +187,24 @@ export default class KombatGameEngine extends GameEngine {
 
         let collision_side;
     
-        if(a.position.x + a.width <= b.position.x){ 
+        if(a.position.x + a.width <= b.position.x ){ 
             //hitting from left;
-            a.velocity.x = -Math.abs(a.velocity.y * .75);
-            a.velocity.y *= .75;
+            a.velocity.x = -Math.abs(a.prevVelocity.x);
+    
         }
         else if(a.position.x >= b.position.x + b.width){
             //hitting from right
-            a.velocity.x = Math.abs(a.velocity.y * .75);
-            a.velocity.y *= .75;
+            a.velocity.x = Math.abs(a.prevVelocity.x);
+
         }
         else if(a.position.y < b.position.y){
             //hitting from top
-            a.velocity.y = -Math.abs(a.velocity.x * .75);
-            a.velocity.x *= .75;
+            a.velocity.y = -Math.abs(a.prevVelocity.y);
+
         }
         else if(a.position.y > b.position.y){
             //hitting from bottom
-            a.velocity.y = Math.abs(a.velocity.x * .75);
-            a.velocity.x *= .75;
+            a.velocity.y = Math.abs(a.prevVelocity.y);
         }
     }
 

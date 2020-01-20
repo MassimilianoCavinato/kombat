@@ -60,6 +60,9 @@ export default class KombatServerEngine extends ServerEngine {
         if(kombat.health <= 0){
             this.destroyObjectById(kombat.id);
         }
+        let blood = new Blood(this.gameEngine, null, { position: kombat.position.clone() });
+        this.gameEngine.addObjectToWorld(blood);
+        this.gameEngine.timer.add(600, this.destroyObjectById, this, [blood.id]);
     }
 
     get_randomVectorInBound(w, h){
@@ -174,7 +177,7 @@ export default class KombatServerEngine extends ServerEngine {
         
             granade.playerId = kombat.playerId;
             granade.prevVelocity = velocity.clone();
-            
+
             this.gameEngine.addObjectToWorld(granade);
             this.gameEngine.timer.add(100, this.explode, this, [granade.id]);
         }

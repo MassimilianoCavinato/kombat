@@ -129,6 +129,12 @@ function (_ServerEngine) {
       if (kombat.health <= 0) {
         this.destroyObjectById(kombat.id);
       }
+
+      var blood = new _Blood.default(this.gameEngine, null, {
+        position: kombat.position.clone()
+      });
+      this.gameEngine.addObjectToWorld(blood);
+      this.gameEngine.timer.add(600, this.destroyObjectById, this, [blood.id]);
     }
   }, {
     key: "get_randomVectorInBound",

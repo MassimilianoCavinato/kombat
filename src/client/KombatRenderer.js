@@ -39,7 +39,7 @@ export default class KombatRenderer extends Renderer {
         ctx.clearRect(0, 0, C_WIDTH, C_HEIGHT);
         ctx.save();
         ctx.translate(0, 0);
-
+        ctx.shadowBlur = 15; 
         //draw blood stains first // layer 0
         let playerKombat = this.gameEngine.world.queryObject({ playerId: this.gameEngine.playerId,  instanceType: Kombat });
         if(playerKombat){

@@ -17517,7 +17517,8 @@ function (_Renderer) {
 
       ctx.clearRect(0, 0, C_WIDTH, C_HEIGHT);
       ctx.save();
-      ctx.translate(0, 0); //draw blood stains first // layer 0
+      ctx.translate(0, 0);
+      ctx.shadowBlur = 15; //draw blood stains first // layer 0
 
       var playerKombat = this.gameEngine.world.queryObject({
         playerId: this.gameEngine.playerId,

@@ -14164,9 +14164,9 @@ var defaults = {
   scheduler: 'render-schedule',
   syncOptions: {
     sync: 'extrapolate',
-    localObjBending: 0.8,
-    remoteObjBending: 0.6,
-    bendingIncrements: 5
+    localObjBending: 0.9,
+    remoteObjBending: 0.4,
+    bendingIncrements: 1
   }
 };
 var options = Object.assign(defaults, qsOptions);

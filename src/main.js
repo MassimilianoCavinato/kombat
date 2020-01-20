@@ -17,7 +17,7 @@ const io = socketIO(requestHandler);
 
 // Game Instances
 const gameEngine = new KombatGameEngine({ traceLevel: Lib.Trace.TRACE_NONE });
-const serverEngine = new KombatServerEngine(io, gameEngine, { debug: {}, updateRate: 2, fullSyncRate: 15 });
+const serverEngine = new KombatServerEngine(io, gameEngine, { debug: {}, updateRate: 2, fullSyncRate: 6 });
 
 // start the game
 serverEngine.start();

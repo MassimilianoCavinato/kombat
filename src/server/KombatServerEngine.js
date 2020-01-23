@@ -112,24 +112,25 @@ export default class KombatServerEngine extends ServerEngine {
     shoot(kombat) {
         if(kombat.ammo_loaded > 0){
             kombat.ammo_loaded--;
-            let speed = 0.5;
+            let speed = 0.45;
             let kombatPos = kombat.position.clone();
             let kombatDir = kombat.direction;
 
             kombatPos.add(new TwoVector(.5, .5));
             let position;
-          
+            
+            let shoot_offset = .5;
             if(kombat.shoot_side === 'l'){
                 position = new TwoVector(
-                    kombatPos.x + 1 * Math.cos(kombatDir-1.5),
-                    kombatPos.y + 1 * Math.sin(kombatDir-1.5)
+                    kombatPos.x + 1 * Math.cos(kombatDir-shoot_offset),
+                    kombatPos.y + 1 * Math.sin(kombatDir-shoot_offset)
                 )
                 kombat.shoot_side = "r";
             }
             else{
                 position = new TwoVector(
-                    kombatPos.x  + 1 *  Math.cos(kombatDir+1.5),
-                    kombatPos.y  + 1 *  Math.sin(kombatDir+1.5)
+                    kombatPos.x  + 1 *  Math.cos(kombatDir+shoot_offset),
+                    kombatPos.y  + 1 *  Math.sin(kombatDir+shoot_offset)
                 )
                 kombat.shoot_side = "l";
             }

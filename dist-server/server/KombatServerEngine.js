@@ -205,17 +205,18 @@ function (_ServerEngine) {
     value: function shoot(kombat) {
       if (kombat.ammo_loaded > 0) {
         kombat.ammo_loaded--;
-        var speed = 0.5;
+        var speed = 0.45;
         var kombatPos = kombat.position.clone();
         var kombatDir = kombat.direction;
         kombatPos.add(new _lanceGg.TwoVector(.5, .5));
         var position;
+        var shoot_offset = .5;
 
         if (kombat.shoot_side === 'l') {
-          position = new _lanceGg.TwoVector(kombatPos.x + 1 * Math.cos(kombatDir - 1.5), kombatPos.y + 1 * Math.sin(kombatDir - 1.5));
+          position = new _lanceGg.TwoVector(kombatPos.x + 1 * Math.cos(kombatDir - shoot_offset), kombatPos.y + 1 * Math.sin(kombatDir - shoot_offset));
           kombat.shoot_side = "r";
         } else {
-          position = new _lanceGg.TwoVector(kombatPos.x + 1 * Math.cos(kombatDir + 1.5), kombatPos.y + 1 * Math.sin(kombatDir + 1.5));
+          position = new _lanceGg.TwoVector(kombatPos.x + 1 * Math.cos(kombatDir + shoot_offset), kombatPos.y + 1 * Math.sin(kombatDir + shoot_offset));
           kombat.shoot_side = "l";
         }
 

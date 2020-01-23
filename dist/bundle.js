@@ -14163,8 +14163,8 @@ var defaults = {
   delayInputCount: 10,
   scheduler: 'render-schedule',
   syncOptions: {
-    sync: 'extrapolate',
-    localObjBending: 0,
+    sync: qsOptions.sync || 'extrapolate',
+    localObjBending: 1,
     remoteObjBending: 1,
     bendingIncrements: 3
   }
@@ -17874,6 +17874,10 @@ function (_GameEngine) {
 
     _this.on('collisionStart', function (e) {
       return _this.handleCollision(e);
+    });
+
+    _this.on('client__slowFrameRate', function (e) {
+      return console.log('lag', e);
     }); // game variables
     // Object.assign(this, {
     //     foodRadius: 0.1, 

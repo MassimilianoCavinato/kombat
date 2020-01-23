@@ -75,6 +75,10 @@ function (_GameEngine) {
 
     _this.on('collisionStart', function (e) {
       return _this.handleCollision(e);
+    });
+
+    _this.on('client__slowFrameRate', function (e) {
+      return console.log('lag', e);
     }); // game variables
     // Object.assign(this, {
     //     foodRadius: 0.1, 

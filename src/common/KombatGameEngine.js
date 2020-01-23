@@ -21,6 +21,8 @@ export default class KombatGameEngine extends GameEngine {
         this.on('preStep', (stepInfo) => this.preStep(stepInfo));
         this.on('postStep', (stepInfo) => this.postStep(stepInfo));
         this.on('collisionStart', (e) => this.handleCollision(e));
+        this.on('client__slowFrameRate', (e) => console.log('lag', e))
+
 
         // game variables
         // Object.assign(this, {

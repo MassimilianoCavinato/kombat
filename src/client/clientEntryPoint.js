@@ -3,7 +3,6 @@ import { Lib } from 'lance-gg';
 import KombatClientEngine from '../client/KombatClientEngine';
 import KombatGameEngine from '../common/KombatGameEngine';
 const qsOptions = querystring.parse(location.search);
-
 // default options, overwritten by query-string options
 // is sent to both game engine and client engine
 const defaults = {
@@ -11,12 +10,13 @@ const defaults = {
     delayInputCount: 10,
     scheduler: 'render-schedule',
     syncOptions: {
-        sync: 'extrapolate',
-        localObjBending: 0,
+        sync: qsOptions.sync || 'extrapolate',
+        localObjBending: 1,
         remoteObjBending: 1,
         bendingIncrements: 3
     }
 };
+
 let options = Object.assign(defaults, qsOptions);
 
 document.addEventListener('DOMContentLoaded', function(e) { 

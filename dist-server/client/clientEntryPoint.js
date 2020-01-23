@@ -20,8 +20,8 @@ var defaults = {
   scheduler: 'render-schedule',
   syncOptions: {
     sync: 'extrapolate',
-    localObjBending: 1,
-    remoteObjBending: 0,
+    localObjBending: 0,
+    remoteObjBending: 1,
     bendingIncrements: 3
   }
 };

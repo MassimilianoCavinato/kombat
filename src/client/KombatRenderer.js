@@ -21,10 +21,10 @@ export default class KombatRenderer extends Renderer {
         game = gameEngine;
         canvas = document.getElementById('kc');
         ctx = canvas.getContext('2d');
-        
+
         ctx.shadowOffsetX = 1;
         ctx.shadowOffsetY = 1;
-        ctx.shadowBlur = 15; 
+        ctx.shadowBlur = 15;
         this.offset = new TwoVector(0, 0);
     }
 
@@ -34,7 +34,7 @@ export default class KombatRenderer extends Renderer {
     }
 
     draw(t, dt) {
-    
+
         super.draw(t, dt);
         ctx.clearRect(0, 0, C_WIDTH, C_HEIGHT);
         ctx.save();
@@ -52,7 +52,7 @@ export default class KombatRenderer extends Renderer {
             ctx.scale(this.clientEngine.zoom, this.clientEngine.zoom);
             this.offset.x = 0;
             this.offset.y = 0;
-        } 
+        }
         game.world.queryObjects({instanceType: Blood }).forEach(obj => this.drawBlood(obj));
         game.world.queryObjects({instanceType: Wall }).forEach(obj => this.drawWall(obj));
         game.world.forEachObject((id, obj) => {
@@ -68,7 +68,7 @@ export default class KombatRenderer extends Renderer {
         if(playerKombat){
             this.drawHUD(playerKombat);
         }
-     
+
         ctx.restore();
     }
 
@@ -86,9 +86,9 @@ export default class KombatRenderer extends Renderer {
                 ctx.beginPath();
                 ctx.arc(center.x, center.y, obj.radius, 0, 2 * Math.PI);
                 ctx.rect(
-                    800/this.clientEngine.zoom, 
-                    0, 
-                    -800/this.clientEngine.zoom, 
+                    800/this.clientEngine.zoom,
+                    0,
+                    -800/this.clientEngine.zoom,
                     600/this.clientEngine.zoom
                 );
                 ctx.closePath();
@@ -102,7 +102,7 @@ export default class KombatRenderer extends Renderer {
 
     drawHUD(obj){
         //Bullets and reloading
-            
+
         ctx.scale(1, 1);
         if(obj.ammo_loaded === -1){
             ctx.fillStyle = "white";
@@ -114,20 +114,20 @@ export default class KombatRenderer extends Renderer {
             ctx.fillStyle = "orange";
             for(let i=0; i < obj.ammo_loaded; i++){
                 ctx.fillRect(
-                    (125 + i*6)/ obj.scope, 
-                    543/ obj.scope, 
-                    2 / obj.scope, 
+                    (125 + i*6)/ obj.scope,
+                    543/ obj.scope,
+                    2 / obj.scope,
                     2 / obj.scope
                 );
                 ctx.fillRect(
-                    (124 + i*6)/ obj.scope, 
-                    545 / obj.scope, 
-                    4 / obj.scope, 
+                    (124 + i*6)/ obj.scope,
+                    545 / obj.scope,
+                    4 / obj.scope,
                     20 / obj.scope
                 );
             }
         }
-        
+
 
         //Granades
         ctx.strokeStyle = "#ADFEAE";
@@ -142,16 +142,16 @@ export default class KombatRenderer extends Renderer {
         ctx.strokeStyle = "white";
         ctx.fillStyle = "rgba(255, 255, 255, .9)";
         ctx.fillRect(
-            20/ obj.scope, 
-            544/ obj.scope, 
-            obj.throw_power  * 100 / obj.scope, 
+            20/ obj.scope,
+            544/ obj.scope,
+            obj.throw_power  * 100 / obj.scope,
             18 / obj.scope
         );
         ctx.beginPath();
         ctx.rect(
-            20/ obj.scope, 
-            545/ obj.scope, 
-            100 / obj.scope, 
+            20/ obj.scope,
+            545/ obj.scope,
+            100 / obj.scope,
             18/ obj.scope
         );
         ctx.closePath();
@@ -170,7 +170,7 @@ export default class KombatRenderer extends Renderer {
         let debugContainer = document.getElementById('debug');
         debugContainer.innerHTML = `
             Pos X: ${player.position.x}
-            <hr/> 
+            <hr/>
             Pos Y: ${player.position.y}
             <hr/>
             Is shooting: ${this.mouseIsDown ? "true" : "false"}
@@ -190,13 +190,13 @@ export default class KombatRenderer extends Renderer {
             obj.position.y + this.offset.y + obj.height/2
         )
     }
-    
+
     getCircumscribedRadiusLength(edge){
         return (edge * Math.SQRT2) / 2;
     }
 
     drawKombat(obj) {
-        
+
         let center = this.getCenter(obj);
         let radius = this.getCircumscribedRadiusLength(obj.width);
         let color = obj.playerId === this.gameEngine.playerId ? "dodgerblue" : "crimson";
@@ -205,12 +205,12 @@ export default class KombatRenderer extends Renderer {
         //base circle
         this.drawCircle(center.x, center.y, radius);
         //kombat name
-   
+
         ctx.fillStyle = "white";
         ctx.font = '1px Arial';
         ctx.fillText(obj.name, center.x - (obj.name.length/4), center.y - 2);
 
-        
+
         //directional line
         ctx.moveTo(center.x,center.y);
         ctx.lineTo(center.x + radius * Math.cos(obj.direction), center.y + radius * Math.sin(obj.direction));
@@ -293,7 +293,7 @@ export default class KombatRenderer extends Renderer {
         ctx.shadowColor = "red";
         ctx.fillRect(center.x - a, center.y - b, 2*a, 2*b);
         ctx.fillRect(center.x - b, center.y - a, 2*b, 2*a);
-      
+
     }
 
     drawWall(obj){
@@ -336,9 +336,9 @@ export default class KombatRenderer extends Renderer {
     }
 
     drawBox(x, y, w, h){
+        ctx.fillStyle = "white";
         ctx.beginPath();
-        ctx.rect(x - (w/2), y - (h/2), w, h);
+        ctx.fillRect(x - (w/2), y - (h/2), w, h);
         ctx.closePath();
-        ctx.stroke();
     }
 }

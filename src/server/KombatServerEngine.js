@@ -41,10 +41,10 @@ export default class KombatServerEngine extends ServerEngine {
         kombat.name = obj.name.trim().length < 1 ? 'Kombat '+ obj.playerId : obj.name;
         kombat.max_health = 100;
         kombat.health = 100;
-        kombat.ammo_capacity = 64;
-        kombat.ammo_loaded =  64;
-        kombat.granade_capacity = 32;
-        kombat.granade_loaded =  32;
+        kombat.ammo_capacity = 32;
+        kombat.ammo_loaded =  32;
+        kombat.granade_capacity = 4;
+        kombat.granade_loaded =  4;
         kombat.throw_power = 0;
         kombat.throwing_granade = false;
         kombat.timer_shot = 0;
@@ -64,15 +64,15 @@ export default class KombatServerEngine extends ServerEngine {
 
     get_randomVectorInBound(w, h){
         return new TwoVector(
-            Math.floor(Math.random() * (w - 16)) + 8 , 
-            Math.floor(Math.random() * (h - 16)) + 8 
+            Math.floor(Math.random() * (w - 16)) + 8 ,
+            Math.floor(Math.random() * (h - 16)) + 8
         )
     }
 
     add_Map(map){
         map.forEach(w => {
-            let wall = new Wall(this.gameEngine, null, { 
-                position: new TwoVector(w.x, w.y), 
+            let wall = new Wall(this.gameEngine, null, {
+                position: new TwoVector(w.x, w.y),
                 width: w.width,
                 height: w.height,
             });
@@ -118,7 +118,7 @@ export default class KombatServerEngine extends ServerEngine {
 
             kombatPos.add(new TwoVector(.5, .5));
             let position;
-            
+
             let shoot_offset = .5;
             if(kombat.shoot_side === 'l'){
                 position = new TwoVector(
@@ -134,9 +134,9 @@ export default class KombatServerEngine extends ServerEngine {
                 )
                 kombat.shoot_side = "l";
             }
-          
+
             let liveTimer = 100; //gameloops
-            let bullet = new Bullet(this.gameEngine, null, { 
+            let bullet = new Bullet(this.gameEngine, null, {
                 direction: kombatDir,
                 playerId: kombat.playerId,
                 ownerId: kombat.id,
@@ -159,7 +159,7 @@ export default class KombatServerEngine extends ServerEngine {
         if(kombat.granade_loaded > 0){
             kombat.granade_loaded--;
             let speed = .4 * kombat.throw_power;
-            let granade = new Granade(this.gameEngine, null, { 
+            let granade = new Granade(this.gameEngine, null, {
                 direction: kombat.direction,
                 position: new TwoVector(
                     kombat.position.x + (kombat.width / 4),
@@ -171,7 +171,7 @@ export default class KombatServerEngine extends ServerEngine {
                 )
             });
             kombat.throw_power = 0;
-        
+
             granade.playerId = kombat.playerId;
             this.gameEngine.addObjectToWorld(granade);
             this.gameEngine.timer.add(100, this.explode, this, [granade.id]);
@@ -179,15 +179,15 @@ export default class KombatServerEngine extends ServerEngine {
     }
 
     pickup(kombat){
-     
+
         let heals = this.gameEngine.world.queryObjects({instanceType: Heal2 });
         for(let i=0; i<heals.length; i++){
             let h = heals[i];
              let d = Math.sqrt(
-                Math.pow( kombat.position.x+kombat.width/2 - h.position.x , 2) +  
+                Math.pow( kombat.position.x+kombat.width/2 - h.position.x , 2) +
                 Math.pow( kombat.position.y+kombat.height/2 - h.position.y,2)
             );
-           
+
             if(d < 1.5){
                 kombat.health += 30;
                 if(kombat.health > kombat.max_health){
@@ -216,14 +216,14 @@ export default class KombatServerEngine extends ServerEngine {
         let granade = this.gameEngine.world.queryObject({ id: granadeId, instanceType: Granade });
         if(granade){
             let position = granade.position.clone();
-            let explosion = new Explosion2(this.gameEngine, null, { 
+            let explosion = new Explosion2(this.gameEngine, null, {
                 position: position
             });
             this.destroyObjectById(granadeId);
             explosion.radius = 10;
             this.gameEngine.addObjectToWorld(explosion);
             this.gameEngine.timer.add(150, this.destroyObjectById, this, [explosion.id]);
-            
+
             let kombats = this.gameEngine.world.queryObjects({ instanceType: Kombat });
             kombats.forEach(k=> {
                 let d = Math.sqrt(
@@ -232,10 +232,10 @@ export default class KombatServerEngine extends ServerEngine {
                 if(d <= explosion.radius){
                     k.health -= 3;
                     if(d <= explosion.radius/2){
-                       k.health -= 3; 
+                       k.health -= 3;
                     }
                     if(d <= explosion.radius/4){
-                        k.health -= 3; 
+                        k.health -= 3;
                     }
                     let blood = new Blood(this.gameEngine, null, { position: k.position.clone() });
                     if(k.health <= 0){
@@ -254,7 +254,7 @@ export default class KombatServerEngine extends ServerEngine {
         if(deadZone){
             if(deadZone.radius < -10){
                 deadZone.position.x = Math.floor(Math.random() * 90) + 10
-                deadZone.position.y = Math.floor(Math.random() * 90) + 10 
+                deadZone.position.y = Math.floor(Math.random() * 90) + 10
                 this.add_DeadZone();
             }
             else if(stepInfo.step - this.deadzoneTimer > 60 ){

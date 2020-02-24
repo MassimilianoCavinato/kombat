@@ -7,23 +7,23 @@ const qsOptions = querystring.parse(location.search);
 // is sent to both game engine and client engine
 const defaults = {
     traceLevel: Lib.Trace.TRACE_NONE,
-    delayInputCount: 10,
+    delayInputCount:3,
     scheduler: 'render-schedule',
     syncOptions: {
         sync: qsOptions.sync || 'extrapolate',
-        localObjBending: 1,
-        remoteObjBending: 1,
-        bendingIncrements: 3
+        localObjBending: 0.8,
+        remoteObjBending: 0.9,
+        bendingIncrements: 2
     }
 };
 
 let options = Object.assign(defaults, qsOptions);
 
-document.addEventListener('DOMContentLoaded', function(e) { 
+document.addEventListener('DOMContentLoaded', function(e) {
 
     let gameEngine = new KombatGameEngine(options);
     let clientEngine = new KombatClientEngine(gameEngine, options);
-	
+
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
     	alert('mobile controllers not available');
 	}

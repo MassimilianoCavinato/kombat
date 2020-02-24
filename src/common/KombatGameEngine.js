@@ -65,9 +65,10 @@ export default class KombatGameEngine extends GameEngine {
         return new TwoVector(x, y);
     }
 
-    processInput(inputData, playerId) {
-        super.processInput(inputData, playerId);
-        let player = this.world.queryObject({ playerId });
+    processInput(inputData, playerId, isServer) {
+        super.processInput(inputData, playerId, isServer);
+        if(isServer === true){
+            let player = this.world.queryObject({ playerId });
         
         if (player) {
             let step = inputData.step;
@@ -142,6 +143,9 @@ export default class KombatGameEngine extends GameEngine {
                 this.emit('play', { playerId: inputData.options.playerId, name: inputData.options.name });
             }
         }
+        }
+
+        
     }
 
     handleCollision(e){
